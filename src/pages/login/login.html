@@ -1,0 +1,18 @@
+<ion-header text-center>
+    <ion-navbar color="cabecera">
+        <ion-title>Iniciar sesión</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Ususario</ion-label>
+            <ion-input [(ngModel)]="username" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Contraseña</ion-label>
+            <ion-input [(ngModel)]="clave_acceso" type="password"></ion-input>
+        </ion-item>
+        <button ion-button full (click)="login()">Secondary</button>
+    </ion-list>
+</ion-content>
