@@ -84,21 +84,21 @@ export class LoginPage {
 			/* Funcion para actualizar los datos del usuario. */
 			this.databaseProvider.actualizarUser(response, usuario)
 				.then((response) => {
-					/* Finalmente obtenemos los datos del usuario logueado */
-					this.databaseProvider.getToken()
-						.then((response) => {
-							/*Mostramos el home de la aplicacion con datos del usuario loguado. */
-							this.navCtrl.setRoot(HomePage, {
-								access_token: response[0].access_token,
-								email: response[0].email,
-								name: response[0].name,
-							})
-						})
+					/* Mostramos el home de la aplicacion. */
+					this.navCtrl.setRoot(HomePage, {})
 				})
 		})
 	}
 
 	getMensajeError = (dataResponse: {}) => {
 		console.log(dataResponse)
+		let mensaje = this.alertCtrl.create({
+			title: 'Iniciar sesión',
+			message: 'Cliente inválido, la autenticación del cliente falló',
+			buttons: ['Aceptar']
+
+		})
+
+		mensaje.present()
 	}
 }

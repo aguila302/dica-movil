@@ -20,15 +20,9 @@ import {
 	templateUrl: 'home.html'
 })
 export class HomePage {
-	accessToken = ''
-	email = ''
-	name = ''
 
 	constructor(public navCtrl: NavController, private navs: NavParams, private nativeStorage: NativeStorage,
 		private databaseProvider: DatabaseProvider) {
-		// this.accessToken = this.navs.get('access_token')
-		// this.email = this.navs.get('email')
-		// this.name = this.navs.get('name')
 		this.databaseProvider.getToken()
 			.then(data => {
 				if (data.length) {
@@ -49,7 +43,6 @@ export class HomePage {
 	logout = () => {
 		/* Eliminamos todos los token del origen de datos */
 		this.databaseProvider.deleteToken().then((response) => {
-			console.log(response)
 			this.nativeStorage.remove('auth').then((data) => {
 				console.log('removed')
 				console.log(data)
@@ -58,5 +51,4 @@ export class HomePage {
 			})
 		})
 	}
-
 }
