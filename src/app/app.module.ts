@@ -36,6 +36,9 @@ import {
 import {
 	DatabaseProvider
 } from '../providers/database/database';
+import {
+	AutopistasService
+} from '../shared/autopistas-service';
 
 import {
 	SQLite
@@ -46,6 +49,9 @@ import {
 import {
 	NativeStorage
 } from '@ionic-native/native-storage';
+import {
+	Network
+} from '@ionic-native/network';
 
 @NgModule({
 	declarations: [
@@ -75,7 +81,9 @@ import {
 		SQLite,
 		NativeStorage,
 		ApiProvider,
-		HTTP
+		HTTP,
+		AutopistasService,
+		Network
 	]
 })
 export class AppModule {}

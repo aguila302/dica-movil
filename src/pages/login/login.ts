@@ -20,6 +20,9 @@ import {
 import {
 	NativeStorage
 } from '@ionic-native/native-storage';
+import {
+	Network
+} from '@ionic-native/network';
 
 @IonicPage()
 @Component({
@@ -32,7 +35,7 @@ export class LoginPage {
 
 	constructor(public navCtrl: NavController, private alertCtrl: AlertController,
 		private apiProvider: ApiProvider, private databaseProvider: DatabaseProvider,
-		private nativeStorage: NativeStorage) {}
+		private nativeStorage: NativeStorage, private network: Network) {}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad LoginPage');
@@ -52,15 +55,22 @@ export class LoginPage {
 
 			alert.present()
 		} else {
-			/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
-			this.username = 'admin@calymayor.com.mx'
-			this.clave_acceso = 'secret'
+			/* Si existe una conexion via wifi. */
+			if (this.network.type == 'wifi') {
+				/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
+				this.username = 'admin@calymayor.com.mx'
+				this.clave_acceso = 'secret'
 
-			/* Llamamos a nuestro servicio para obtener token de acceso. */
-			this.apiProvider.getLogin(this.username, this.clave_acceso)
-				.then(response => {
-					response.status === 200 ? this.setToken(response.data) : this.getMensajeError(response.data)
-				})
+				/* Llamamos a nuestro servicio para obtener token de acceso. */
+				this.apiProvider.getLogin(this.username, this.clave_acceso)
+					.then(response => {
+						response.status === 200 ? this.setToken(response.data) : this.getMensajeError('Iniciar sesión', 'Cliente inválido, la autenticación del cliente falló')
+					})
+			} else {
+				/* Si no hay conexión alguna mandamos un mensaje de error */
+				this.getMensajeError('Error', 'Parece que tienes un error de conexión, favor de verificarlo para continuar')
+
+			}
 		}
 	}
 
@@ -69,7 +79,6 @@ export class LoginPage {
 	 */
 	setToken = (dataResponse: {}) => {
 		this.databaseProvider.setToken(dataResponse).then((response) => {
-
 			/* Funcion para obtener el token de acceso. */
 			this.databaseProvider.getToken()
 				.then((response) => {
@@ -80,23 +89,25 @@ export class LoginPage {
 
 	/* Funcion para realizar la peticion al end point para loguear al usuario. */
 	setUpdate = (usuario) => {
-		this.apiProvider.getUsuario(usuario).then((response) => {
+		this.apiProvider.getUsuario(usuario).then((dataUser) => {
 			/* Funcion para actualizar los datos del usuario. */
-			this.databaseProvider.actualizarUser(response, usuario)
+			this.databaseProvider.actualizarUser(dataUser.data, usuario)
 				.then((response) => {
-					/* Mostramos el home de la aplicacion. */
-					this.navCtrl.setRoot(HomePage, {})
+					/* Registramos las autopistas asignadas a este usuario conectado en el origen de datos movil */
+					this.databaseProvider.registrarAutopistas(dataUser.data.data.autopistas, usuario).then((data) => {
+						/* Mostramos el home de la aplicacion. */
+						this.navCtrl.setRoot(HomePage, {})
+					})
 				})
 		})
 	}
 
-	getMensajeError = (dataResponse: {}) => {
-		console.log(dataResponse)
+	/* Mostramos mensaje de error en la autenticación al api*/
+	getMensajeError = (title: string, message: string) => {
 		let mensaje = this.alertCtrl.create({
-			title: 'Iniciar sesión',
-			message: 'Cliente inválido, la autenticación del cliente falló',
+			title: title,
+			message: message,
 			buttons: ['Aceptar']
-
 		})
 
 		mensaje.present()

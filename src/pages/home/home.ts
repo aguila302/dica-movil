@@ -14,6 +14,9 @@ import {
 import {
 	DatabaseProvider
 } from '../../providers/database/database'
+import {
+	AutopistasService
+} from '../../shared/autopistas-service';
 
 @Component({
 	selector: 'page-home',
@@ -21,16 +24,26 @@ import {
 })
 export class HomePage {
 
+	public autopistas = []
+
 	constructor(public navCtrl: NavController, private navs: NavParams, private nativeStorage: NativeStorage,
-		private databaseProvider: DatabaseProvider) {
+		private databaseProvider: DatabaseProvider, private autopistasService: AutopistasService) {
+
+		/* Obtenemos el ultimo token registrado en el origen de datos movil. */
 		this.databaseProvider.getToken()
 			.then(data => {
+				/* Hay un token activo. */
 				if (data.length) {
 					this.nativeStorage.setItem('auth', true).then(
 						() => console.log('Stored item!'),
 						error => console.error('Error storing item', error)
 					)
+					/* Obtenemos las autopistas del origen de datos asignadas a dicho usuario conectado*/
+					this.autopistasService.userId = data[0].id
+					this.autopistasService.getAutopistas().then(autopistas => this.autopistas = autopistas)
+
 				} else {
+					/* No hay token activo. */
 					this.navCtrl.setRoot(LoginPage, {})
 				}
 
@@ -43,11 +56,11 @@ export class HomePage {
 	logout = () => {
 		/* Eliminamos todos los token del origen de datos */
 		this.databaseProvider.deleteToken().then((response) => {
-			this.nativeStorage.remove('auth').then((data) => {
-				console.log('removed')
-				console.log(data)
-				this.navCtrl.setRoot(LoginPage, {})
-
+			/* Eliminamos las autopistas */
+			this.databaseProvider.deleteAutopistas().then((response) => {
+				this.nativeStorage.remove('auth').then((data) => {
+					this.navCtrl.setRoot(LoginPage, {})
+				})
 			})
 		})
 	}

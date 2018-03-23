@@ -35,15 +35,28 @@ export class DatabaseProvider {
 
 	private createTables() {
 		return this.database.executeSql(
-			`CREATE TABLE IF NOT EXISTS usuarios (
-        	id INTEGER PRIMARY KEY AUTOINCREMENT,
-        	name TEXT,
-        	email TEXT,
-        	access_token TEXT,
-        	expires_in TEXT,
-        	refresh_token TEXT,
-        	datetime DATETIME default current_timestamp);`, {}
-		)
+				`CREATE TABLE IF NOT EXISTS usuarios (
+	        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	        	name TEXT,
+	        	email TEXT,
+	        	access_token TEXT,
+	        	expires_in TEXT,
+	        	refresh_token TEXT,
+	        	datetime DATETIME default current_timestamp);`, {}
+			)
+			.then(() => {
+				return this.database.executeSql(
+					`CREATE TABLE IF NOT EXISTS autopistas (
+		        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+		        	nombre TEXT,
+		        	cadenamiento_inicial_km INTEGER,
+		        	cadenamiento_inicial_m INTEGER,
+		        	cadenamiento_final_km INTEGER,
+		        	cadenamiento_final_m INTEGER,
+		        	user_id INTEGER,
+  					FOREIGN KEY(user_id) REFERENCES usuarios(id));`, {}
+				)
+			})
 	}
 
 	private isReady() {
@@ -72,11 +85,11 @@ export class DatabaseProvider {
 
 	/* Obtenemos el token de acceso. */
 	getToken = () => {
+		let userData = []
 		return this.isReady()
 			.then(() => {
 				return this.database.executeSql(`select * from usuarios order by 1 desc`, {})
 					.then((result) => {
-						let userData = []
 						for (let i = 0; i < result.rows.length; i++) {
 							userData.push({
 								access_token: result.rows.item(i).access_token,
@@ -93,14 +106,10 @@ export class DatabaseProvider {
 	/* Actualizamos los datos del usuario. */
 	actualizarUser = (response, usuario) => {
 		let parameters = [response.data.name, response.data.email, usuario.id]
-		console.log(parameters)
 
 		return this.isReady()
 			.then(() => {
-				return this.database.executeSql(`update usuarios
-					set name = ?,
-						email = ?
-						where id = ?`, parameters)
+				return this.database.executeSql(`update usuarios set name = ?, email = ? where id = ?`, parameters)
 			})
 	}
 
@@ -109,5 +118,53 @@ export class DatabaseProvider {
 		return this.isReady().then(() => {
 			return this.database.executeSql(`DELETE FROM usuarios`, {})
 		})
+	}
+
+	/* Eliminamos los autopistas del origen de datos. */
+	deleteAutopistas = () => {
+		return this.isReady().then(() => {
+			return this.database.executeSql(`DELETE FROM autopistas`, {})
+		})
+	}
+
+	/* Registramos las autopistas de dicho usuario conectado. */
+	registrarAutopistas = (autopistas, usuario) => {
+		let sql = ''
+		return this.isReady()
+			.then(() => {
+				autopistas.forEach(item => {
+					sql = `insert into autopistas (
+								nombre,
+								cadenamiento_inicial_km,
+								cadenamiento_inicial_m,
+								cadenamiento_final_km,
+								cadenamiento_final_m,
+								user_id)
+								values (
+									'${item.nombre}',
+									${item.cadenamiento_inicial_km},
+									${item.cadenamiento_inicial_m},
+									${item.cadenamiento_final_km},
+									${item.cadenamiento_final_m},
+									${usuario.id});`
+					return this.database.executeSql(sql, {})
+				})
+			})
+	}
+
+	/* Funcion para obtener un listado de las autopistas. */
+	getAutopistas = (id) => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`select * from autopistas where user_id = ${id}`, {})
+					.then((result) => {
+						let autopistas = []
+						for (let i = 0; i < result.rows.length; i++) {
+							autopistas.push(result.rows.item(i))
+						}
+						return autopistas
+					})
+
+			})
 	}
 }
