@@ -58,8 +58,6 @@ export class LoginPage {
 			/* Si existe una conexion via wifi. */
 			if (this.network.type == 'wifi') {
 				/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
-				this.username = 'admin@calymayor.com.mx'
-				this.clave_acceso = 'secret'
 
 				/* Llamamos a nuestro servicio para obtener token de acceso. */
 				this.apiProvider.getLogin(this.username, this.clave_acceso)

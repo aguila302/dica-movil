@@ -10,8 +10,8 @@ import {
 export class ApiProvider {
 
 	link = {
-		apiUrl: 'http://11.11.2.30:9999',
-		client_secret: 'NPQuC1eO1DQYNhTj7tnpDFo13w5P0XSZXD1ObvVy'
+		apiUrl: 'http://180027c4.ngrok.io',
+		client_secret: 'ZU6DC8oPgAXWzKswg9TFm67Fa5wFt9viZowNOVBJ'
 	}
 
 	constructor(public http: HTTP) {}
@@ -19,12 +19,12 @@ export class ApiProvider {
 	/**
 	 * Funcion para resolver el end point y obtener token de acceso.
 	 */
-	getLogin = (email: string, password: string): Promise < HTTPResponse > => {
+	getLogin = (username: string, password: string): Promise < HTTPResponse > => {
 		let params = {
-			username: email,
+			username: username,
 			password: password,
 			grant_type: 'password',
-			client_id: 8,
+			client_id: 2,
 			client_secret: this.link.client_secret
 		}
 		let headers = {
