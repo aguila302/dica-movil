@@ -60,8 +60,9 @@ export class LoginPage {
 				/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
 
 				/* Llamamos a nuestro servicio para obtener token de acceso. */
-				this.apiProvider.getLogin(this.username, this.clave_acceso)
+				this.apiProvider.getToken(this.username, this.clave_acceso)
 					.then(response => {
+
 						response.status === 200 ? this.setToken(response.data) : this.getMensajeError('Iniciar sesión', 'Cliente inválido, la autenticación del cliente falló')
 					})
 			} else {
@@ -88,13 +89,21 @@ export class LoginPage {
 	/* Funcion para realizar la peticion al end point para loguear al usuario. */
 	setUpdate = (usuario) => {
 		this.apiProvider.getUsuario(usuario).then((dataUser) => {
+
 			/* Funcion para actualizar los datos del usuario. */
 			this.databaseProvider.actualizarUser(dataUser.data, usuario)
 				.then((response) => {
-					/* Registramos las autopistas asignadas a este usuario conectado en el origen de datos movil */
-					this.databaseProvider.registrarAutopistas(dataUser.data.data.autopistas, usuario).then((data) => {
-						/* Mostramos el home de la aplicacion. */
-						this.navCtrl.setRoot(HomePage, {})
+					/* Obtenemos las autopistas asignadas del usuario conectado a la aplicacion.  */
+					this.apiProvider.getAutopistas(usuario).then((response) => {
+						/* Registramos las autopistas asignadas a este usuario conectado en el origen de datos movil */
+						this.databaseProvider.registrarAutopistas(response.data.data, usuario).then(data => {
+							console.log('mi data')
+
+							console.log(this.databaseProvider.autopistasList)
+
+							/* Mostramos el home de la aplicacion. */
+							this.navCtrl.setRoot(HomePage, {})
+						})
 					})
 				})
 		})

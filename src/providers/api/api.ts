@@ -10,8 +10,8 @@ import {
 export class ApiProvider {
 
 	link = {
-		apiUrl: 'http://180027c4.ngrok.io',
-		client_secret: 'ZU6DC8oPgAXWzKswg9TFm67Fa5wFt9viZowNOVBJ'
+		apiUrl: 'http://d2f1a188.ngrok.io',
+		client_secret: 'unKvzknkJBX908RHuE1KBpI1oRsj011jlrnlXxRt'
 	}
 
 	constructor(public http: HTTP) {}
@@ -19,7 +19,7 @@ export class ApiProvider {
 	/**
 	 * Funcion para resolver el end point y obtener token de acceso.
 	 */
-	getLogin = (username: string, password: string): Promise < HTTPResponse > => {
+	getToken = (username: string, password: string): Promise < HTTPResponse > => {
 		let params = {
 			username: username,
 			password: password,
@@ -57,6 +57,28 @@ export class ApiProvider {
 		}
 
 		return this.http.get(`${this.link.apiUrl}/api/user`, {}, params)
+			.then(data => {
+				return {
+					'status': data.status,
+					'data': JSON.parse(data.data),
+					'headers': data.headers
+				}
+			}).catch(error => {
+				return {
+					'status': error.status,
+					'data': JSON.parse(error.error),
+					'headers': error.headers,
+				}
+			})
+	}
+
+	/* Obtiene las autopistas asignadas de un usuario */
+	getAutopistas = (accessToken): Promise < HTTPResponse > => {
+		let params = {
+			'Authorization': 'Bearer ' + accessToken.access_token
+		}
+
+		return this.http.get(`${this.link.apiUrl}/api/autopistas`, {}, params)
 			.then(data => {
 				return {
 					'status': data.status,

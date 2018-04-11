@@ -17,6 +17,7 @@ export class DatabaseProvider {
 
 	private database: SQLiteObject
 	private dbReady = new BehaviorSubject < boolean > (false)
+	public autopistasList = []
 
 	constructor(private platform: Platform, private sqlite: SQLite) {
 		this.platform.ready().then(() => {
@@ -129,26 +130,26 @@ export class DatabaseProvider {
 
 	/* Registramos las autopistas de dicho usuario conectado. */
 	registrarAutopistas = (autopistas, usuario) => {
-		let sql = ''
+		var miglobal = this
 		return this.isReady()
 			.then(() => {
-				autopistas.forEach(item => {
-					sql = `insert into autopistas (
-								nombre,
-								cadenamiento_inicial_km,
-								cadenamiento_inicial_m,
-								cadenamiento_final_km,
-								cadenamiento_final_m,
-								user_id)
-								values (
-									'${item.nombre}',
-									${item.cadenamiento_inicial_km},
-									${item.cadenamiento_inicial_m},
-									${item.cadenamiento_final_km},
-									${item.cadenamiento_final_m},
-									${usuario.id});`
-					return this.database.executeSql(sql, {})
-				})
+				this.database.transaction(function(tx) {
+					for (let item of autopistas) {
+						let sql = `insert into autopistas (nombre, cadenamiento_inicial_km, cadenamiento_inicial_m, cadenamiento_final_km,
+							cadenamiento_final_m, user_id) values (?,?,?,?,?,?);`
+						tx.executeSql(sql, [item.nombre, item.cadenamiento_inicial_km, item.cadenamiento_inicial_m,
+							item.cadenamiento_final_km, item.cadenamiento_final_m, usuario.id
+						], function(tx, res) {
+							this.autopistasList.push({
+								'nombre': item.nombre
+							})
+						})
+					}
+				}).then(() => {
+					console.log("Transaction Ok!")
+
+				});
+
 			})
 	}
 
