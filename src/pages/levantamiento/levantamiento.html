@@ -1,0 +1,109 @@
+<ion-header text-center>
+    <ion-navbar color="cabecera">
+        <ion-title>DICA - Diagnostico carretero</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="logout()">
+                <ion-icon ios="ios-log-out" md="md-log-out"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-title>Registro de levantamiento</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+    <div style="margin-top: 50px;">
+        <form [formGroup]="dataLevantamiento" (ngSubmit)="logForm()">
+            <ion-item>
+                <ion-label>Cuerpo</ion-label>
+                <ion-select formControlName="cuerpo">
+                    <ion-option *ngFor="let cuerpo of autopistasService.cuerpos" [value]="cuerpo.cuerpo_id">{{cuerpo.descripcion}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Elemento</ion-label>
+                <ion-select formControlName="elemento">
+                    <ion-option value="nes">Elemento 1</ion-option>
+                    <ion-option value="nes">Elemento 2</ion-option>
+                    <ion-option value="nes">Elemento 3</ion-option>
+                    <ion-option value="nes">Elemento 4</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Tipo de elemento</ion-label>
+                <ion-select formControlName="tipoElemento">
+                    <ion-option value="nes">Tipo elemento 1</ion-option>
+                    <ion-option value="nes">Tipo elemento 2</ion-option>
+                    <ion-option value="nes">Tipo elemento 3</ion-option>
+                    <ion-option value="nes">Tipo elemento 4</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Condición fisica</ion-label>
+                <ion-select formControlName="condicionFisica">
+                    <ion-option value="nes">Condición 1</ion-option>
+                    <ion-option value="nes">Condición 2</ion-option>
+                    <ion-option value="nes">Condición 3</ion-option>
+                    <ion-option value="nes">Condición 4</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Carril y/o lado</ion-label>
+                <ion-select formControlName="carril">
+                    <ion-option value="n">Derecho</ion-option>
+                    <ion-option value="nes">Izquierdo</ion-option>
+                    <ion-option value="nes">Central</ion-option>
+                    <ion-option value="nes">Ambos</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Longitud del elemento</ion-label>
+                <ion-input type="number" [brmasker]="{mask: '0.00', len:4}" formControlName="longitudElemento"></ion-input>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Cadenamiento inicial km</ion-label>
+                <ion-input id="cadenamientoInicialKm" type="number" [brmasker]="{mask: '000', len:3}" formControlName="cadenamientoInicialKm"></ion-input>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Cadenamiento inicial m </ion-label>
+                <ion-input type="number" [brmasker]="{mask: '000', len:3}" formControlName="cadenamientoInicialm"></ion-input>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Cadenamiento final km</ion-label>
+                <ion-input type="number" [brmasker]="{mask: '000', len:3}" formControlName="cadenamientoFinalKm"></ion-input>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Cadenamiento final m </ion-label>
+                <ion-input type="number" [brmasker]="{mask: '000', len:3}" formControlName="cadenamientoFinalm"></ion-input>
+            </ion-item>
+            <ion-item margin-top>
+                <ion-label>Reportar</ion-label>
+                <ion-checkbox color="dark" checked="false" formControlName="reportar"></ion-checkbox>
+            </ion-item>
+            <ion-list radio-group formControlName="statusLevantamiento">
+                <!--                 <ion-list-header>
+                    Auto Manufacturers
+                </ion-list-header> -->
+                <ion-item>
+                    <ion-label>Reporte inicial</ion-label>
+                    <ion-radio value="1"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>En proceso de atención</ion-label>
+                    <ion-radio value="2"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Atendido</ion-label>
+                    <ion-radio value="3"></ion-radio>
+                </ion-item>
+            </ion-list>
+            <img [src]="base64Image" *ngIf="base64Image" />
+            <ion-item margin-top>
+                <button ion-button full (click)="mostrarCamara()" [disabled]="!dataLevantamiento.valid">Tomar foto</button>
+            </ion-item>
+            <ion-item margin-top>
+                <button ion-button full type="submit" [disabled]="!dataLevantamiento.valid">Guardar</button>
+            </ion-item>
+        </form>
+    </div>
+</ion-content>

@@ -18,6 +18,12 @@ import {
 	DatabaseProvider
 } from '../../providers/database/database'
 import {
+	LoginService
+} from '../../shared/login-service'
+import {
+	AutopistasService
+} from '../../shared/autopistas-service'
+import {
 	NativeStorage
 } from '@ionic-native/native-storage';
 import {
@@ -34,8 +40,8 @@ export class LoginPage {
 	clave_acceso: string = ''
 
 	constructor(public navCtrl: NavController, private alertCtrl: AlertController,
-		private apiProvider: ApiProvider, private databaseProvider: DatabaseProvider,
-		private nativeStorage: NativeStorage, private network: Network) {}
+		private apiProvider: ApiProvider, private databaseProvider: DatabaseProvider, private loginService: LoginService,
+		private nativeStorage: NativeStorage, private network: Network, private autopistasService: AutopistasService) {}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad LoginPage');
@@ -77,35 +83,65 @@ export class LoginPage {
 		Funcion para registrar el token de acceso en el origen de datos movil.
 	 */
 	setToken = (dataResponse: {}) => {
-		this.databaseProvider.setToken(dataResponse).then((response) => {
+		this.loginService.registrarToken(dataResponse).then((response) => {
 			/* Funcion para obtener el token de acceso. */
-			this.databaseProvider.getToken()
-				.then((response) => {
-					this.setUpdate(response[0])
-				})
+			this.loginService.obtenerToken().then((response) => {
+				this.signIn(response[0])
+			})
 		})
 	}
 
 	/* Funcion para realizar la peticion al end point para loguear al usuario. */
-	setUpdate = (usuario) => {
+	signIn = (usuario) => {
 		this.apiProvider.getUsuario(usuario).then((dataUser) => {
 
 			/* Funcion para actualizar los datos del usuario. */
-			this.databaseProvider.actualizarUser(dataUser.data, usuario)
+			this.loginService.actualizarUser(dataUser.data, usuario)
 				.then((response) => {
-					/* Obtenemos las autopistas asignadas del usuario conectado a la aplicacion.  */
-					this.apiProvider.getAutopistas(usuario).then((response) => {
-						/* Registramos las autopistas asignadas a este usuario conectado en el origen de datos movil */
-						this.databaseProvider.registrarAutopistas(response.data.data, usuario).then(data => {
-							console.log('mi data')
-
-							console.log(this.databaseProvider.autopistasList)
-
-							/* Mostramos el home de la aplicacion. */
-							this.navCtrl.setRoot(HomePage, {})
-						})
-					})
+					/* Funcion para descargar los catalogos de autopistas. */
+					this.descargaAutopistas(response, usuario)
 				})
+		})
+	}
+
+	/* Descaraga los autopistas en el API. */
+	descargaAutopistas = (response, usuario) => {
+		/* Descargamos las autopistas asignadas al usuario.  */
+		this.apiProvider.getAutopistas(usuario).then((response) => {
+			/* Registramos las autopistas asignadas a este usuario conectado en el origen de datos movil */
+			this.autopistasService.registrarAutopistas(response.data.data, usuario).then((response) => {
+
+				/* Descargamos los elementos.  */
+				this.descargaElementos(usuario)
+			})
+		})
+	}
+
+	/* Descaraga los elementos en el API. */
+	descargaElementos = (usuario) => {
+		/* Descargamos los elementos.  */
+		this.apiProvider.getElementos(usuario).then((response) => {
+			/* Registramos las elementos en el origen de datos movil */
+			this.autopistasService.registrarElementos(response.data.data).then((response) => {
+
+				/* Descarga el listado de cuerpos. */
+				this.descargaCuerpos(usuario)
+				/* Mostramos vista de inicio. */
+				// this.navCtrl.setRoot(HomePage, {})
+			})
+		})
+	}
+
+	/* Descaraga los elementos en el API. */
+	descargaCuerpos = (usuario) => {
+		/* Descargamos los elementos.  */
+		this.apiProvider.getCuerpos(usuario).then((response) => {
+			/* Registramos las elementos en el origen de datos movil */
+			this.autopistasService.registrarCuerpos(response.data.data).then((response) => {
+
+				/* Mostramos vista de inicio. */
+				this.navCtrl.setRoot(HomePage, {})
+			})
 		})
 	}
 

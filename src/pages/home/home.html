@@ -15,8 +15,8 @@
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-list>
-        <button ion-item *ngFor="let autopista of autopistas">
+    <ion-list margin-top inset>
+        <button ion-item *ngFor="let autopista of autopistas" (click)="nuevoLevantamiento(autopista)">
             {{autopista.nombre}}
         </button>
     </ion-list>

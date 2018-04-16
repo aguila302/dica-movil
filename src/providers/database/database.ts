@@ -11,13 +11,13 @@ import {
 import {
 	BehaviorSubject
 } from 'rxjs/BehaviorSubject';
+import * as collect from 'collect.js/dist'
 
 @Injectable()
 export class DatabaseProvider {
 
 	private database: SQLiteObject
 	private dbReady = new BehaviorSubject < boolean > (false)
-	public autopistasList = []
 
 	constructor(private platform: Platform, private sqlite: SQLite) {
 		this.platform.ready().then(() => {
@@ -38,6 +38,7 @@ export class DatabaseProvider {
 		return this.database.executeSql(
 				`CREATE TABLE IF NOT EXISTS usuarios (
 	        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	        	usuario_id INTEGER,
 	        	name TEXT,
 	        	email TEXT,
 	        	access_token TEXT,
@@ -48,15 +49,30 @@ export class DatabaseProvider {
 			.then(() => {
 				return this.database.executeSql(
 					`CREATE TABLE IF NOT EXISTS autopistas (
-		        	id INTEGER PRIMARY KEY AUTOINCREMENT,
-		        	nombre TEXT,
-		        	cadenamiento_inicial_km INTEGER,
-		        	cadenamiento_inicial_m INTEGER,
-		        	cadenamiento_final_km INTEGER,
-		        	cadenamiento_final_m INTEGER,
-		        	user_id INTEGER,
-  					FOREIGN KEY(user_id) REFERENCES usuarios(id));`, {}
-				)
+			        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+			        	autopista_id INTEGER,
+			        	nombre TEXT,
+			        	cadenamiento_inicial_km INTEGER,
+			        	cadenamiento_inicial_m INTEGER,
+			        	cadenamiento_final_km INTEGER,
+			        	cadenamiento_final_m INTEGER,
+			        	user_id INTEGER,
+	  					FOREIGN KEY(user_id) REFERENCES usuarios(id));`, {}
+				).then(() => {
+					return this.database.executeSql(
+						`CREATE TABLE IF NOT EXISTS elementos (
+				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+				        	elemento_id INTEGER,
+				        	descripcion TEXT);`, {}
+					).then(() => {
+						return this.database.executeSql(
+							`CREATE TABLE IF NOT EXISTS cuerpos (
+				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+				        	cuerpo_id INTEGER,
+				        	descripcion TEXT);`, {}
+						)
+					})
+				})
 			})
 	}
 
@@ -106,14 +122,24 @@ export class DatabaseProvider {
 
 	/* Actualizamos los datos del usuario. */
 	actualizarUser = (response, usuario) => {
-		let parameters = [response.data.name, response.data.email, usuario.id]
+		let parameters = [response.name, response.email, response.id, usuario.id]
 
 		return this.isReady()
 			.then(() => {
-				return this.database.executeSql(`update usuarios set name = ?, email = ? where id = ?`, parameters)
+				return this.database.executeSql(`update usuarios set name = ?, email = ?, usuario_id = ? where id = ?`, parameters)
 			})
 	}
 
+	/* Elimina el origen de datos movil. */
+	deleteDatabase = () => {
+		return this.isReady().then(() => {
+
+			return this.sqlite.deleteDatabase({
+				name: 'dica.db',
+				location: 'default'
+			}).then(() => console.log('Database eleiminada'))
+		})
+	}
 	/* Eliminamos los token del origen de datos. */
 	deleteToken = () => {
 		return this.isReady().then(() => {
@@ -129,27 +155,18 @@ export class DatabaseProvider {
 	}
 
 	/* Registramos las autopistas de dicho usuario conectado. */
-	registrarAutopistas = (autopistas, usuario) => {
-		var miglobal = this
+	registrarAutopistas(autopistas, usuario) {
 		return this.isReady()
 			.then(() => {
-				this.database.transaction(function(tx) {
-					for (let item of autopistas) {
-						let sql = `insert into autopistas (nombre, cadenamiento_inicial_km, cadenamiento_inicial_m, cadenamiento_final_km,
-							cadenamiento_final_m, user_id) values (?,?,?,?,?,?);`
-						tx.executeSql(sql, [item.nombre, item.cadenamiento_inicial_km, item.cadenamiento_inicial_m,
-							item.cadenamiento_final_km, item.cadenamiento_final_m, usuario.id
-						], function(tx, res) {
-							this.autopistasList.push({
-								'nombre': item.nombre
-							})
-						})
-					}
-				}).then(() => {
-					console.log("Transaction Ok!")
+				autopistas.forEach(item => {
+					let sql = `insert into autopistas (autopista_id, nombre, cadenamiento_inicial_km, cadenamiento_inicial_m, cadenamiento_final_km,
+							cadenamiento_final_m, user_id) values (?,?,?,?,?,?,?);`
+					this.database.executeSql(sql, [item.id, item.nombre, item.cadenamiento_inicial_km, item.cadenamiento_inicial_m,
+						item.cadenamiento_final_km, item.cadenamiento_final_m, usuario.id
+					])
+				}, this)
 
-				});
-
+				return autopistas
 			})
 	}
 
@@ -164,6 +181,73 @@ export class DatabaseProvider {
 							autopistas.push(result.rows.item(i))
 						}
 						return autopistas
+					})
+
+			})
+	}
+
+	/* Registramos los elementos. */
+	registrarElementos = (elementos) => {
+		return this.isReady()
+			.then(() => {
+				elementos.forEach(item => {
+					let sql = `insert into elementos (elemento_id, descripcion) values (?,?);`
+					this.database.executeSql(sql, [item.id, item.descripcion])
+				}, this)
+
+				return elementos
+			})
+
+	}
+
+	/* Funcion para obtener un listado de elementos. */
+	getElementos = () => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`select elemento_id, descripcion from elementos`, {})
+					.then((result) => {
+						let elementos = []
+						for (let i = 0; i < result.rows.length; i++) {
+							elementos.push({
+								elemento_id: result.rows.item(i).elemento_id,
+								descripcion: result.rows.item(i).descripcion
+							})
+						}
+
+						return elementos
+					})
+
+			})
+	}
+
+	/* Registramos los cuerpos. */
+	registrarCuerpos = (cuerpos) => {
+		return this.isReady()
+			.then(() => {
+				cuerpos.forEach(item => {
+					let sql = `insert into cuerpos (cuerpo_id, descripcion) values (?,?);`
+					this.database.executeSql(sql, [item.id, item.descripcion])
+				}, this)
+
+				return cuerpos
+			})
+
+	}
+
+	/* Funcion para obtener un listado de cuerpos. */
+	getCuerpos = () => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`select cuerpo_id, descripcion from cuerpos`, {})
+					.then((result) => {
+						let cuerpos = []
+						for (let i = 0; i < result.rows.length; i++) {
+							cuerpos.push({
+								cuerpo_id: result.rows.item(i).cuerpo_id,
+								descripcion: result.rows.item(i).descripcion
+							})
+						}
+						return Promise.resolve(cuerpos)
 					})
 
 			})

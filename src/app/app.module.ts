@@ -28,6 +28,10 @@ import {
 } from '../pages/login/login';
 
 import {
+	LevantamientoPage
+} from '../pages/levantamiento/levantamiento';
+
+import {
 	StatusBar
 } from '@ionic-native/status-bar';
 import {
@@ -39,6 +43,9 @@ import {
 import {
 	AutopistasService
 } from '../shared/autopistas-service';
+import {
+	LoginService
+} from '../shared/login-service';
 
 import {
 	SQLite
@@ -52,24 +59,38 @@ import {
 import {
 	Network
 } from '@ionic-native/network';
+import {
+	Camera
+} from '@ionic-native/camera';
+import {
+	BrMaskerModule
+} from 'brmasker-ionic-3';
+import {
+	FormsModule,
+	ReactiveFormsModule
+} from '@angular/forms';
 
 @NgModule({
 	declarations: [
 		MyApp,
 		HomePage,
 		ListPage,
-		LoginPage
+		LoginPage,
+		LevantamientoPage
 	],
 	imports: [
 		BrowserModule,
 		IonicModule.forRoot(MyApp),
+		BrMaskerModule,
+		FormsModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
 		MyApp,
 		HomePage,
 		ListPage,
-		LoginPage
+		LoginPage,
+		LevantamientoPage
 	],
 	providers: [
 		StatusBar,
@@ -83,7 +104,9 @@ import {
 		ApiProvider,
 		HTTP,
 		AutopistasService,
-		Network
+		LoginService,
+		Network,
+		Camera
 	]
 })
 export class AppModule {}

@@ -10,7 +10,7 @@ import {
 export class ApiProvider {
 
 	link = {
-		apiUrl: 'http://d2f1a188.ngrok.io',
+		apiUrl: 'http://7266f56c.ngrok.io',
 		client_secret: 'unKvzknkJBX908RHuE1KBpI1oRsj011jlrnlXxRt'
 	}
 
@@ -42,6 +42,8 @@ export class ApiProvider {
 					'headers': data.headers
 				}
 			}).catch(error => {
+				console.log(error)
+
 				return {
 					'status': error.status,
 					'data': JSON.parse(error.error),
@@ -93,4 +95,49 @@ export class ApiProvider {
 				}
 			})
 	}
+
+	/* Obtiene las autopistas asignadas de un usuario */
+	getElementos = (accessToken): Promise < HTTPResponse > => {
+		let params = {
+			'Authorization': 'Bearer ' + accessToken.access_token
+		}
+
+		return this.http.get(`${this.link.apiUrl}/api/elementos`, {}, params)
+			.then(data => {
+				return {
+					'status': data.status,
+					'data': JSON.parse(data.data),
+					'headers': data.headers
+				}
+			}).catch(error => {
+				return {
+					'status': error.status,
+					'data': JSON.parse(error.error),
+					'headers': error.headers,
+				}
+			})
+	}
+
+	/* Obtiene las autopistas asignadas de un usuario */
+	getCuerpos = (accessToken): Promise < HTTPResponse > => {
+		let params = {
+			'Authorization': 'Bearer ' + accessToken.access_token
+		}
+
+		return this.http.get(`${this.link.apiUrl}/api/cuerpos`, {}, params)
+			.then(data => {
+				return {
+					'status': data.status,
+					'data': JSON.parse(data.data),
+					'headers': data.headers
+				}
+			}).catch(error => {
+				return {
+					'status': error.status,
+					'data': JSON.parse(error.error),
+					'headers': error.headers,
+				}
+			})
+	}
+
 }
