@@ -15,9 +15,6 @@ import {
 } from '../../providers/api/api'
 
 import {
-	DatabaseProvider
-} from '../../providers/database/database'
-import {
 	LoginService
 } from '../../shared/login-service'
 import {
@@ -40,7 +37,7 @@ export class LoginPage {
 	clave_acceso: string = ''
 
 	constructor(public navCtrl: NavController, private alertCtrl: AlertController,
-		private apiProvider: ApiProvider, private databaseProvider: DatabaseProvider, private loginService: LoginService,
+		private apiProvider: ApiProvider, private loginService: LoginService,
 		private nativeStorage: NativeStorage, private network: Network, private autopistasService: AutopistasService) {}
 
 	ionViewDidLoad() {
@@ -63,6 +60,8 @@ export class LoginPage {
 		} else {
 			/* Si existe una conexion via wifi. */
 			if (this.network.type == 'wifi') {
+				this.username = 'useradmin'
+				this.clave_acceso = 'secret'
 				/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
 
 				/* Llamamos a nuestro servicio para obtener token de acceso. */
@@ -123,11 +122,8 @@ export class LoginPage {
 		this.apiProvider.getElementos(usuario).then((response) => {
 			/* Registramos las elementos en el origen de datos movil */
 			this.autopistasService.registrarElementos(response.data.data).then((response) => {
-
 				/* Descarga el listado de cuerpos. */
 				this.descargaCuerpos(usuario)
-				/* Mostramos vista de inicio. */
-				// this.navCtrl.setRoot(HomePage, {})
 			})
 		})
 	}
@@ -136,10 +132,50 @@ export class LoginPage {
 	descargaCuerpos = (usuario) => {
 		/* Descargamos los elementos.  */
 		this.apiProvider.getCuerpos(usuario).then((response) => {
+
 			/* Registramos las elementos en el origen de datos movil */
 			this.autopistasService.registrarCuerpos(response.data.data).then((response) => {
 
-				/* Mostramos vista de inicio. */
+				/* Descarga el listado de subelementos. */
+				this.descargaSubElementos(usuario)
+			})
+		})
+	}
+
+	/* Descaraga los sub elementos en el API. */
+	descargaSubElementos = (usuario) => {
+		/* Descargamos los elementos.  */
+		this.apiProvider.getSubElementos(usuario).then((response) => {
+
+			/* Registramos los sub elementos en el origen de datos movil */
+			this.autopistasService.registrarSubElementos(response.data.data).then((response) => {
+				this.descargaCondiciones(usuario)
+			})
+		})
+	}
+
+	/* Descaraga las condiciones en el API. */
+	descargaCondiciones = (usuario) => {
+		/* Descargamos las condiones. */
+		this.apiProvider.getCondiciones(usuario).then((response) => {
+
+			/* Registramos las condiciones en el origen de datos movil */
+			this.autopistasService.registrarCondiciones(response.data.data).then((response) => {
+				this.descargaCarriles(usuario)
+
+			})
+
+		})
+	}
+
+	/* Descaraga los carriles en el API. */
+	descargaCarriles = (usuario) => {
+		/* Descargamos las condiones. */
+		this.apiProvider.getCarriles(usuario).then((response) => {
+
+			/* Registramos los carriles en el origen de datos movil */
+			this.autopistasService.registrarCarriles(response.data.data).then((response) => {
+				/* Mostramos el home de la aplicacion. */
 				this.navCtrl.setRoot(HomePage, {})
 			})
 		})

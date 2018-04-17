@@ -87,4 +87,5 @@
     <plugin name="cordova-plugin-nativestorage" spec="^2.3.1" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
+    <plugin name="uk.co.workingedge.cordova.plugin.sqliteporter" spec="^1.0.2" />
 </widget>

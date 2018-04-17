@@ -69,6 +69,9 @@ import {
 	FormsModule,
 	ReactiveFormsModule
 } from '@angular/forms';
+import {
+	SQLitePorter
+} from '@ionic-native/sqlite-porter';
 
 @NgModule({
 	declarations: [
@@ -106,7 +109,8 @@ import {
 		AutopistasService,
 		LoginService,
 		Network,
-		Camera
+		Camera,
+		SQLitePorter
 	]
 })
 export class AppModule {}

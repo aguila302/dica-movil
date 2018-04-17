@@ -10,9 +10,13 @@ export class AutopistasService {
 
 	public userId: number
 	cuerpos = []
+	elementoId: number
+	elementos = []
+	condiciones = []
+	carriles = []
 
 	constructor(public databaseProvider: DatabaseProvider) {
-		this.getCuerpos()
+		this.getCuerpos(), this.getElementos(), this.getCondiciones(), this.getCarriles()
 	}
 
 	/**
@@ -37,7 +41,9 @@ export class AutopistasService {
 
 	/* Obtenemos un listado de elementos. */
 	getElementos = () => {
-		return this.databaseProvider.getElementos()
+		this.databaseProvider.getElementos().then((response) => {
+			this.elementos = response
+		})
 	}
 
 	/**
@@ -51,6 +57,46 @@ export class AutopistasService {
 	getCuerpos = () => {
 		this.databaseProvider.getCuerpos().then((response) => {
 			this.cuerpos = response
+		})
+	}
+
+	/* Obtenemos los sub elementos asociados a un elemento. */
+	getSubElemento = (event) => {
+		return this.databaseProvider.getSubElemento(event)
+	}
+
+	/**
+	 * Registrar subelementos obtenidas en el API.
+	 */
+	registrarSubElementos = (subelementos) => {
+		return this.databaseProvider.registrarSubElementos(subelementos)
+	}
+
+	/**
+	 * Registrar condiciones obtenidas en el API.
+	 */
+	registrarCondiciones = (condiciones) => {
+		return this.databaseProvider.registrarCondiciones(condiciones)
+	}
+
+	/* Obtenemos un listado de condiciones. */
+	getCondiciones = () => {
+		this.databaseProvider.getCondiciones().then((response) => {
+			this.condiciones = response
+		})
+	}
+
+	/**
+	 * Registra los carriles obtenidas en el API.
+	 */
+	registrarCarriles = (carriles) => {
+		return this.databaseProvider.registrarCarriles(carriles)
+	}
+
+	/* Obtenemos un listado de carriles. */
+	getCarriles = () => {
+		this.databaseProvider.getCarriles().then((response) => {
+			this.carriles = response
 		})
 	}
 }

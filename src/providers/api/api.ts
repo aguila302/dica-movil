@@ -10,7 +10,7 @@ import {
 export class ApiProvider {
 
 	link = {
-		apiUrl: 'http://7266f56c.ngrok.io',
+		apiUrl: 'http://1cb81335.ngrok.io',
 		client_secret: 'unKvzknkJBX908RHuE1KBpI1oRsj011jlrnlXxRt'
 	}
 
@@ -140,4 +140,70 @@ export class ApiProvider {
 			})
 	}
 
+	/* Obtiene los subelementos. */
+	getSubElementos = (accessToken): Promise < HTTPResponse > => {
+		let params = {
+			'Authorization': 'Bearer ' + accessToken.access_token
+		}
+
+		return this.http.get(`${this.link.apiUrl}/api/subelementos`, {}, params)
+			.then(data => {
+				return {
+					'status': data.status,
+					'data': JSON.parse(data.data),
+					'headers': data.headers
+				}
+			}).catch(error => {
+				return {
+					'status': error.status,
+					'data': JSON.parse(error.error),
+					'headers': error.headers,
+				}
+			})
+	}
+
+
+	/* Obtiene las condiones. */
+	getCondiciones = (accessToken): Promise < HTTPResponse > => {
+		let params = {
+			'Authorization': 'Bearer ' + accessToken.access_token
+		}
+
+		return this.http.get(`${this.link.apiUrl}/api/condiciones`, {}, params)
+			.then(data => {
+				return {
+					'status': data.status,
+					'data': JSON.parse(data.data),
+					'headers': data.headers
+				}
+			}).catch(error => {
+				return {
+					'status': error.status,
+					'data': JSON.parse(error.error),
+					'headers': error.headers,
+				}
+			})
+	}
+
+	/* Obtiene las carriles. */
+	getCarriles = (accessToken): Promise < HTTPResponse > => {
+		let params = {
+			'Authorization': 'Bearer ' + accessToken.access_token
+		}
+
+		return this.http.get(`${this.link.apiUrl}/api/carriles`, {}, params)
+			.then(data => {
+				return {
+					'status': data.status,
+					'data': JSON.parse(data.data),
+					'headers': data.headers
+				}
+			}).catch(error => {
+				return {
+					'status': error.status,
+					'data': JSON.parse(error.error),
+					'headers': error.headers,
+				}
+			})
+	}
 }

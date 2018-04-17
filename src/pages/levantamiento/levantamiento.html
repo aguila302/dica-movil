@@ -22,38 +22,27 @@
             </ion-item>
             <ion-item margin-top>
                 <ion-label>Elemento</ion-label>
-                <ion-select formControlName="elemento">
-                    <ion-option value="nes">Elemento 1</ion-option>
-                    <ion-option value="nes">Elemento 2</ion-option>
-                    <ion-option value="nes">Elemento 3</ion-option>
-                    <ion-option value="nes">Elemento 4</ion-option>
+                <ion-select formControlName="elemento" (ionChange)="muestraSubElementos($event)">
+                    <ion-option *ngFor="let elemento of autopistasService.elementos" [value]="elemento.elemento_id">{{elemento.descripcion}}</ion-option>
                 </ion-select>
             </ion-item>
             <ion-item margin-top>
                 <ion-label>Tipo de elemento</ion-label>
                 <ion-select formControlName="tipoElemento">
-                    <ion-option value="nes">Tipo elemento 1</ion-option>
-                    <ion-option value="nes">Tipo elemento 2</ion-option>
-                    <ion-option value="nes">Tipo elemento 3</ion-option>
-                    <ion-option value="nes">Tipo elemento 4</ion-option>
+                    <ion-option *ngFor="let subelemento of subelementos" [value]="subelemento.subelemento_id">{{subelemento.descripcion_subelemento}}
+                    </ion-option>
                 </ion-select>
             </ion-item>
             <ion-item margin-top>
                 <ion-label>Condición fisica</ion-label>
                 <ion-select formControlName="condicionFisica">
-                    <ion-option value="nes">Condición 1</ion-option>
-                    <ion-option value="nes">Condición 2</ion-option>
-                    <ion-option value="nes">Condición 3</ion-option>
-                    <ion-option value="nes">Condición 4</ion-option>
+                    <ion-option *ngFor="let condicion of autopistasService.condiciones" [value]="condicion.condicion_id">{{condicion.descripcion}}</ion-option>
                 </ion-select>
             </ion-item>
             <ion-item margin-top>
                 <ion-label>Carril y/o lado</ion-label>
                 <ion-select formControlName="carril">
-                    <ion-option value="n">Derecho</ion-option>
-                    <ion-option value="nes">Izquierdo</ion-option>
-                    <ion-option value="nes">Central</ion-option>
-                    <ion-option value="nes">Ambos</ion-option>
+                    <ion-option *ngFor="let carril of autopistasService.carriles" [value]="carril.carril_id">{{carril.descripcion}}</ion-option>
                 </ion-select>
             </ion-item>
             <ion-item margin-top>

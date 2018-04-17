@@ -33,7 +33,8 @@ export class LevantamientoPage {
 
 	private dataLevantamiento: FormGroup
 	public base64Image: string
-	private cuerpos = []
+	elementos = []
+	subelementos = []
 
 	options: CameraOptions = {
 		quality: 100,
@@ -66,6 +67,14 @@ export class LevantamientoPage {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad LevantamientoPage')
+	}
+
+	/* Muestra los sub elementos de un elemento seleccionado. */
+	muestraSubElementos = (event: any) => {
+
+		this.autopistasService.getSubElemento(event).then((response) => {
+			this.subelementos = response
+		})
 	}
 
 	mostrarCamara = () => {

@@ -74,8 +74,8 @@ export class HomePage {
 
 	/* Funcion para cerrar sesion en la aplicación */
 	logout = () => {
-		/* Eliminamos el origen de datos */
-		this.databaseProvider.deleteDatabase().then((response) => {
+		//* Eliminamos todos los token del origen de datos */
+		this.databaseProvider.resetDatabase().then((response) => {
 			this.nativeStorage.remove('auth').then((data) => {
 				this.navCtrl.setRoot(LoginPage, {})
 			})

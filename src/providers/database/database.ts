@@ -12,6 +12,9 @@ import {
 	BehaviorSubject
 } from 'rxjs/BehaviorSubject';
 import * as collect from 'collect.js/dist'
+import {
+	SQLitePorter
+} from '@ionic-native/sqlite-porter';
 
 @Injectable()
 export class DatabaseProvider {
@@ -19,15 +22,14 @@ export class DatabaseProvider {
 	private database: SQLiteObject
 	private dbReady = new BehaviorSubject < boolean > (false)
 
-	constructor(private platform: Platform, private sqlite: SQLite) {
+	constructor(private platform: Platform, private sqlite: SQLite, private sqlitePorter: SQLitePorter) {
 		this.platform.ready().then(() => {
 			this.sqlite.create({
 				name: 'dica.db',
 				location: 'default'
 			}).then((db: SQLiteObject) => {
 				this.database = db
-
-				this.createTables().then(() => {
+				this.createTables().then((res) => {
 					this.dbReady.next(true)
 				})
 			})
@@ -70,7 +72,30 @@ export class DatabaseProvider {
 				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
 				        	cuerpo_id INTEGER,
 				        	descripcion TEXT);`, {}
-						)
+						).then(() => {
+							return this.database.executeSql(
+								`CREATE TABLE IF NOT EXISTS subelementos (
+				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+				        	subelemento_id INTEGER,
+				        	descripcion_subelemento TEXT,
+				        	elemento_id INTEGER,
+				        	FOREIGN KEY(elemento_id) REFERENCES elementos(elemento_id));`, {}
+							).then(() => {
+								return this.database.executeSql(
+									`CREATE TABLE IF NOT EXISTS condiciones (
+				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+				        	condicion_id INTEGER,
+				        	descripcion TEXT);`, {}
+								).then(() => {
+									return this.database.executeSql(
+										`CREATE TABLE IF NOT EXISTS carriles (
+				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+				        	carril_id INTEGER,
+				        	descripcion TEXT);`, {}
+									)
+								})
+							})
+						})
 					})
 				})
 			})
@@ -95,6 +120,7 @@ export class DatabaseProvider {
 		let parameters = [data.access_token, data.expires_in, data.refresh_token]
 		return this.isReady()
 			.then(() => {
+
 				return this.database.executeSql(`insert into usuarios (access_token, expires_in, refresh_token)
 					values(?,?,?)`, parameters)
 			})
@@ -130,27 +156,28 @@ export class DatabaseProvider {
 			})
 	}
 
-	/* Elimina el origen de datos movil. */
-	deleteDatabase = () => {
+	/* Limpiamos los datos . */
+	resetDatabase = () => {
 		return this.isReady().then(() => {
-
-			return this.sqlite.deleteDatabase({
-				name: 'dica.db',
-				location: 'default'
-			}).then(() => console.log('Database eleiminada'))
-		})
-	}
-	/* Eliminamos los token del origen de datos. */
-	deleteToken = () => {
-		return this.isReady().then(() => {
-			return this.database.executeSql(`DELETE FROM usuarios`, {})
-		})
-	}
-
-	/* Eliminamos los autopistas del origen de datos. */
-	deleteAutopistas = () => {
-		return this.isReady().then(() => {
-			return this.database.executeSql(`DELETE FROM autopistas`, {})
+			return this.database.executeSql(`DELETE FROM usuarios;`, {})
+				.then(() => {
+					return this.database.executeSql(`DELETE FROM autopistas;`, {})
+						.then(() => {
+							return this.database.executeSql(`DELETE FROM cuerpos;`, {})
+								.then(() => {
+									return this.database.executeSql(`DELETE FROM subelementos;`, {})
+										.then(() => {
+											return this.database.executeSql(`DELETE FROM elementos;`, {})
+												.then(() => {
+													return this.database.executeSql(`DELETE FROM condiciones;`, {})
+														.then(() => {
+															return this.database.executeSql(`DELETE FROM carriles;`, {})
+														})
+												})
+										})
+								})
+						})
+				})
 		})
 	}
 
@@ -188,6 +215,7 @@ export class DatabaseProvider {
 
 	/* Registramos los elementos. */
 	registrarElementos = (elementos) => {
+
 		return this.isReady()
 			.then(() => {
 				elementos.forEach(item => {
@@ -207,6 +235,7 @@ export class DatabaseProvider {
 				return this.database.executeSql(`select elemento_id, descripcion from elementos`, {})
 					.then((result) => {
 						let elementos = []
+						elementos.splice(0, elementos.length)
 						for (let i = 0; i < result.rows.length; i++) {
 							elementos.push({
 								elemento_id: result.rows.item(i).elemento_id,
@@ -214,7 +243,7 @@ export class DatabaseProvider {
 							})
 						}
 
-						return elementos
+						return Promise.resolve(elementos)
 					})
 
 			})
@@ -248,6 +277,104 @@ export class DatabaseProvider {
 							})
 						}
 						return Promise.resolve(cuerpos)
+					})
+
+			})
+	}
+
+	/* Registramos los subelementos. */
+	registrarSubElementos = (subelementos) => {
+		return this.isReady()
+			.then(() => {
+				subelementos.forEach(item => {
+					let sql = `insert into subelementos (subelemento_id, descripcion_subelemento, elemento_id) values (?,?,?);`
+					this.database.executeSql(sql, [item.id, item.descripcion, item.elemento.data.id])
+				}, this)
+
+				return subelementos
+			})
+
+	}
+
+	/* Funcion para obtener un listado de subelementos. */
+	getSubElemento = (event) => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`select subelemento_id, descripcion_subelemento from subelementos where elemento_id = ?`, [event])
+					.then((result) => {
+						let subelementos = []
+						for (let i = 0; i < result.rows.length; i++) {
+							subelementos.push({
+								subelemento_id: result.rows.item(i).subelemento_id,
+								descripcion_subelemento: result.rows.item(i).descripcion_subelemento
+							})
+						}
+						return Promise.resolve(subelementos)
+					})
+
+			})
+	}
+
+	/* Registramos las condiciones. */
+	registrarCondiciones = (condiciones) => {
+		return this.isReady()
+			.then(() => {
+				condiciones.forEach(item => {
+					let sql = `insert into condiciones (condicion_id, descripcion) values (?,?);`
+					this.database.executeSql(sql, [item.id, item.descripcion])
+				}, this)
+
+				return condiciones
+			})
+	}
+
+	/* Funcion para obtener un listado de cuerpos. */
+	getCondiciones = () => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`select condicion_id, descripcion from condiciones`, {})
+					.then((result) => {
+						let condiciones = []
+						for (let i = 0; i < result.rows.length; i++) {
+							condiciones.push({
+								condicion_id: result.rows.item(i).condicion_id,
+								descripcion: result.rows.item(i).descripcion
+							})
+						}
+						return Promise.resolve(condiciones)
+					})
+
+			})
+	}
+
+	/* Registramos las condiciones. */
+	registrarCarriles = (carriles) => {
+		return this.isReady()
+			.then(() => {
+				carriles.forEach(item => {
+					let sql = `insert into carriles (carril_id, descripcion) values (?,?);`
+					this.database.executeSql(sql, [item.id, item.descripcion])
+				}, this)
+
+				return carriles
+			})
+	}
+
+
+	/* Funcion para obtener un listado de los carriles. */
+	getCarriles = () => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`select carril_id, descripcion from carriles`, {})
+					.then((result) => {
+						let carriles = []
+						for (let i = 0; i < result.rows.length; i++) {
+							carriles.push({
+								carril_id: result.rows.item(i).carril_id,
+								descripcion: result.rows.item(i).descripcion
+							})
+						}
+						return Promise.resolve(carriles)
 					})
 
 			})
