@@ -17,8 +17,8 @@ import {
 	CameraOptions
 } from '@ionic-native/camera';
 import {
-	CadenamientoValidator
-} from '../../app/validators/cadenamiento';
+	CustomValidators
+} from 'ng2-validation';
 import {
 	AutopistasService
 } from '../../shared/autopistas-service';
@@ -33,7 +33,10 @@ export class LevantamientoPage {
 
 	private dataLevantamiento: FormGroup
 	public base64Image: string
+	cuerpos = []
 	elementos = []
+	condiciones = []
+	carriles = []
 	subelementos = []
 
 	options: CameraOptions = {
@@ -67,6 +70,42 @@ export class LevantamientoPage {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad LevantamientoPage')
+		this.getCuerpos()
+		this.getElementos()
+		this.getCondiciones()
+		this.getCarriles()
+	}
+
+	/* Obtiene un listado de cuerpos del origen de datos movil. */
+	getCuerpos = () => {
+		this.autopistasService.getCuerpos().then((response) => {
+			this.cuerpos = response
+		})
+
+	}
+
+	/* Obtiene un listado de elementos del origen de datos movil. */
+	getElementos = () => {
+		this.autopistasService.getElementos().then((response) => {
+			this.elementos = response
+		})
+
+	}
+
+	/* Obtiene un listado de condiciones del origen de datos movil. */
+	getCondiciones = () => {
+		this.autopistasService.getCondiciones().then((response) => {
+			this.condiciones = response
+		})
+
+	}
+
+	/* Obtiene un listado de carriles del origen de datos movil. */
+	getCarriles = () => {
+		this.autopistasService.getCarriles().then((response) => {
+			this.carriles = response
+		})
+
 	}
 
 	/* Muestra los sub elementos de un elemento seleccionado. */
@@ -77,16 +116,16 @@ export class LevantamientoPage {
 		})
 	}
 
-	mostrarCamara = () => {
-		this.camera.getPicture(this.options).then((imageData) => {
+	// mostrarCamara = () => {
+	// 	this.camera.getPicture(this.options).then((imageData) => {
 
-			// imageData is either a base64 encoded string or a file URI
-			// If it's base64:
-			this.base64Image = 'data:image/jpeg;base64,' + imageData;
-		}, (err) => {
-			// Handle error
-		});
-	}
+	// 		// imageData is either a base64 encoded string or a file URI
+	// 		// If it's base64:
+	// 		this.base64Image = 'data:image/jpeg;base64,' + imageData;
+	// 	}, (err) => {
+	// 		// Handle error
+	// 	});
+	// }
 
 	logForm = () => {
 		console.log(this.dataLevantamiento.value)

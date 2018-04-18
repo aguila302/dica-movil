@@ -243,7 +243,7 @@ export class DatabaseProvider {
 							})
 						}
 
-						return Promise.resolve(elementos)
+						return elementos
 					})
 
 			})
@@ -276,7 +276,7 @@ export class DatabaseProvider {
 								descripcion: result.rows.item(i).descripcion
 							})
 						}
-						return Promise.resolve(cuerpos)
+						return cuerpos
 					})
 
 			})
@@ -341,7 +341,7 @@ export class DatabaseProvider {
 								descripcion: result.rows.item(i).descripcion
 							})
 						}
-						return Promise.resolve(condiciones)
+						return condiciones
 					})
 
 			})
@@ -374,7 +374,7 @@ export class DatabaseProvider {
 								descripcion: result.rows.item(i).descripcion
 							})
 						}
-						return Promise.resolve(carriles)
+						return carriles
 					})
 
 			})

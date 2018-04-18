@@ -9,14 +9,12 @@ import {
 export class AutopistasService {
 
 	public userId: number
-	cuerpos = []
+
 	elementoId: number
-	elementos = []
-	condiciones = []
-	carriles = []
+
 
 	constructor(public databaseProvider: DatabaseProvider) {
-		this.getCuerpos(), this.getElementos(), this.getCondiciones(), this.getCarriles()
+		// this.getCuerpos(), this.getElementos(), this.getCondiciones(), this.getCarriles()
 	}
 
 	/**
@@ -41,9 +39,7 @@ export class AutopistasService {
 
 	/* Obtenemos un listado de elementos. */
 	getElementos = () => {
-		this.databaseProvider.getElementos().then((response) => {
-			this.elementos = response
-		})
+		return this.databaseProvider.getElementos()
 	}
 
 	/**
@@ -55,9 +51,7 @@ export class AutopistasService {
 
 	/* Obtenemos un listado de elementos. */
 	getCuerpos = () => {
-		this.databaseProvider.getCuerpos().then((response) => {
-			this.cuerpos = response
-		})
+		return this.databaseProvider.getCuerpos()
 	}
 
 	/* Obtenemos los sub elementos asociados a un elemento. */
@@ -81,9 +75,7 @@ export class AutopistasService {
 
 	/* Obtenemos un listado de condiciones. */
 	getCondiciones = () => {
-		this.databaseProvider.getCondiciones().then((response) => {
-			this.condiciones = response
-		})
+		return this.databaseProvider.getCondiciones()
 	}
 
 	/**
@@ -95,8 +87,6 @@ export class AutopistasService {
 
 	/* Obtenemos un listado de carriles. */
 	getCarriles = () => {
-		this.databaseProvider.getCarriles().then((response) => {
-			this.carriles = response
-		})
+		return this.databaseProvider.getCarriles()
 	}
 }

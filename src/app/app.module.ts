@@ -72,6 +72,9 @@ import {
 import {
 	SQLitePorter
 } from '@ionic-native/sqlite-porter';
+import {
+	CustomFormsModule
+} from 'ng2-validation'
 
 @NgModule({
 	declarations: [
@@ -85,7 +88,8 @@ import {
 		BrowserModule,
 		IonicModule.forRoot(MyApp),
 		BrMaskerModule,
-		FormsModule
+		FormsModule,
+		CustomFormsModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
