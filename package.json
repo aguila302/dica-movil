@@ -29,6 +29,7 @@
     "@ionic-native/sqlite": "^4.5.3",
     "@ionic-native/sqlite-porter": "^4.7.0",
     "@ionic-native/status-bar": "4.4.0",
+    "accounting-js": "^1.1.1",
     "brmasker-ionic-3": "^1.0.9",
     "collect.js": "^4.0.14",
     "cordova-android": "7.0.0",

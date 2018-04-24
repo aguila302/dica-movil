@@ -13,9 +13,7 @@ export class AutopistasService {
 	elementoId: number
 
 
-	constructor(public databaseProvider: DatabaseProvider) {
-		// this.getCuerpos(), this.getElementos(), this.getCondiciones(), this.getCarriles()
-	}
+	constructor(public databaseProvider: DatabaseProvider) {}
 
 	/**
 	 * Registrar autopistas obtenidas en el API.
@@ -88,5 +86,26 @@ export class AutopistasService {
 	/* Obtenemos un listado de carriles. */
 	getCarriles = () => {
 		return this.databaseProvider.getCarriles()
+	}
+
+	/* Registramos levantamientos en el origen de datos movil. */
+	guardaLevantamiento = (controles, autopista: number) => {
+		let dataInsert = {
+			autopista,
+			cuerpo: controles.cuerpo.value,
+			elemento: controles.elemento.value,
+			tipoElemento: controles.tipoElemento.value,
+			condición: controles.condicionFisica.value,
+			carril: controles.carril.value,
+			longitudElemento: controles.longitudElemento.value,
+			cadenamientoInicialKm: controles.cadenamientoInicialKm.value,
+			cadenamientoInicialm: controles.cadenamientoInicialm.value,
+			cadenamientoFinalKm: controles.cadenamientoFinalKm.value,
+			cadenamientoFinalm: controles.cadenamientoFinalm.value,
+			reportar: controles.reportar.value,
+			statusLevantamiento: controles.statusLevantamiento.value,
+		}
+		return this.databaseProvider.registrarInventarios(dataInsert)
+
 	}
 }

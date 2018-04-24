@@ -92,7 +92,25 @@ export class DatabaseProvider {
 				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
 				        	carril_id INTEGER,
 				        	descripcion TEXT);`, {}
-									)
+									).then(() => {
+										return this.database.executeSql(
+											`CREATE TABLE IF NOT EXISTS levantamientos (
+				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+				        	autopista_id INTEGER,
+				        	cuerpo_id INTEGER,
+				        	elemento_id INTEGER,
+				        	tipo_elemento_id INTEGER,
+				        	coondicion_id INTEGER,
+				        	carril_id INTEGER,
+				        	longitud_elemento NUMERIC,
+				        	cadenamiento_inicial_km NUMERIC,
+				        	cadenamiento_inicial_m NUMERIC,
+				        	cadenamiento_final_km NUMERIC,
+				        	cadenamiento_final_m NUMERIC,
+				        	reportar NUMERIC,
+				        	estatus NUMERIC);`, {}
+										)
+									})
 								})
 							})
 						})
@@ -378,5 +396,21 @@ export class DatabaseProvider {
 					})
 
 			})
+	}
+
+	/* Registramos levantamientos en el origen de datos movil. */
+	registrarInventarios = (levantamiento) => {
+		return this.isReady()
+			.then(() => {
+				let sql = `insert into levantamientos (autopista_id, cuerpo_id, elemento_id, tipo_elemento_id, coondicion_id, carril_id,
+				        	longitud_elemento, cadenamiento_inicial_km, cadenamiento_inicial_m, cadenamiento_final_km,
+				        	cadenamiento_final_m, reportar, estatus) values (?,?,?,?,?,?,?,?,?,?,?,?,?);`
+				return this.database.executeSql(sql, [levantamiento.autopista, levantamiento.cuerpo, levantamiento.elemento,
+					levantamiento.tipoElemento, levantamiento.condicion, levantamiento.carril, levantamiento.longitudElemento,
+					levantamiento.cadenamientoInicialKm, levantamiento.cadenamientoInicialm, levantamiento.cadenamientoFinalKm,
+					levantamiento.cadenamientoFinalm, levantamiento.reportar, levantamiento.statusLevantamiento
+				])
+			}).catch(console.error.bind(console))
+
 	}
 }

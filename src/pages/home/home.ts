@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 import {
 	NavController,
-	NavParams
+	NavParams,
+	ActionSheetController
 } from 'ionic-angular';
 import {
 	LoginPage
@@ -36,7 +37,7 @@ export class HomePage {
 
 	constructor(public navCtrl: NavController, private navs: NavParams, private nativeStorage: NativeStorage,
 		private autopistasService: AutopistasService, private loginService: LoginService,
-		public databaseProvider: DatabaseProvider) {
+		public databaseProvider: DatabaseProvider, public actionSheetCtrl: ActionSheetController) {
 
 		/* Obtenemos el ultimo token registrado en el origen de datos movil. */
 		this.loginService.obtenerToken()
@@ -64,6 +65,39 @@ export class HomePage {
 	}
 
 	ionViewDidLoad() {}
+
+	/* Muestra una ventana emergente de las opciones de una autopista. */
+	verOpciones = (autopista) => {
+		let actionSheet = this.actionSheetCtrl.create({
+			title: 'Seleccion una opcion.',
+			buttons: [{
+				text: 'Consultar inventario.',
+				role: 'destructive',
+				handler: () => {
+				}
+			}, {
+				text: 'Registrar levantamientp carretero.',
+				role: 'destructive',
+				handler: () => {
+					this.nuevoLevantamiento(autopista)
+				}
+			}, {
+				text: 'Consulatr reporte.',
+				role: 'destructive',
+				handler: () => {
+
+				}
+			}, {
+				text: 'Cancelar.',
+				role: 'cancel',
+				handler: () => {
+					console.log('Cancel clicked');
+				}
+			}]
+		});
+		actionSheet.present();
+
+	}
 
 	/* Funcion para visualizar la vista principal de una autopista. */
 	nuevoLevantamiento = (autopista) => {

@@ -16,8 +16,14 @@
 </ion-header>
 <ion-content padding>
     <ion-list margin-top inset>
-        <button ion-item *ngFor="let autopista of autopistas" (click)="nuevoLevantamiento(autopista)">
+        <button ion-item *ngFor="let autopista of autopistas" (click)="verOpciones(autopista)">
             {{autopista.nombre}}
         </button>
     </ion-list>
 </ion-content>
+<ion-footer text-center>
+    <ion-toolbar>
+        <ion-title>
+            <small>Copyright © Cal y Mayor y Asociados, S.C. 2018. Todos los derechos reservados.</small></ion-title>
+    </ion-toolbar>
+</ion-footer>
