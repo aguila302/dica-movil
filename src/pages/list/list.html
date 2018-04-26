@@ -1,23 +1,26 @@
-<ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>List</ion-title>
-  </ion-navbar>
+<ion-header text-center>
+    <ion-navbar color="cabecera">
+        <ion-title>DICA - Diagnostico carretero</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="logout()">
+                <ion-icon ios="ios-log-out" md="md-log-out"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-toolbar>
+        <ion-title>Autopistas</ion-title>
+    </ion-toolbar>
 </ion-header>
-
-<ion-content>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-start></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-end>
-        {{item.note}}
-      </div>
-    </button>
-  </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+<ion-content padding>
+    <ion-list margin-top inset>
+        <button ion-item *ngFor="let autopista of autopistas" (click)="verOpciones(autopista)">
+            {{autopista.nombre}}
+        </button>
+    </ion-list>
 </ion-content>
+<ion-footer text-center>
+    <ion-toolbar>
+        <ion-title>
+            <small>Copyright © Cal y Mayor y Asociados, S.C. 2018. Todos los derechos reservados.</small></ion-title>
+    </ion-toolbar>
+</ion-footer>

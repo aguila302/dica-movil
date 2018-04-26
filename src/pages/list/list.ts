@@ -3,45 +3,97 @@ import {
 } from '@angular/core';
 import {
 	NavController,
-	NavParams
+	NavParams,
+	ModalController
 } from 'ionic-angular';
+import {
+	LoginPage
+} from '../login/login';
+import {
+	OpcionesAutopistaPage
+} from '../opciones-autopista/opciones-autopista';
+import {
+	LevantamientoPage
+} from '../levantamiento/levantamiento';
+import {
+	NativeStorage
+} from '@ionic-native/native-storage';
+
+import {
+	AutopistasService
+} from '../../shared/autopistas-service';
+import {
+	LoginService
+} from '../../shared/login-service'
+import {
+	DatabaseProvider
+} from '../../providers/database/database'
+import {
+	HomePage
+} from '../home/home';
 
 @Component({
 	selector: 'page-list',
 	templateUrl: 'list.html'
 })
 export class ListPage {
-	selectedItem: any;
-	icons: string[];
-	items: Array < {
-		title: string,
-		note: string,
-		icon: string
-	} > ;
+	public autopistas = []
 
-	constructor(public navCtrl: NavController, public navParams: NavParams) {
-		// If we navigated to this page, we will have an item available as a nav param
-		this.selectedItem = navParams.get('item');
+	constructor(public navCtrl: NavController, private navs: NavParams, private nativeStorage: NativeStorage,
+		private autopistasService: AutopistasService, private loginService: LoginService,
+		public databaseProvider: DatabaseProvider, public modal: ModalController) {
+		/* Obtenemos el ultimo token registrado en el origen de datos movil. */
+		this.loginService.obtenerToken()
+			.then(data => {
 
-		// Let's populate this page with some filler content for funzies
-		this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-			'american-football', 'boat', 'bluetooth', 'build'
-		];
+				/* Hay un token activo. */
+				if (data.length) {
+					this.nativeStorage.setItem('auth', {
+						email: data[0].email,
+						nmae: data[0].name
+					}).then(
+						() => console.log('Stored item!'),
+						error => console.error('Error storing item', error)
+					)
+					/* Obtenemos las autopistas del origen de datos asignadas a dicho usuario conectado*/
+					this.autopistasService.userId = data[0].id
+					this.autopistasService.getAutopistas().then(autopistas => this.autopistas = autopistas)
 
-		this.items = [];
-		for (let i = 1; i < 11; i++) {
-			this.items.push({
-				title: 'Item ' + i,
-				note: 'This is item #' + i,
-				icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-			});
-		}
+				} else {
+					/* No hay token activo. */
+					this.navCtrl.setRoot(LoginPage, {})
+				}
+
+			})
+
+	}
+	ionViewDidLoad() {}
+
+	/* Muestra una ventana emergente de las opciones de una autopista. */
+	verOpciones = (autopista) => {
+		let opciones = this.modal.create(OpcionesAutopistaPage, {
+			autopista: autopista
+		})
+		opciones.onDidDismiss(data => {
+			data.opcion === 'Nuevo levantamiento' ? this.nuevoLevantamiento(autopista) : ''
+		});
+		opciones.present()
 	}
 
-	itemTapped(event, item) {
-		// That's right, we're pushing to ourselves!
-		this.navCtrl.push(ListPage, {
-			item: item
-		});
+	/* Funcion para visualizar la vista principal de una autopista. */
+	nuevoLevantamiento = (autopista) => {
+		this.navCtrl.setRoot(HomePage, {
+			autopista: autopista
+		})
+	}
+
+	/* Funcion para cerrar sesion en la aplicación */
+	logout = () => {
+		//* Eliminamos todos los token del origen de datos */
+		this.databaseProvider.resetDatabase().then((response) => {
+			this.nativeStorage.remove('auth').then((data) => {
+				this.navCtrl.setRoot(LoginPage, {})
+			})
+		})
 	}
 }

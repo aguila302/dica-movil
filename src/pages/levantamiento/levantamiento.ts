@@ -51,9 +51,11 @@ export class LevantamientoPage implements OnInit {
 	public base64Image: string
 	options: CameraOptions = {
 		quality: 100,
-		destinationType: this.camera.DestinationType.NATIVE_URI,
+		destinationType: this.camera.DestinationType.FILE_URI,
 		encodingType: this.camera.EncodingType.JPEG,
 		mediaType: this.camera.MediaType.PICTURE,
+		allowEdit: true,
+		sourceType: this.camera.PictureSourceType.CAMERA,
 		saveToPhotoAlbum: true,
 		targetWidth: 200,
 		targetHeight: 100
@@ -199,7 +201,7 @@ export class LevantamientoPage implements OnInit {
 		this.camera.getPicture(this.options).then((imageData) => {
 			// this.base64Image = 'data:image/jpeg;base64,' + imageData;
 			this.base64Image = imageData
-			console.log(imageData)
+			console.log(this.base64Image)
 
 		}, (err) => {});
 	}

@@ -75,6 +75,9 @@ import {
 import {
 	CustomFormsModule
 } from 'ng2-validation'
+import {
+	OpcionesAutopistaPage
+} from '../pages/opciones-autopista/opciones-autopista';
 
 @NgModule({
 	declarations: [
@@ -82,7 +85,8 @@ import {
 		HomePage,
 		ListPage,
 		LoginPage,
-		LevantamientoPage
+		LevantamientoPage,
+		OpcionesAutopistaPage
 	],
 	imports: [
 		BrowserModule,
@@ -97,7 +101,8 @@ import {
 		HomePage,
 		ListPage,
 		LoginPage,
-		LevantamientoPage
+		LevantamientoPage,
+		OpcionesAutopistaPage
 	],
 	providers: [
 		StatusBar,
