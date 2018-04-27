@@ -14,11 +14,8 @@ import {
 } from '@ionic-native/splash-screen';
 
 import {
-	HomePage
-} from '../pages/home/home';
-import {
-	ListPage
-} from '../pages/list/list';
+	ListadoAutopistasPage
+} from '../pages/listado-autopistas/listado-autopistas';
 import {
 	NativeStorage
 } from '@ionic-native/native-storage';
@@ -29,7 +26,7 @@ import {
 export class MyApp {
 	@ViewChild(Nav) nav: Nav;
 
-	rootPage: any = ListPage;
+	rootPage: any = ListadoAutopistasPage;
 
 	pages: Array < {
 		title: string,
@@ -43,22 +40,22 @@ export class MyApp {
 		// used for an example of ngFor and navigation
 		this.pages = [{
 			title: 'Inventario',
-			component: HomePage
+			component: ListadoAutopistasPage
 		}, {
 			title: 'Registrar levantamiento',
-			component: ListPage
+			component: ListadoAutopistasPage
 		}, {
 			title: 'Reporte',
-			component: ListPage
+			component: ListadoAutopistasPage
 		}, {
 			title: 'Consultar',
-			component: ListPage
+			component: ListadoAutopistasPage
 		}, {
 			title: 'Cambiar de autopista',
-			component: ListPage
+			component: ListadoAutopistasPage
 		}, {
 			title: 'Sincronizar',
-			component: ListPage
+			component: ListadoAutopistasPage
 		}];
 
 	}

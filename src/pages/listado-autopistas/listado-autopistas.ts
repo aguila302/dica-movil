@@ -13,8 +13,8 @@ import {
 	OpcionesAutopistaPage
 } from '../opciones-autopista/opciones-autopista';
 import {
-	LevantamientoPage
-} from '../levantamiento/levantamiento';
+	RegistroLevantamientoPage
+} from '../registro-levantamiento/registro-levantamiento';
 import {
 	NativeStorage
 } from '@ionic-native/native-storage';
@@ -28,16 +28,12 @@ import {
 import {
 	DatabaseProvider
 } from '../../providers/database/database'
-import {
-	HomePage
-} from '../home/home';
-
 
 @Component({
-	selector: 'page-list',
-	templateUrl: 'list.html'
+	selector: 'page-listado-autopistas',
+	templateUrl: 'listado-autopistas.html'
 })
-export class ListPage {
+export class ListadoAutopistasPage {
 	public autopistas = []
 
 	constructor(public navCtrl: NavController, private navs: NavParams, private nativeStorage: NativeStorage,
@@ -83,7 +79,7 @@ export class ListPage {
 
 	/* Funcion para visualizar la vista principal de una autopista. */
 	nuevoLevantamiento = (autopista) => {
-		this.navCtrl.setRoot(HomePage, {
+		this.navCtrl.setRoot(RegistroLevantamientoPage, {
 			autopista: autopista
 		})
 	}

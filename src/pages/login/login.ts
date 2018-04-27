@@ -8,8 +8,8 @@ import {
 	AlertController
 } from 'ionic-angular';
 import {
-	ListPage
-} from '../list/list'
+	ListadoAutopistasPage
+} from '../listado-autopistas/listado-autopistas'
 import {
 	ApiProvider
 } from '../../providers/api/api'
@@ -176,7 +176,7 @@ export class LoginPage {
 			/* Registramos los carriles en el origen de datos movil */
 			this.autopistasService.registrarCarriles(response.data.data).then((response) => {
 				/* Mostramos el listado de las autopistas. */
-				this.navCtrl.setRoot(ListPage, {})
+				this.navCtrl.setRoot(ListadoAutopistasPage, {})
 			})
 		})
 	}

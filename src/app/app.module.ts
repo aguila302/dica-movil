@@ -18,18 +18,14 @@ import {
 	MyApp
 } from './app.component';
 import {
-	HomePage
-} from '../pages/home/home';
+	RegistroLevantamientoPage
+} from '../pages/registro-levantamiento/registro-levantamiento';
 import {
-	ListPage
-} from '../pages/list/list';
+	ListadoAutopistasPage
+} from '../pages/listado-autopistas/listado-autopistas';
 import {
 	LoginPage
 } from '../pages/login/login';
-
-import {
-	LevantamientoPage
-} from '../pages/levantamiento/levantamiento';
 
 import {
 	StatusBar
@@ -88,10 +84,9 @@ import {
 @NgModule({
 	declarations: [
 		MyApp,
-		HomePage,
-		ListPage,
+		RegistroLevantamientoPage,
+		ListadoAutopistasPage,
 		LoginPage,
-		LevantamientoPage,
 		OpcionesAutopistaPage
 	],
 	imports: [
@@ -104,10 +99,9 @@ import {
 	bootstrap: [IonicApp],
 	entryComponents: [
 		MyApp,
-		HomePage,
-		ListPage,
+		RegistroLevantamientoPage,
+		ListadoAutopistasPage,
 		LoginPage,
-		LevantamientoPage,
 		OpcionesAutopistaPage
 	],
 	providers: [
