@@ -9,10 +9,7 @@ import {
 export class AutopistasService {
 
 	public userId: number
-
 	elementoId: number
-
-
 	constructor(public databaseProvider: DatabaseProvider) {}
 
 	/**
@@ -106,6 +103,10 @@ export class AutopistasService {
 			statusLevantamiento: controles.statusLevantamiento.value,
 		}
 		return this.databaseProvider.registrarInventarios(dataInsert)
+	}
 
+	/* Registra un levantamiento con su imagen. */
+	guardaImagen = (urlImgen: string, id: number) => {
+		return this.databaseProvider.registrarImagenes(urlImgen, id)
 	}
 }

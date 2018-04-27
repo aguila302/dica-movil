@@ -28,7 +28,12 @@ import {
 import {
 	AutopistasService
 } from '../../shared/autopistas-service';
-import * as account from 'accounting-js'
+import {
+	Base64ToGallery
+} from '@ionic-native/base64-to-gallery';
+import {
+	PhotoLibrary
+} from '@ionic-native/photo-library';
 
 
 @Component({
@@ -47,24 +52,25 @@ export class HomePage {
 	formSubmit: boolean = false
 	errorCadenamientoInicialKm: boolean = false
 	errorCadenamientoFinalKm: boolean = false
-	public base64Image: string
+	imagen: string
+	base64image: string
 	options: CameraOptions = {
 		quality: 100,
-		destinationType: this.camera.DestinationType.NATIVE_URI,
+		destinationType: this.camera.DestinationType.DATA_URL,
 		encodingType: this.camera.EncodingType.JPEG,
 		mediaType: this.camera.MediaType.PICTURE,
-		saveToPhotoAlbum: true,
 		targetWidth: 200,
 		targetHeight: 100
 	}
 
+	url: string = ''
+
 	constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder,
-		private camera: Camera, private autopistasService: AutopistasService, public alert: AlertController) {
+		private camera: Camera, private autopistasService: AutopistasService, public alert: AlertController,
+		private base64ToGallery: Base64ToGallery, private photoLibrary: PhotoLibrary) {
 
 		/* Obtiene el id de autopista actual. */
 		this.autopista = this.navParams.get('autopista').autopista_id
-		console.log('home');
-
 	}
 
 	ngOnInit(): void {
@@ -190,20 +196,41 @@ export class HomePage {
 		/* Guardamos la informacion en el origen de datos. */
 		if (this.form.status === 'VALID' && this.errorCadenamientoFinalKm === false) {
 			this.autopistasService.guardaLevantamiento(this.form.controls, this.autopista).then((response) => {
+				/* Almacenamos la imagen en el dispositivo movil. */
+				this.guardaImagen(this.base64image, response.insertId)
+
 				response.rowsAffected === 1 ? this.confirmarRegistro() : ''
+
 			})
 		}
 	}
 
-	/* Muestra la camara. */
+	/* Muestra la camara para la toma de fotos. */
 	mostrarCamara = () => {
 		this.camera.getPicture(this.options).then((imageData) => {
-			// this.base64Image = 'data:image/jpeg;base64,' + imageData;
-			this.base64Image = imageData
-			console.log(imageData)
+			/* Obtenemos la imagen y la mostramos en la vista. */
+			this.imagen = 'data:image/jpeg;base64,' + imageData;
+			this.base64image = imageData
 
-		}, (err) => {});
+		}).catch(err => console.error.bind(console))
 	}
+
+	/* Guardamos la imagen en dispositivo movil. */
+	guardaImagen = (base64, levantamientoId) => {
+		this.base64ToGallery.base64ToGallery(base64, {
+			prefix: 'img_',
+			mediaScanner: true
+		}).then(
+			res => {
+				/* Guardamos la url de la imagen y el id de levantamiento en el origen de datos. */
+				this.autopistasService.guardaImagen(res, levantamientoId).then((response) => {
+					console.log(response)
+				})
+			},
+			err => console.log(err)
+		).catch(err => console.error.bind(console))
+	}
+
 
 	/* Confirma el registro del levantamiento. */
 	confirmarRegistro = () => {

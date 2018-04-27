@@ -19,7 +19,7 @@ export class ApiProvider {
 	/**
 	 * Funcion para resolver el end point y obtener token de acceso.
 	 */
-	getToken = (username: string, password: string): Promise < HTTPResponse > => {
+	getToken = (username: string, password: string) => {
 		let params = {
 			username: username,
 			password: password,
@@ -53,7 +53,7 @@ export class ApiProvider {
 	}
 
 	/* Funcion para loguar al usuario en la aplicacion y obteer loa datos del usuario. */
-	getUsuario = (user): Promise < HTTPResponse > => {
+	getUsuario = (user) => {
 		let params = {
 			'Authorization': 'Bearer ' + user.access_token
 		}
@@ -75,7 +75,7 @@ export class ApiProvider {
 	}
 
 	/* Obtiene las autopistas asignadas de un usuario */
-	getAutopistas = (accessToken): Promise < HTTPResponse > => {
+	getAutopistas = (accessToken) => {
 		let params = {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
@@ -97,7 +97,7 @@ export class ApiProvider {
 	}
 
 	/* Obtiene las autopistas asignadas de un usuario */
-	getElementos = (accessToken): Promise < HTTPResponse > => {
+	getElementos = (accessToken) => {
 		let params = {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
@@ -119,7 +119,7 @@ export class ApiProvider {
 	}
 
 	/* Obtiene las autopistas asignadas de un usuario */
-	getCuerpos = (accessToken): Promise < HTTPResponse > => {
+	getCuerpos = (accessToken) => {
 		let params = {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
@@ -141,7 +141,7 @@ export class ApiProvider {
 	}
 
 	/* Obtiene los subelementos. */
-	getSubElementos = (accessToken): Promise < HTTPResponse > => {
+	getSubElementos = (accessToken) => {
 		let params = {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
@@ -164,7 +164,7 @@ export class ApiProvider {
 
 
 	/* Obtiene las condiones. */
-	getCondiciones = (accessToken): Promise < HTTPResponse > => {
+	getCondiciones = (accessToken) => {
 		let params = {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
@@ -186,7 +186,7 @@ export class ApiProvider {
 	}
 
 	/* Obtiene las carriles. */
-	getCarriles = (accessToken): Promise < HTTPResponse > => {
+	getCarriles = (accessToken) => {
 		let params = {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}

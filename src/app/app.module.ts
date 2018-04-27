@@ -78,6 +78,12 @@ import {
 import {
 	OpcionesAutopistaPage
 } from '../pages/opciones-autopista/opciones-autopista';
+import {
+	Base64ToGallery
+} from '@ionic-native/base64-to-gallery';
+import {
+	PhotoLibrary
+} from '@ionic-native/photo-library';
 
 @NgModule({
 	declarations: [
@@ -105,6 +111,8 @@ import {
 		OpcionesAutopistaPage
 	],
 	providers: [
+		PhotoLibrary,
+		Base64ToGallery,
 		StatusBar,
 		SplashScreen, {
 			provide: ErrorHandler,

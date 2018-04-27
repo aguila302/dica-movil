@@ -28,7 +28,9 @@ import {
 import {
 	AutopistasService
 } from '../../shared/autopistas-service';
-import * as account from 'accounting-js'
+import {
+	Base64ToGallery
+} from '@ionic-native/base64-to-gallery';
 
 
 @IonicPage()
@@ -51,18 +53,17 @@ export class LevantamientoPage implements OnInit {
 	public base64Image: string
 	options: CameraOptions = {
 		quality: 100,
-		destinationType: this.camera.DestinationType.FILE_URI,
+		destinationType: this.camera.DestinationType.DATA_URL,
 		encodingType: this.camera.EncodingType.JPEG,
 		mediaType: this.camera.MediaType.PICTURE,
-		allowEdit: true,
-		sourceType: this.camera.PictureSourceType.CAMERA,
-		saveToPhotoAlbum: true,
+		// saveToPhotoAlbum: true,
 		targetWidth: 200,
 		targetHeight: 100
 	}
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder,
-		private camera: Camera, private autopistasService: AutopistasService, public alert: AlertController) {
+		private camera: Camera, private autopistasService: AutopistasService, public alert: AlertController,
+		private base64ToGallery: Base64ToGallery) {
 
 		/* Obtiene el id de autopista actual. */
 		this.autopista = this.navParams.get('autopista').autopista_id
@@ -199,11 +200,23 @@ export class LevantamientoPage implements OnInit {
 	/* Muestra la camara. */
 	mostrarCamara = () => {
 		this.camera.getPicture(this.options).then((imageData) => {
-			// this.base64Image = 'data:image/jpeg;base64,' + imageData;
-			this.base64Image = imageData
-			console.log(this.base64Image)
+			this.base64Image = 'data:image/jpeg;base64,' + imageData;
+
+			console.log('guarda inamen')
+			this.guardaImagen(this.base64Image)
 
 		}, (err) => {});
+
+	}
+
+	guardaImagen = (base64) => {
+		this.base64ToGallery.base64ToGallery(this.base64Image, {
+				prefix: '_img',
+				mediaScanner: true
+			}).then(
+				res => console.log('Saved image to gallery ', res),
+				err => console.log('Error saving image to gallery ', err)
+			);
 	}
 
 	/* Confirma el registro del levantamiento. */

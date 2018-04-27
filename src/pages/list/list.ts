@@ -32,6 +32,7 @@ import {
 	HomePage
 } from '../home/home';
 
+
 @Component({
 	selector: 'page-list',
 	templateUrl: 'list.html'

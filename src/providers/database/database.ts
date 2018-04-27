@@ -11,7 +11,6 @@ import {
 import {
 	BehaviorSubject
 } from 'rxjs/BehaviorSubject';
-import * as collect from 'collect.js/dist'
 import {
 	SQLitePorter
 } from '@ionic-native/sqlite-porter';
@@ -109,7 +108,15 @@ export class DatabaseProvider {
 				        	cadenamiento_final_m NUMERIC,
 				        	reportar NUMERIC,
 				        	estatus NUMERIC);`, {}
-										)
+										).then(() => {
+											return this.database.executeSql(
+												`CREATE TABLE IF NOT EXISTS levantamiento_imagen (
+				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
+				        	levantamiento_id INTEGER,
+				        	imagen TEXT,
+				        	FOREIGN KEY(levantamiento_id) REFERENCES levantamientos(id));`, {}
+											)
+										})
 									})
 								})
 							})
@@ -412,5 +419,14 @@ export class DatabaseProvider {
 				])
 			}).catch(console.error.bind(console))
 
+	}
+
+	/* Registrar imagen y levantamiento. */
+	registrarImagenes = (url, id) => {
+		return this.isReady()
+			.then(() => {
+				let sql = `insert into levantamiento_imagen (levantamiento_id, imagen) values (?,?);`
+				return this.database.executeSql(sql, [id, url])
+			})
 	}
 }
