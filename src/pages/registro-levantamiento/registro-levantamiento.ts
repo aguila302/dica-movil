@@ -41,9 +41,15 @@ import {
 	templateUrl: 'registro-levantamiento.html'
 })
 export class RegistroLevantamientoPage {
+	datosAutopista = {
+		id: 0,
+		nombre: '',
+		cadenamientoInicialKm: 0,
+		cadenamientoInicialm: 0,
+		cadenamientoFinalKm: 0,
+		cadenamientoFinalm: 0,
+	}
 
-	idAutopista: number = 0
-	nombreAutopista: string = ''
 	cuerpos = []
 	elementos = []
 	condiciones = []
@@ -70,11 +76,15 @@ export class RegistroLevantamientoPage {
 		private camera: Camera, private autopistasService: AutopistasService, public alert: AlertController,
 		private base64ToGallery: Base64ToGallery, private photoLibrary: PhotoLibrary) {
 
-		/* Obtiene el id de autopista actual. */
+		/* Obtiene los datos generaes de la autopista. */
 		console.log(this.navParams.get('autopista'))
 
-		this.idAutopista = this.navParams.get('autopista').autopista_id
-		this.nombreAutopista = this.navParams.get('autopista').nombre
+		this.datosAutopista.id = this.navParams.get('autopista').autopista_id
+		this.datosAutopista.nombre = this.navParams.get('autopista').nombre
+		this.datosAutopista.cadenamientoInicialKm = this.navParams.get('autopista').cadenamiento_inicial_km
+		this.datosAutopista.cadenamientoInicialm = this.navParams.get('autopista').cadenamiento_inicial_m
+		this.datosAutopista.cadenamientoFinalKm = this.navParams.get('autopista').cadenamiento_final_km
+		this.datosAutopista.cadenamientoFinalm = this.navParams.get('autopista').cadenamiento_final_m
 	}
 
 	ngOnInit(): void {
@@ -88,11 +98,30 @@ export class RegistroLevantamientoPage {
 			carril: new FormControl('', Validators.required),
 			longitudElemento: new FormControl('', Validators.required),
 
-			cadenamientoInicialKm: new FormControl('', Validators.compose([Validators.required, Validators.minLength(3)])),
-			cadenamientoInicialm: new FormControl('', Validators.compose([Validators.required, Validators.minLength(3)])),
+			cadenamientoInicialKm: new FormControl('', Validators.compose([
+				Validators.required,
+				Validators.minLength(3),
+				Validators.min(this.datosAutopista.cadenamientoInicialKm),
+				Validators.max(this.datosAutopista.cadenamientoFinalKm),
+			])),
+			cadenamientoInicialm: new FormControl('', Validators.compose([
+				Validators.required,
+				Validators.minLength(3),
+				Validators.min(this.datosAutopista.cadenamientoInicialm),
 
-			cadenamientoFinalKm: new FormControl('', Validators.compose([Validators.required, Validators.minLength(3)])),
-			cadenamientoFinalm: new FormControl('', Validators.compose([Validators.required, Validators.minLength(3)])),
+			])),
+
+			cadenamientoFinalKm: new FormControl('', Validators.compose([
+				Validators.required,
+				Validators.minLength(3),
+				Validators.min(this.datosAutopista.cadenamientoInicialKm),
+				Validators.max(this.datosAutopista.cadenamientoFinalKm),
+			])),
+			cadenamientoFinalm: new FormControl('', Validators.compose([
+				Validators.required,
+				Validators.minLength(3),
+				Validators.max(this.datosAutopista.cadenamientoFinalm),
+			])),
 
 			reportar: new FormControl('', Validators.required),
 			statusLevantamiento: new FormControl('', Validators.required)
@@ -199,7 +228,7 @@ export class RegistroLevantamientoPage {
 
 		/* Guardamos la informacion en el origen de datos. */
 		if (this.form.status === 'VALID' && this.errorCadenamientoFinalKm === false) {
-			this.autopistasService.guardaLevantamiento(this.form.controls, this.idAutopista).then((response) => {
+			this.autopistasService.guardaLevantamiento(this.form.controls, this.datosAutopista.id).then((response) => {
 				/* Almacenamos la imagen en el dispositivo movil. */
 				this.guardaImagen(this.base64image, response.insertId)
 

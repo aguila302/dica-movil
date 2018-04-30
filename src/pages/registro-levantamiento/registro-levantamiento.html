@@ -1,13 +1,13 @@
-<ion-header text-center>
+<ion-header text-left>
     <ion-navbar color="cabecera">
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>DICA - Diagnostico carretero</ion-title>
     </ion-navbar>
-    <ion-toolbar>
+    <ion-toolbar text-center>
         <ion-title>Registro de levantamiento</ion-title>
-        Autopista: {{ nombreAutopista }}
+        Autopista: {{ datosAutopista.nombre }}
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
@@ -21,8 +21,8 @@
                             <ion-option *ngFor="let cuerpo of cuerpos" [value]="cuerpo.cuerpo_id">{{cuerpo.descripcion}}</ion-option>
                         </ion-select>
                     </ion-item>
-                    <div margin-left margin-top *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="cuerpo.errors">
+                    <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="cuerpo.invalid && (cuerpo.dirty || cuerpo.touched)">
+                        <div *ngIf="cuerpo.errors.required">
                             El cuerpo es requerido.
                         </div>
                     </div>
@@ -36,8 +36,8 @@
                             <ion-option *ngFor="let elemento of elementos" [value]="elemento.elemento_id">{{elemento.descripcion}}</ion-option>
                         </ion-select>
                     </ion-item>
-                    <div margin-left margin-top *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="elemento.errors">
+                    <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="elemento.invalid && (elemento.dirty || elemento.touched)">
+                        <div *ngIf="elemento.errors.required">
                             El elemento es requerido.
                         </div>
                     </div>
@@ -52,8 +52,8 @@
                             </ion-option>
                         </ion-select>
                     </ion-item>
-                    <div margin-left margin-top *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="tipoElemento.errors">
+                    <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="tipoElemento.invalid && (tipoElemento.dirty || tipoElemento.touched)">
+                        <div *ngIf="tipoElemento.errors.required">
                             El tipo de elemento es requerido.
                         </div>
                     </div>
@@ -67,8 +67,8 @@
                             <ion-option *ngFor="let condicion of condiciones" [value]="condicion.condicion_id">{{condicion.descripcion}}</ion-option>
                         </ion-select>
                     </ion-item>
-                    <div margin-left margin-top *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="condicionFisica.errors">
+                    <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="condicionFisica.invalid && (condicionFisica.dirty || condicionFisica.touched)">
+                        <div *ngIf="condicionFisica.errors.required">
                             La condición fisica es requerido.
                         </div>
                     </div>
@@ -82,8 +82,8 @@
                             <ion-option *ngFor="let carril of carriles" [value]="carril.carril_id">{{carril.descripcion}}</ion-option>
                         </ion-select>
                     </ion-item>
-                    <div margin-left margin-top *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="carril.errors">
+                    <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="carril.invalid && (carril.dirty || carril.touched)">
+                        <div *ngIf="carril.errors.required">
                             El carril es requerido.
                         </div>
                     </div>
@@ -95,8 +95,8 @@
                         <ion-label floating for="longitudElemento">Longitud del elemento</ion-label>
                         <ion-input id="longitudElemento" type="number" [brmasker]="{mask: '0.00', len:4}" formControlName="longitudElemento" required></ion-input>
                     </ion-item>
-                    <div margin-left margin-top *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="longitudElemento.errors">
+                    <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="longitudElemento.invalid && (longitudElemento.dirty || longitudElemento.touched)">
+                        <div *ngIf="longitudElemento.errors.required">
                             Longitud del elemento es requerido.
                         </div>
                     </div>
@@ -119,19 +119,20 @@
                     </ion-item>
                 </ion-col>
             </ion-row>
-            <ion-row>
-                <ion-col col-12>
+            <ion-row align-items-start>
+                <ion-col col-12 align-self-start>
                     <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="cadenamientoInicialKm.invalid && (cadenamientoInicialKm.dirty || cadenamientoInicialKm.touched)">
                         <div *ngIf="cadenamientoInicialKm.errors.required">
                             El cadenamiento inicial (Km) es requerido.
                         </div>
                         <div *ngIf="cadenamientoInicialKm.errors.minlength">
-                            El formato del cadenamiento inicial (Km) es incorrecto
+                            El formato del cadenamiento inicial (Km) es incorrecto.
                         </div>
-                    </div>
-                    <div margin-left style="margin-top: 10px;" *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="errorCadenamientoInicialKm">
-                            El cadenamiento inicial (Km) debe ser menor que el cadenamiento final (Km).
+                        <div *ngIf="cadenamientoInicialKm.errors.min">
+                            El valor del cadenamiento inicial (Km) debe estar entre {{datosAutopista.cadenamientoInicialKm}} y {{ datosAutopista.cadenamientoFinalKm }}.
+                        </div>
+                        <div *ngIf="cadenamientoInicialKm.errors.max">
+                            El valor del cadenamiento inicial (Km) debe estar entre {{datosAutopista.cadenamientoInicialKm}} y {{ datosAutopista.cadenamientoFinalKm }}.
                         </div>
                     </div>
                     <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="cadenamientoInicialm.invalid && (cadenamientoInicialm.dirty || cadenamientoInicialm.touched)">
@@ -139,7 +140,10 @@
                             El cadenamiento inicial (m) es requerido.
                         </div>
                         <div *ngIf="cadenamientoInicialm.errors.minlength">
-                            El formato del cadenamiento inicial (m) es incorrecto
+                            El formato del cadenamiento inicial (m) es incorrecto.
+                        </div>
+                        <div *ngIf="cadenamientoInicialm.errors.min">
+                            El valor minimo del cadenamiento inicial (m) debe ser de {{datosAutopista.cadenamientoInicialm}}.
                         </div>
                     </div>
                 </ion-col>
@@ -161,19 +165,20 @@
                     </ion-item>
                 </ion-col>
             </ion-row>
-            <ion-row>
-                <ion-col col-12>
+            <ion-row align-items-start>
+                <ion-col col-12 align-self-start>
                     <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="cadenamientoFinalKm.invalid && (cadenamientoFinalKm.dirty || cadenamientoFinalKm.touched)">
                         <div *ngIf="cadenamientoFinalKm.errors.required">
                             El cadenamiento final (Km) es requerido.
                         </div>
                         <div *ngIf="cadenamientoFinalKm.errors.minlength">
-                            El formato del cadenamiento final (Km) es incorrecto
+                            El formato del cadenamiento final (Km) es incorrecto.
                         </div>
-                    </div>
-                    <div margin-left style="margin-top: 10px;" *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="errorCadenamientoFinalKm">
-                            El cadenamiento final (Km) debe ser mayor que el cadenamiento inicial (Km).
+                        <div *ngIf="cadenamientoFinalKm.errors.min">
+                            El valor del cadenamiento final (Km) debe estar entre {{datosAutopista.cadenamientoInicialKm}} y {{ datosAutopista.cadenamientoFinalKm }}.
+                        </div>
+                        <div *ngIf="cadenamientoFinalKm.errors.max">
+                            El valor del cadenamiento final (Km) debe estar entre {{datosAutopista.cadenamientoInicialKm}} y {{ datosAutopista.cadenamientoFinalKm }}.
                         </div>
                     </div>
                     <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="cadenamientoFinalm.invalid && (cadenamientoFinalm.dirty || cadenamientoFinalm.touched)">
@@ -183,6 +188,9 @@
                         <div *ngIf="cadenamientoFinalm.errors.minlength">
                             El formato del cadenamiento final (m) es incorrecto.
                         </div>
+                        <div *ngIf="cadenamientoFinalm.errors.max">
+                            El valor maximo del cadenamiento final (m) debe ser de {{datosAutopista.cadenamientoFinalm}}.
+                        </div>
                     </div>
                 </ion-col>
             </ion-row>
@@ -190,10 +198,10 @@
                 <ion-col col-12>
                     <ion-item>
                         <ion-label>Reportar</ion-label>
-                        <ion-checkbox checked="false" formControlName="reportar"></ion-checkbox>
+                        <ion-checkbox formControlName="reportar"></ion-checkbox>
                     </ion-item>
-                    <div margin-left margin-top *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
-                        <div *ngIf="reportar.errors">
+                    <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="reportar.invalid && (reportar.dirty || reportar.touched)">
+                        <div *ngIf="reportar.errors.required">
                             El campo reportar es requerido.
                         </div>
                     </div>
@@ -226,14 +234,14 @@
                 <ion-col col-12>
                     <ion-item margin-top>
                         <img [src]="imagen" *ngIf="imagen" />
-                        <button ion-button full (click)="mostrarCamara()">Tomar foto</button>
+                        <button ion-button full (click)="mostrarCamara()" [disabled]="form.invalid">Tomar foto</button>
                     </ion-item>
                 </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col col-12>
                     <ion-item margin-top>
-                        <button ion-button full type="submit">Guardar</button>
+                        <button ion-button full type="submit" [disabled]="form.invalid">Guardar</button>
                     </ion-item>
                 </ion-col>
             </ion-row>
