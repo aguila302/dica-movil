@@ -1,4 +1,4 @@
-<ion-header text-left>
+<ion-header text-center>
     <ion-navbar color="cabecera">
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
@@ -196,15 +196,17 @@
             </ion-row>
             <ion-row>
                 <ion-col col-12>
-                    <ion-item>
-                        <ion-label>Reportar</ion-label>
-                        <ion-checkbox formControlName="reportar"></ion-checkbox>
-                    </ion-item>
-                    <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="reportar.invalid && (reportar.dirty || reportar.touched)">
-                        <div *ngIf="reportar.errors.required">
-                            El campo reportar es requerido.
+                    <ion-list>
+                        <ion-item>
+                            <ion-label>Reportar</ion-label>
+                            <ion-checkbox checked="false" formControlName="reportar"></ion-checkbox>
+                        </ion-item>
+                        <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="reportar.invalid && (reportar.dirty || reportar.touched)">
+                            <div *ngIf="reportar.errors.required">
+                                El campo reportar es requerido.
+                            </div>
                         </div>
-                    </div>
+                    </ion-list>
                 </ion-col>
             </ion-row>
             <ion-row>
@@ -222,7 +224,7 @@
                             <ion-label>Atendido</ion-label>
                             <ion-radio value="3"></ion-radio>
                         </ion-item>
-                        <div margin-left margin-top *ngIf="formSubmit" [ngClass]="['ng-invalid', 'danger']">
+                        <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="statusLevantamiento.invalid && (statusLevantamiento.dirty || statusLevantamiento.touched)">
                             <div *ngIf="statusLevantamiento.errors">
                                 El estatus es requerido.
                             </div>
@@ -231,10 +233,20 @@
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-12>
+                <ion-col col-6>
                     <ion-item margin-top>
-                        <img [src]="imagen" *ngIf="imagen" />
-                        <button ion-button full (click)="mostrarCamara()" [disabled]="form.invalid">Tomar foto</button>
+                        <ion-card (click)="tomaFotoA()">
+                            <img *ngIf="!imagenA" src="assets/imgs/camara.png">
+                            <img [src]="imagenA" *ngIf="imagenA" />
+                        </ion-card>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-6>
+                    <ion-item margin-top>
+                        <ion-card (click)="tomaFotoB()">
+                            <img *ngIf="!imagenB" src="assets/imgs/camara.png">
+                            <img [src]="imagenB" *ngIf="imagenB" />
+                        </ion-card>
                     </ion-item>
                 </ion-col>
             </ion-row>

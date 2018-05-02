@@ -56,12 +56,14 @@ export class RegistroLevantamientoPage {
 	carriles = []
 	subelementos = []
 	form: FormGroup
-	formSubmit: boolean = false
-	errorCadenamientoInicialKm: boolean = false
-	errorCadenamientoFinalKm: boolean = false
+
 	url: string = ''
-	imagen: string
-	base64image: string
+	imagenA: string
+	imagenB: string
+	base64imageA: string
+	base64imageB: string
+	fotos = []
+
 	options: CameraOptions = {
 		quality: 100,
 		destinationType: this.camera.DestinationType.DATA_URL,
@@ -215,55 +217,54 @@ export class RegistroLevantamientoPage {
 
 	/* Realiza en submit y validamos los datos del formulario. */
 	submitEvent = () => {
-		this.formSubmit = true
-
-		/* Validar cadenamiento final e inicial (Km). */
-		parseInt(this.form.controls.cadenamientoFinalKm.value) < parseInt(this.form.controls.cadenamientoInicialKm.value) ? (
-			this.errorCadenamientoFinalKm = true,
-			this.errorCadenamientoInicialKm = false
-		) : (
-			this.errorCadenamientoFinalKm = false,
-			this.errorCadenamientoInicialKm = false
-		)
-
 		/* Guardamos la informacion en el origen de datos. */
-		if (this.form.status === 'VALID' && this.errorCadenamientoFinalKm === false) {
-			this.autopistasService.guardaLevantamiento(this.form.controls, this.datosAutopista.id).then((response) => {
-				/* Almacenamos la imagen en el dispositivo movil. */
-				this.guardaImagen(this.base64image, response.insertId)
+		this.autopistasService.guardaLevantamiento(this.form.controls, this.datosAutopista.id).then((response) => {
+			/* Almacenamos la imagen en el dispositivo movil. */
+			// this.guardaImagen(this.base64imageA, this.base64imageB, response.insertId)
+			response.rowsAffected === 1 ? this.guardaImagen(this.base64imageA, this.base64imageB, response.insertId) : ''
 
-				response.rowsAffected === 1 ? this.confirmarRegistro() : ''
-
-			})
-		}
+		})
 	}
 
 	/* Muestra la camara para la toma de fotos. */
-	mostrarCamara = () => {
+	tomaFotoA = () => {
 		this.camera.getPicture(this.options).then((imageData) => {
 			/* Obtenemos la imagen y la mostramos en la vista. */
-			this.imagen = 'data:image/jpeg;base64,' + imageData;
-			this.base64image = imageData
+			this.imagenA = 'data:image/jpeg;base64,' + imageData
+			this.base64imageA = imageData
+
+		}).catch(err => console.error.bind(console))
+	}
+	tomaFotoB = () => {
+		this.camera.getPicture(this.options).then((imageData) => {
+			/* Obtenemos la imagen y la mostramos en la vista. */
+			this.imagenB = 'data:image/jpeg;base64,' + imageData
+			this.base64imageB = imageData
 
 		}).catch(err => console.error.bind(console))
 	}
 
 	/* Guardamos la imagen en dispositivo movil. */
-	guardaImagen = (base64, levantamientoId) => {
-		this.base64ToGallery.base64ToGallery(base64, {
-			prefix: 'img_',
-			mediaScanner: true
-		}).then(
-			res => {
-				/* Guardamos la url de la imagen y el id de levantamiento en el origen de datos. */
-				this.autopistasService.guardaImagen(res, levantamientoId).then((response) => {
+	guardaImagen(fotoA, fotoB, levantamientoId) {
+		this.base64ToGallery.base64ToGallery(fotoA).then((res) => {
+			console.log(res)
+			/* Guardamos la url de la imagen y el id de levantamiento en el origen de datos. */
+			this.autopistasService.guardaImagen(res, levantamientoId)
+				.then((response) => {
 					console.log(response)
 				})
-			},
-			err => console.log(err)
-		).catch(err => console.error.bind(console))
+			setTimeout(() => {
+				this.base64ToGallery.base64ToGallery(fotoB).then((res1) => {
+					console.log(res1)
+					this.autopistasService.guardaImagen(res1, levantamientoId)
+						.then((response) => {
+							console.log(response)
+							this.confirmarRegistro()
+						})
+				})
+			}, 2000)
+		})
 	}
-
 
 	/* Confirma el registro del levantamiento. */
 	confirmarRegistro = () => {
