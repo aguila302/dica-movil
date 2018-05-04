@@ -17,6 +17,14 @@ import {
 	ListadoAutopistasPage
 } from '../pages/listado-autopistas/listado-autopistas';
 import {
+	RegistroLevantamientoPage
+} from '../pages/registro-levantamiento/registro-levantamiento';
+
+import {
+	ListadoLevantamientosPage
+} from '../pages/listado-levantamientos/listado-levantamientos';
+
+import {
 	NativeStorage
 } from '@ionic-native/native-storage';
 
@@ -27,10 +35,11 @@ export class MyApp {
 	@ViewChild(Nav) nav: Nav;
 
 	rootPage: any = ListadoAutopistasPage;
+	autopista = {}
 
 	pages: Array < {
 		title: string,
-		component: any
+		component: any,
 	} > ;
 
 	constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
@@ -39,23 +48,14 @@ export class MyApp {
 
 		// used for an example of ngFor and navigation
 		this.pages = [{
-			title: 'Inventario',
-			component: ListadoAutopistasPage
+			title: 'Consultar levantamiento',
+			component: ListadoLevantamientosPage,
 		}, {
 			title: 'Registrar levantamiento',
-			component: ListadoAutopistasPage
-		}, {
-			title: 'Reporte',
-			component: ListadoAutopistasPage
-		}, {
-			title: 'Consultar',
-			component: ListadoAutopistasPage
+			component: RegistroLevantamientoPage,
 		}, {
 			title: 'Cambiar de autopista',
-			component: ListadoAutopistasPage
-		}, {
-			title: 'Sincronizar',
-			component: ListadoAutopistasPage
+			component: ListadoAutopistasPage,
 		}];
 
 	}
@@ -67,17 +67,33 @@ export class MyApp {
 			this.statusBar.styleDefault();
 			this.splashScreen.hide();
 
+			/* Obtiene usuario logueado. */
 			this.nativeStorage.getItem('auth')
 				.then(
 					data => console.log(data),
 					error => console.error(error)
 				);
+
+			/* Obtiene autopista seleccionada. */
+			this.nativeStorage.getItem('autopistas')
+				.then(
+					data => {
+						console.log(data)
+						this.autopista = data
+						console.log(this.autopista);
+
+					},
+					error => console.error(error)
+				);
+
 		});
 	}
 
 	openPage(page) {
 		// Reset the content nav to have just this page
 		// we wouldn't want the back button to show in this scenario
-		this.nav.setRoot(page.component);
+		this.nav.setRoot(page.component, {
+			autopista: this.autopista
+		});
 	}
 }

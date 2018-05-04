@@ -75,6 +75,9 @@ import {
 	OpcionesAutopistaPage
 } from '../pages/opciones-autopista/opciones-autopista';
 import {
+	ListadoLevantamientosPage
+} from '../pages/listado-levantamientos/listado-levantamientos';
+import {
 	Base64ToGallery
 } from '@ionic-native/base64-to-gallery';
 import {
@@ -87,7 +90,8 @@ import {
 		RegistroLevantamientoPage,
 		ListadoAutopistasPage,
 		LoginPage,
-		OpcionesAutopistaPage
+		OpcionesAutopistaPage,
+		ListadoLevantamientosPage
 	],
 	imports: [
 		BrowserModule,
@@ -102,7 +106,8 @@ import {
 		RegistroLevantamientoPage,
 		ListadoAutopistasPage,
 		LoginPage,
-		OpcionesAutopistaPage
+		OpcionesAutopistaPage,
+		ListadoLevantamientosPage
 	],
 	providers: [
 		PhotoLibrary,

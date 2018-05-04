@@ -29,12 +29,17 @@ import {
 	DatabaseProvider
 } from '../../providers/database/database'
 
+// import {
+// 	AuthAutopista
+// } from '../../authAutopista/authAutopista'
+
 @Component({
 	selector: 'page-listado-autopistas',
 	templateUrl: 'listado-autopistas.html'
 })
 export class ListadoAutopistasPage {
 	public autopistas = []
+	// authAutopista: AuthAutopista
 
 	constructor(public navCtrl: NavController, private navs: NavParams, private nativeStorage: NativeStorage,
 		private autopistasService: AutopistasService, private loginService: LoginService,
@@ -73,6 +78,16 @@ export class ListadoAutopistasPage {
 		})
 		opciones.onDidDismiss(data => {
 			data.opcion === 'Nuevo levantamiento' ? this.nuevoLevantamiento(autopista) : ''
+
+			// this.authAutopista = new AuthAutopista(autopista.autopista_id, autopista.nombre, autopista.cadenamiento_inicial_km,
+			// autopista.cadenamiento_inicial_m, autopista.cadenamiento_final_km, autopista.cadenamiento_final_m)
+			this.nativeStorage.setItem('autopistas', {
+				autopista
+			}).then(
+				() => console.log('Stored item autopistas!'),
+				error => console.error('Error storing item', error)
+			)
+
 		});
 		opciones.present()
 	}

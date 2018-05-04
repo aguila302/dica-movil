@@ -11,4 +11,23 @@ page-registro-levantamiento {
     .danger {
         color: #E74C3C;
     }
+    .card-background-page {
+
+        ion-card {
+            position: relative;
+            text-align: center;
+        }
+        .imagenA {
+            margin: 80px 0 80px 0;
+            font-size: 4.0em;
+        }
+        img {
+            width: 100%;
+        }
+
+        .imagenB {
+            margin: 80px 0 80px 0;
+            font-size: 4.0em;
+        }
+    }
 }
