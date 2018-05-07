@@ -15,6 +15,7 @@ import {
 })
 export class OpcionesAutopistaPage {
 
+
 	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {}
 
 	ionViewDidLoad() {
@@ -25,6 +26,14 @@ export class OpcionesAutopistaPage {
 	nuevoLevantamiento = () => {
 		let opcion = {
 			opcion: 'Nuevo levantamiento'
+		};
+		this.viewCtrl.dismiss(opcion);
+	}
+
+	/* Opcion para consultar levantamientos registrados. */
+	consultarLevantamiento = () => {
+		let opcion = {
+			opcion: 'Consultar levantamientos'
 		};
 		this.viewCtrl.dismiss(opcion);
 	}

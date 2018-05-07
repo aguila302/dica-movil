@@ -16,8 +16,11 @@ import {
 	RegistroLevantamientoPage
 } from '../registro-levantamiento/registro-levantamiento';
 import {
-	NativeStorage
-} from '@ionic-native/native-storage';
+	ListadoLevantamientosPage
+} from '../listado-levantamientos/listado-levantamientos';
+import {
+	Storage
+} from '@ionic/storage';
 
 import {
 	AutopistasService
@@ -28,10 +31,9 @@ import {
 import {
 	DatabaseProvider
 } from '../../providers/database/database'
-
-// import {
-// 	AuthAutopista
-// } from '../../authAutopista/authAutopista'
+import {
+	StatusBar
+} from '@ionic-native/status-bar';
 
 @Component({
 	selector: 'page-listado-autopistas',
@@ -41,71 +43,62 @@ export class ListadoAutopistasPage {
 	public autopistas = []
 	// authAutopista: AuthAutopista
 
-	constructor(public navCtrl: NavController, private navs: NavParams, private nativeStorage: NativeStorage,
+	constructor(public navCtrl: NavController, private storage: Storage,
 		private autopistasService: AutopistasService, private loginService: LoginService,
-		public databaseProvider: DatabaseProvider, public modal: ModalController) {
+		public databaseProvider: DatabaseProvider, public modal: ModalController,
+		private statusBar: StatusBar) {
+
+
+	}
+	ionViewDidLoad() {
 		/* Obtenemos el ultimo token registrado en el origen de datos movil. */
 		this.loginService.obtenerToken()
 			.then(data => {
-
 				/* Hay un token activo. */
 				if (data.length) {
-					this.nativeStorage.setItem('auth', {
+					this.storage.set('auth', {
 						email: data[0].email,
 						nmae: data[0].name
-					}).then(
-						() => console.log('Stored item!'),
-						error => console.error('Error storing item', error)
-					)
-					/* Obtenemos las autopistas del origen de datos asignadas a dicho usuario conectado*/
-					this.autopistasService.userId = data[0].id
-					this.autopistasService.getAutopistas().then(autopistas => this.autopistas = autopistas)
+					}).then((response) => {
+						/* Obtenemos las autopistas del origen de datos asignadas a dicho usuario conectado*/
+						this.autopistasService.userId = data[0].id
+						this.autopistasService.getAutopistas().then(autopistas => this.autopistas = autopistas)
+					})
 
-				} else {
-					/* No hay token activo. */
-					this.navCtrl.setRoot(LoginPage, {})
 				}
-
 			})
-
 	}
-	ionViewDidLoad() {}
 
 	/* Muestra una ventana emergente de las opciones de una autopista. */
 	verOpciones = (autopista) => {
-		let opciones = this.modal.create(OpcionesAutopistaPage, {
-			autopista: autopista
-		})
+		let opciones = this.modal.create(OpcionesAutopistaPage, {})
+
 		opciones.onDidDismiss(data => {
-			data.opcion === 'Nuevo levantamiento' ? this.nuevoLevantamiento(autopista) : ''
+			data.opcion === 'Nuevo levantamiento' ? this.nuevoLevantamiento(autopista) :
+				data.opcion === 'Consultar levantamientos' ? this.consultarLevantamiento(autopista) : ''
 
-			// this.authAutopista = new AuthAutopista(autopista.autopista_id, autopista.nombre, autopista.cadenamiento_inicial_km,
-			// autopista.cadenamiento_inicial_m, autopista.cadenamiento_final_km, autopista.cadenamiento_final_m)
-			this.nativeStorage.setItem('autopistas', {
-				autopista
-			}).then(
-				() => console.log('Stored item autopistas!'),
-				error => console.error('Error storing item', error)
-			)
-
+			this.autopistasService.autopistaActiva = autopista
 		});
 		opciones.present()
 	}
 
-	/* Funcion para visualizar la vista principal de una autopista. */
+	/* Funcion para visualizar la vista nuevo levantamiento. */
 	nuevoLevantamiento = (autopista) => {
 		this.navCtrl.setRoot(RegistroLevantamientoPage, {
-			autopista: autopista
+			autopista
+		})
+	}
+
+	consultarLevantamiento = (autopista) => {
+		this.navCtrl.setRoot(ListadoLevantamientosPage, {
+			autopista
 		})
 	}
 
 	/* Funcion para cerrar sesion en la aplicación */
 	logout = () => {
-		//* Eliminamos todos los token del origen de datos */
-		this.databaseProvider.resetDatabase().then((response) => {
-			this.nativeStorage.remove('auth').then((data) => {
-				this.navCtrl.setRoot(LoginPage, {})
-			})
+		this.storage.remove('auth').then(auth => {
+			this.navCtrl.setRoot(LoginPage, {})
 		})
 	}
 }

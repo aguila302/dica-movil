@@ -49,9 +49,7 @@ import {
 import {
 	ApiProvider
 } from '../providers/api/api';
-import {
-	NativeStorage
-} from '@ionic-native/native-storage';
+
 import {
 	Network
 } from '@ionic-native/network';
@@ -63,7 +61,6 @@ import {
 } from 'brmasker-ionic-3';
 import {
 	FormsModule,
-	ReactiveFormsModule
 } from '@angular/forms';
 import {
 	SQLitePorter
@@ -83,6 +80,9 @@ import {
 import {
 	PhotoLibrary
 } from '@ionic-native/photo-library';
+import {
+	IonicStorageModule
+} from '@ionic/storage';
 
 @NgModule({
 	declarations: [
@@ -98,7 +98,8 @@ import {
 		IonicModule.forRoot(MyApp),
 		BrMaskerModule,
 		FormsModule,
-		CustomFormsModule
+		CustomFormsModule,
+		IonicStorageModule.forRoot()
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -119,7 +120,6 @@ import {
 		},
 		DatabaseProvider,
 		SQLite,
-		NativeStorage,
 		ApiProvider,
 		HTTP,
 		AutopistasService,

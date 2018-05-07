@@ -20,6 +20,10 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="loadUrlTimeoutValue" value="700000" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarBackgroundColor" value="#696969" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
+    <preference name="StatusBarDefaultScrollToTop" value="true" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -83,9 +87,7 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <engine name="android" spec="~7.0.0" />
-    <plugin name="cordova-sqlite-storage" spec="^2.2.1" />
     <plugin name="cordova-plugin-advanced-http" spec="^1.11.0" />
-    <plugin name="cordova-plugin-nativestorage" spec="^2.3.1" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
     <plugin name="uk.co.workingedge.cordova.plugin.sqliteporter" spec="^1.0.2" />
@@ -95,4 +97,6 @@
     <plugin name="cordova-plugin-photo-library" spec="^2.1.1">
         <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="To choose photos" />
     </plugin>
+    <plugin name="cordova-sqlite-storage" spec="^2.2.1" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
 </widget>

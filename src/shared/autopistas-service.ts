@@ -11,6 +11,7 @@ export class AutopistasService {
 	public userId: number
 	elementoId: number
 	constructor(public databaseProvider: DatabaseProvider) {}
+	autopistaActiva = {}
 
 	/**
 	 * Registrar autopistas obtenidas en el API.

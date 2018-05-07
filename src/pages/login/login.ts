@@ -21,8 +21,8 @@ import {
 	AutopistasService
 } from '../../shared/autopistas-service'
 import {
-	NativeStorage
-} from '@ionic-native/native-storage';
+	Storage
+} from '@ionic/storage';
 import {
 	Network
 } from '@ionic-native/network';
@@ -38,7 +38,7 @@ export class LoginPage {
 
 	constructor(public navCtrl: NavController, private alertCtrl: AlertController,
 		private apiProvider: ApiProvider, private loginService: LoginService,
-		private nativeStorage: NativeStorage, private network: Network, private autopistasService: AutopistasService) {}
+		private storage: Storage, private network: Network, private autopistasService: AutopistasService) {}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad LoginPage');

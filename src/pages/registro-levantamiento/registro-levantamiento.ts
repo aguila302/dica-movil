@@ -69,8 +69,6 @@ export class RegistroLevantamientoPage {
 		destinationType: this.camera.DestinationType.DATA_URL,
 		encodingType: this.camera.EncodingType.JPEG,
 		mediaType: this.camera.MediaType.PICTURE,
-		// targetWidth: 200,
-		// targetHeight: 100
 	}
 
 
@@ -247,8 +245,6 @@ export class RegistroLevantamientoPage {
 
 	/* Guardamos la imagen en dispositivo movil. */
 	guardaImagen(fotoA, fotoB, levantamientoId) {
-
-
 		this.base64ToGallery.base64ToGallery(fotoA).then((res) => {
 			console.log(res)
 			/* Guardamos la url de la imagen y el id de levantamiento en el origen de datos. */
@@ -267,6 +263,7 @@ export class RegistroLevantamientoPage {
 						})
 				})
 			}, 2000)
+
 		})
 	}
 
