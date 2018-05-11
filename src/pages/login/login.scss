@@ -1,1 +1,23 @@
-page-login {}
+page-login {
+	.content {
+		background: #4682B4;
+	}
+		.logo {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 150px;
+		}
+			img {
+				width: 40%;
+			}
+
+	ion-scroll {
+		background: #DEB887;
+		margin: 10px;
+	}
+
+	// ion-item {
+	// 	margin-bottom: 10px;
+	// }
+}

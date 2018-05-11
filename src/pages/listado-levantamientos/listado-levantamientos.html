@@ -11,38 +11,43 @@
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-list [virtualScroll]="levantamientos" [bufferRatio]="3.1" [approxItemHeight]="'300px'">
-        <ion-item [ngClass]="['levantamientos']" *virtualItem="let levantamiento" (click)="detalleLevantamiento(levantamiento)">
-            <ion-grid>
-                <ion-row text-right>
-                    <ion-col col-12>
-                        <p ion-text color="primary">No. de levantamiento:</p>
-                        <p>{{ levantamiento.id }} </p>
-                    </ion-col>
-                </ion-row>
-                <ion-row text-left>
-                    <ion-col col-12>
-                        <p ion-text color="primary">Elemento:</p>
-                        <p>{{ levantamiento.elemento }}</p>
-                    </ion-col>
-                    <ion-col col-12>
-                        <p ion-text color="primary">Seguimiento:</p>
-                        <p *ngIf="levantamiento.seguimiento === 0">Reporte inicial</p>
-                        <p *ngIf="levantamiento.seguimiento === 1">En proceso de atención</p>
-                        <p *ngIf="levantamiento.seguimiento === 2">Atendido</p>
-                    </ion-col>
-                </ion-row>
-                <ion-row text-left>
-                    <ion-col col-12>
-                        <p ion-text color="primary">Cadenamiento inicial:</p>
-                        <p>{{ levantamiento.cadenamientoInicial }} </p>
-                    </ion-col>
-                    <ion-col col-12>
-                        <p ion-text color="primary">Cadenamiento final:</p>
-                        <p>{{ levantamiento.cadenamientoFinal }} </p>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </ion-item>
+    <ion-list no-lines [virtualScroll]="levantamientos" [bufferRatio]="3.1" [approxItemHeight]="'300px'">
+        <ion-item-sliding [ngClass]="['levantamientos']" *virtualItem="let levantamiento" (click)="detalleLevantamiento(levantamiento)">
+            <ion-item>
+                <ion-grid>
+                    <ion-row text-left justify-content-center>
+                        <ion-col col-12>
+                            <small>No. de levantamiento:</small>
+                            <span>{{ levantamiento.id }}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row text-left>
+                        <ion-col col-12>
+                            <small>Elemento:</small>
+                            <span>{{ levantamiento.elemento }}</span>
+                        </ion-col>
+                        <ion-col col-12>
+                            <small>Seguimiento:</small>
+                            <span *ngIf="levantamiento.seguimiento === 0">Reporte inicial</span>
+                            <span *ngIf="levantamiento.seguimiento === 1">En proceso de atención</span>
+                            <span *ngIf="levantamiento.seguimiento === 2">Atendido</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row text-left>
+                        <ion-col col-12>
+                            <small>Cadenamiento inicial:</small>
+                            <span>{{ levantamiento.cadenamientoInicial }} </span>
+                        </ion-col>
+                        <ion-col col-12>
+                            <small>Cadenamiento final:</small>
+                            <span>{{ levantamiento.cadenamientoFinal }} </span>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+            <ion-item-options>
+                <button ion-button icon-only color="danger"><ion-icon name="trash"></ion-icon></button>
+            </ion-item-options>
+        </ion-item-sliding>
     </ion-list>
 </ion-content>

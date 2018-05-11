@@ -10,8 +10,8 @@ import {
 export class ApiProvider {
 
 	link = {
-		apiUrl: 'http://b6db04b8.ngrok.io',
-		client_secret: 'unKvzknkJBX908RHuE1KBpI1oRsj011jlrnlXxRt'
+		apiUrl: 'http://11.11.1.58/dica/public',
+		client_secret: 'nQzYnsciKFa3hwsVQdLsxMgbJt9m1J1X3sIPjo0S'
 	}
 
 	constructor(public http: HTTP) {}

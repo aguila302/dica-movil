@@ -26,6 +26,9 @@ import {
 import {
 	Network
 } from '@ionic-native/network';
+import {
+	Keyboard
+} from '@ionic-native/keyboard';
 
 @IonicPage()
 @Component({
@@ -38,15 +41,15 @@ export class LoginPage {
 
 	constructor(public navCtrl: NavController, private alertCtrl: AlertController,
 		private apiProvider: ApiProvider, private loginService: LoginService,
-		private storage: Storage, private network: Network, private autopistasService: AutopistasService) {}
+		private storage: Storage, private network: Network, private autopistasService: AutopistasService,
+		private keyboard: Keyboard) {}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad LoginPage');
 	}
 
 	/**
-	 * Funcion para realizar el proceso de logueo.
-	 */
+	 *	Funcion para realizar el proceso de logueo.*/
 	login = () => {
 		/* Si el usuario o contraseña son vacios mostramos una alerta de aviso. */
 		if (this.username === '' || this.clave_acceso === '') {
@@ -62,7 +65,7 @@ export class LoginPage {
 			if (this.network.type == 'wifi') {
 				this.username = 'useradmin'
 				this.clave_acceso = 'secret'
-				/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
+					/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
 
 				/* Llamamos a nuestro servicio para obtener token de acceso. */
 				this.apiProvider.getToken(this.username, this.clave_acceso)

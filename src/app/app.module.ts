@@ -87,6 +87,9 @@ import {
 import {
 	IonicStorageModule
 } from '@ionic/storage';
+import {
+	Keyboard
+} from '@ionic-native/keyboard';
 
 @NgModule({
 	declarations: [
@@ -124,6 +127,7 @@ import {
 			provide: ErrorHandler,
 			useClass: IonicErrorHandler
 		},
+		Keyboard,
 		DatabaseProvider,
 		SQLite,
 		ApiProvider,
