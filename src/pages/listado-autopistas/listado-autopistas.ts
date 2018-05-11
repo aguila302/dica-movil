@@ -3,7 +3,6 @@ import {
 } from '@angular/core';
 import {
 	NavController,
-	NavParams,
 	ModalController
 } from 'ionic-angular';
 import {
@@ -31,9 +30,6 @@ import {
 import {
 	DatabaseProvider
 } from '../../providers/database/database'
-import {
-	StatusBar
-} from '@ionic-native/status-bar';
 
 @Component({
 	selector: 'page-listado-autopistas',
@@ -41,12 +37,10 @@ import {
 })
 export class ListadoAutopistasPage {
 	public autopistas = []
-	// authAutopista: AuthAutopista
 
 	constructor(public navCtrl: NavController, private storage: Storage,
 		private autopistasService: AutopistasService, private loginService: LoginService,
-		public databaseProvider: DatabaseProvider, public modal: ModalController,
-		private statusBar: StatusBar) {
+		public databaseProvider: DatabaseProvider, public modal: ModalController) {
 
 
 	}
@@ -89,16 +83,19 @@ export class ListadoAutopistasPage {
 		})
 	}
 
+	/* Muestra un listado de levantamietos de una autopista. */
 	consultarLevantamiento = (autopista) => {
 		this.navCtrl.setRoot(ListadoLevantamientosPage, {
 			autopista
 		})
 	}
 
-	/* Funcion para cerrar sesion en la aplicación */
+	/* Funcion para cerrar sesion en la aplicación. */
 	logout = () => {
 		this.storage.remove('auth').then(auth => {
 			this.navCtrl.setRoot(LoginPage, {})
 		})
+
+		this.databaseProvider.resetDatabase().then(() => console.log('database reset'))
 	}
 }

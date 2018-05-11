@@ -35,8 +35,9 @@ dark: #222,
 cabecera: ( base: #566573,
 contrast: #ffffff));
 
-$action-sheet-width: 100%; // App iOS Variables
-$card-md-line-height: 1.5; // --------------------------------------------------
+
+$item-md-border-color: #1E90FF;
+
 // iOS only Sass variables can go here
 // App Material Design Variables
 // --------------------------------------------------

@@ -1,10 +1,7 @@
 import {
 	Component,
-	OnInit,
-	Directive
 } from '@angular/core';
 import {
-	IonicPage,
 	NavController,
 	NavParams,
 	AlertController,
@@ -15,9 +12,6 @@ import {
 	FormBuilder,
 	FormGroup,
 	FormControl,
-	AbstractControl,
-	NG_VALIDATORS,
-	ValidatorFn
 } from '@angular/forms';
 import {
 	Camera,
@@ -32,7 +26,6 @@ import {
 import {
 	Base64ToGallery
 } from '@ionic-native/base64-to-gallery';
-
 
 @Component({
 	selector: 'page-registro-levantamiento',
@@ -258,10 +251,11 @@ export class RegistroLevantamientoPage {
 					this.autopistasService.guardaImagen(res1, levantamientoId)
 						.then((response) => {
 							console.log(response)
-							this.loader.dismiss()
+
 							this.confirmarRegistro()
 						})
 				})
+				this.loader.dismiss()
 			}, 2000)
 
 		})

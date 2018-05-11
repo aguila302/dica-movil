@@ -12,7 +12,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-list margin-top inset>
+    <ion-list margin-top>
         <button ion-item *ngFor="let autopista of autopistas" (click)="verOpciones(autopista)">
             {{autopista.nombre}}
         </button>

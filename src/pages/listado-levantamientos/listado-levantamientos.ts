@@ -7,17 +7,14 @@ import {
 	NavParams
 } from 'ionic-angular';
 import {
-	LoginPage
-} from '../login/login';
-import {
-	Storage
-} from '@ionic/storage';
-import {
 	AutopistasService
 } from '../../shared/autopistas-service';
 import {
 	LoginService
 } from '../../shared/login-service'
+import {
+	DetalleLevantamientoPage
+} from '../../pages/detalle-levantamiento/detalle-levantamiento';
 
 @IonicPage()
 @Component({
@@ -25,6 +22,7 @@ import {
 	templateUrl: 'listado-levantamientos.html',
 })
 export class ListadoLevantamientosPage {
+	levantamientos = []
 	public datosAutopista = {
 		id: 0,
 		nombre: '',
@@ -34,53 +32,35 @@ export class ListadoLevantamientosPage {
 		cadenamientoFinalm: 0,
 	}
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage,
-		private autopistasService: AutopistasService, private loginService: LoginService) {
-		/* Obtiene los datos generaes de la autopista. */
-		console.log(this.navParams.get('autopista'))
+	constructor(public navCtrl: NavController, public navParams: NavParams,
+		private autopistasService: AutopistasService) {
 
+		/* Obtiene los datos generaes de la autopista. */
 		this.datosAutopista.id = this.navParams.get('autopista').autopista_id
 		this.datosAutopista.nombre = this.navParams.get('autopista').nombre
-		this.datosAutopista.cadenamientoInicialKm = this.navParams.get('autopista').cadenamiento_inicial_km
-		this.datosAutopista.cadenamientoInicialm = this.navParams.get('autopista').cadenamiento_inicial_m
-		this.datosAutopista.cadenamientoFinalKm = this.navParams.get('autopista').cadenamiento_final_km
-		this.datosAutopista.cadenamientoFinalm = this.navParams.get('autopista').cadenamiento_final_m
 	}
 
 	ionViewDidLoad() {
-		// console.log('ionViewDidLoad ListadoLevantamientosPage');
-		// /* Obtenemos el ultimo token registrado en el origen de datos movil. */
-		// this.loginService.obtenerToken()
-		// 	.then(data => {
-
-		// 		/* Hay un token activo. */
-		// 		if (data.length) {
-		// 			this.nativeStorage.setItem('auth', {
-		// 				email: data[0].email,
-		// 				nmae: data[0].name
-		// 			}).then(
-		// 				() => console.log('Stored item!'),
-		// 				error => console.error('Error storing item', error)
-		// 			)
-		// 			/* Obtenemos las autopistas del origen de datos asignadas a dicho usuario conectado*/
-		// 			// this.autopistasService.userId = data[0].id
-		// 			// this.autopistasService.getAutopistas().then(autopistas => this.autopistas = autopistas)
-
-		// 		} else {
-		// 			/* No hay token activo. */
-		// 			this.navCtrl.setRoot(LoginPage, {})
-		// 		}
-
-		// 	})
+		console.log('ionViewDidLoad ListadoLevantamientosPage');
+		this.listadoLevantamientos()
 	}
 
-	/* Funcion para cerrar sesion en la aplicación */
-	logout = () => {
-		//* Eliminamos todos los token del origen de datos */
-		// this.databaseProvider.resetDatabase().then((response) => {
-		// 	this.nativeStorage.remove('auth').then((data) => {
-		// 		this.navCtrl.setRoot(LoginPage, {})
-		// 	})
-		// })
+	/*
+	Obtiene una lista de vantamientos de una autopista.
+	 */
+	listadoLevantamientos = () => {
+		this.autopistasService.listadoLevantamientos(this.datosAutopista.id).then(levantamientos => {
+			this.levantamientos = levantamientos
+		})
+	}
+
+	/*
+	Muestra el detalle de un levantamiento.
+	 */
+	detalleLevantamiento = (levantamiento) => {
+		this.navCtrl.push(DetalleLevantamientoPage, {
+			levantamiento,
+			autopista: this.datosAutopista.nombre
+		})
 	}
 }

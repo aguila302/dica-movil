@@ -237,10 +237,6 @@
                     <ion-item class="card-background-page" margin-top>
                         <ion-card (click)="tomaFotoA()">
                             <ion-icon class="imagenA" ios="ios-camera" md="md-camera" *ngIf="!imagenA"></ion-icon>
-                            <!-- <img *ngIf="!imagenA" src="assets/imgs/camara.png"> -->
-                            <!-- <div class="card-title">
-                                <ion-icon ios="ios-camera" md="md-camera" *ngIf="!imagenA"></ion-icon>
-                            </div> -->
                             <img [src]="imagenA" *ngIf="imagenA" />
                         </ion-card>
                     </ion-item>
@@ -250,8 +246,6 @@
                         <ion-card (click)="tomaFotoB()">
                             <ion-icon class="imagenB" ios="ios-camera" md="md-camera" *ngIf="!imagenB"></ion-icon>
                             <img [src]="imagenB" *ngIf="imagenB" />
-                            <!-- <img *ngIf="!imagenB" src="assets/imgs/camara.png">
-                            <img [src]="imagenB" *ngIf="imagenB" /> -->
                         </ion-card>
                     </ion-item>
                 </ion-col>

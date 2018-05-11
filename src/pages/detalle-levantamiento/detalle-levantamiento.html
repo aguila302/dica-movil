@@ -1,0 +1,104 @@
+<ion-header text-center>
+    <ion-navbar color="cabecera">
+        <ion-title>DICA - Diagnostico carretero</ion-title>
+    </ion-navbar>
+    <ion-toolbar text-center>
+        <ion-title>Detalle de levantamiento</ion-title>
+        Autopista: {{ autopista }}
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+    <ion-list>
+        <ion-item [ngClass]="['levantamientos']">
+            <ion-grid>
+                <ion-row text-right>
+                    <ion-col col-12>
+                        <p ion-text color="primary">No. de levantamiento:</p>
+                        <p>{{ levantamiento.id }} </p>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Elemento:</p>
+                        <p>{{ levantamiento.elemento }}</p>
+                    </ion-col>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Seguimiento:</p>
+                        <p *ngIf="levantamiento.seguimiento === 0">Reporte inicial</p>
+                        <p *ngIf="levantamiento.seguimiento === 1">En proceso de atención</p>
+                        <p *ngIf="levantamiento.seguimiento === 2">Atendido</p>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Cadenamiento inicial:</p>
+                        <p>{{ levantamiento.cadenamientoInicial }} </p>
+                    </ion-col>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Cadenamiento final:</p>
+                        <p>{{ levantamiento.cadenamientoFinal }} </p>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Carril:</p>
+                        <p>{{ levantamiento.carril }} </p>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Condición:</p>
+                        <p>{{ levantamiento.condicion }} </p>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Subelemento:</p>
+                        <p>{{ levantamiento.subelemento }} </p>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Longitud del elemento:</p>
+                        <p>{{ levantamiento.longitudElemento }} </p>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Reportar:</p>
+                        <p>{{ levantamiento.reportar }} </p>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <p ion-text color="primary">Estatus:</p>
+                        <p>{{ levantamiento.estatus }} </p>
+                        <!-- <ion-badge item-end>260k</ion-badge> -->
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+    </ion-list>
+    <ion-grid [ngClass]="['levantamientos']">
+        <ion-row>
+            <ion-col col-12>
+                <ion-slides pager zoom="true" loop="true" effect="fade">
+                    <ion-slide>
+                        <img tappable [src]="imagenA" />
+                    </ion-slide>
+                    <ion-slide>
+                        <img tappable [src]="imagenB" />
+                    </ion-slide>
+                </ion-slides>
+                <!-- <ion-card>
+                    <img tappable [src]="imagenA" />
+                </ion-card> -->
+            </ion-col>
+            <!-- <ion-col col-6>
+                <ion-card>
+                    <img tappable [src]="imagenB" />
+                </ion-card>
+            </ion-col> -->
+        </ion-row>
+    </ion-grid>
+</ion-content>

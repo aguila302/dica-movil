@@ -75,6 +75,10 @@ import {
 	ListadoLevantamientosPage
 } from '../pages/listado-levantamientos/listado-levantamientos';
 import {
+	DetalleLevantamientoPage
+} from '../pages/detalle-levantamiento/detalle-levantamiento';
+
+import {
 	Base64ToGallery
 } from '@ionic-native/base64-to-gallery';
 import {
@@ -91,7 +95,8 @@ import {
 		ListadoAutopistasPage,
 		LoginPage,
 		OpcionesAutopistaPage,
-		ListadoLevantamientosPage
+		ListadoLevantamientosPage,
+		DetalleLevantamientoPage
 	],
 	imports: [
 		BrowserModule,
@@ -108,7 +113,8 @@ import {
 		ListadoAutopistasPage,
 		LoginPage,
 		OpcionesAutopistaPage,
-		ListadoLevantamientosPage
+		ListadoLevantamientosPage,
+		DetalleLevantamientoPage
 	],
 	providers: [
 		PhotoLibrary,

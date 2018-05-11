@@ -10,7 +10,7 @@ import {
 export class ApiProvider {
 
 	link = {
-		apiUrl: 'http://42906eda.ngrok.io',
+		apiUrl: 'http://b6db04b8.ngrok.io',
 		client_secret: 'unKvzknkJBX908RHuE1KBpI1oRsj011jlrnlXxRt'
 	}
 

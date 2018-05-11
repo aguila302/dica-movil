@@ -24,6 +24,11 @@
     <preference name="StatusBarBackgroundColor" value="#696969" />
     <preference name="StatusBarStyle" value="blacktranslucent" />
     <preference name="StatusBarDefaultScrollToTop" value="true" />
+    <allow-navigation href="http://localhost:8080/*" />
+    <feature name="CDVWKWebViewEngine">
+        <param name="ios-package" value="CDVWKWebViewEngine" />
+    </feature>
+    <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />

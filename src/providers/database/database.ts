@@ -28,8 +28,13 @@ export class DatabaseProvider {
 				location: 'default'
 			}).then((db: SQLiteObject) => {
 				this.database = db
+				// this.sqlitePorter.exportDbToSql(this.database)
+				// 	.then((res) => console.log(res))
+				// 	.catch(e => console.error(e))
+
 				this.createTables().then((res) => {
 					this.dbReady.next(true)
+
 				})
 			})
 		})
@@ -77,8 +82,7 @@ export class DatabaseProvider {
 				        	id INTEGER PRIMARY KEY AUTOINCREMENT,
 				        	subelemento_id INTEGER,
 				        	descripcion_subelemento TEXT,
-				        	elemento_id INTEGER,
-				        	FOREIGN KEY(elemento_id) REFERENCES elementos(elemento_id));`, {}
+				        	elemento_id INTEGER);`, {}
 							).then(() => {
 								return this.database.executeSql(
 									`CREATE TABLE IF NOT EXISTS condiciones (
@@ -116,6 +120,7 @@ export class DatabaseProvider {
 				        	imagen TEXT,
 				        	FOREIGN KEY(levantamiento_id) REFERENCES levantamientos(id));`, {}
 											)
+
 										})
 									})
 								})
@@ -145,7 +150,6 @@ export class DatabaseProvider {
 		let parameters = [data.access_token, data.expires_in, data.refresh_token]
 		return this.isReady()
 			.then(() => {
-
 				return this.database.executeSql(`insert into usuarios (access_token, expires_in, refresh_token)
 					values(?,?,?)`, parameters)
 			})
@@ -240,7 +244,6 @@ export class DatabaseProvider {
 
 	/* Registramos los elementos. */
 	registrarElementos = (elementos) => {
-
 		return this.isReady()
 			.then(() => {
 				elementos.forEach(item => {
@@ -427,6 +430,65 @@ export class DatabaseProvider {
 			.then(() => {
 				let sql = `insert into levantamiento_imagen (levantamiento_id, imagen) values (?,?);`
 				return this.database.executeSql(sql, [id, url])
+			})
+	}
+
+	/* Obtiene un listado de levantamientos registrados de una autopista. */
+	listadoLevantamientos = (id: number) => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`
+					select a.id, a.elemento_id, b.descripcion as elemento_descripcion, a.estatus as seguimiento,
+					a.cadenamiento_inicial_km || ' + ' || a.cadenamiento_inicial_m as cadenamiento_inicial,
+					a.cadenamiento_final_km || ' + ' || a.cadenamiento_final_m as cadenamiento_final,
+					c.descripcion as cuerpo_descripcion, e.descripcion as condicion_descripcion,
+					d.descripcion_subelemento, f.descripcion as carril_descripcion, a.longitud_elemento, a.reportar, a.estatus
+					from levantamientos as a
+					INNER JOIN elementos as b on a.elemento_id = b.elemento_id
+					INNER JOIN cuerpos as c on a.cuerpo_id = c.cuerpo_id
+					INNER JOIN subelementos as d on a.tipo_elemento_id = d.subelemento_id
+					INNER JOIN condiciones as e on a.coondicion_id = e.condicion_id
+					INNER JOIN carriles as f on a.carril_id = f.carril_id
+					where a.autopista_id = ? order by a.id ASC`, [id])
+					.then((result) => {
+						let levantamientos = []
+						for (let i = 0; i < result.rows.length; i++) {
+							levantamientos.push({
+								id: result.rows.item(i).id,
+								elemento_id: result.rows.item(i).elemento_id,
+								elemento: result.rows.item(i).elemento_descripcion,
+								seguimiento: result.rows.item(i).seguimiento,
+								cadenamientoInicial: result.rows.item(i).cadenamiento_inicial,
+								cadenamientoFinal: result.rows.item(i).cadenamiento_final,
+								cuerpo: result.rows.item(i).cuerpo_descripcion,
+								subelemento: result.rows.item(i).descripcion_subelemento,
+								condicion: result.rows.item(i).condicion_descripcion,
+								carril: result.rows.item(i).carril_descripcion,
+								longitudElemento: result.rows.item(i).longitud_elemento,
+								reportar: result.rows.item(i).reportar,
+								estatus: result.rows.item(i).estatus,
+							})
+						}
+						return levantamientos
+					})
+
+			})
+	}
+	/* Obtiene la url de las fotos de un levantamiento. */
+	getFotos = (id: number) => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`select imagen from levantamiento_imagen where levantamiento_id = ?`, [id])
+					.then((result) => {
+						let fotos = []
+						for (let i = 0; i < result.rows.length; i++) {
+							fotos.push({
+								imagen: result.rows.item(i).imagen
+							})
+						}
+						return fotos
+					})
+
 			})
 	}
 }

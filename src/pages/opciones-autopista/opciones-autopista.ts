@@ -7,6 +7,9 @@ import {
 	NavParams,
 	ViewController
 } from 'ionic-angular';
+import {
+	AutopistasService
+} from '../../shared/autopistas-service';
 
 @IonicPage()
 @Component({
@@ -16,7 +19,10 @@ import {
 export class OpcionesAutopistaPage {
 
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {}
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,
+		private autopistasService: AutopistasService) {
+		this.autopistasService.autopistaActiva = null
+	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad OpcionesAutopistaPage');

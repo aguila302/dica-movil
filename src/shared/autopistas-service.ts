@@ -93,7 +93,7 @@ export class AutopistasService {
 			cuerpo: controles.cuerpo.value,
 			elemento: controles.elemento.value,
 			tipoElemento: controles.tipoElemento.value,
-			condición: controles.condicionFisica.value,
+			condicion: controles.condicionFisica.value,
 			carril: controles.carril.value,
 			longitudElemento: controles.longitudElemento.value,
 			cadenamientoInicialKm: controles.cadenamientoInicialKm.value,
@@ -109,5 +109,19 @@ export class AutopistasService {
 	/* Registra un levantamiento con su imagen. */
 	guardaImagen = (urlImgen: string, id: number) => {
 		return this.databaseProvider.registrarImagenes(urlImgen, id)
+	}
+
+	/*
+	Obtiene un listado de levantamientos de una autopista.
+	*/
+	listadoLevantamientos = (id: number) => {
+		return this.databaseProvider.listadoLevantamientos(id)
+	}
+
+	/*
+	Obtener las url de las fotos de un levantamiento.
+	*/
+	getFotos = (levantamiento) => {
+		return this.databaseProvider.getFotos(levantamiento.id)
 	}
 }
