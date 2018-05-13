@@ -11,9 +11,6 @@ import {
 import {
 	BehaviorSubject
 } from 'rxjs/BehaviorSubject';
-import {
-	SQLitePorter
-} from '@ionic-native/sqlite-porter';
 
 @Injectable()
 export class DatabaseProvider {
@@ -21,7 +18,7 @@ export class DatabaseProvider {
 	private database: SQLiteObject
 	private dbReady = new BehaviorSubject < boolean > (false)
 
-	constructor(private platform: Platform, private sqlite: SQLite, private sqlitePorter: SQLitePorter) {
+	constructor(private platform: Platform, private sqlite: SQLite) {
 		this.platform.ready().then(() => {
 			this.sqlite.create({
 				name: 'dica.db',

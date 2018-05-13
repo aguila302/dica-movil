@@ -32,11 +32,15 @@ secondary: #32db64,
 danger: #f53d3d,
 light: #f4f4f4,
 dark: #222,
-cabecera: ( base: #4682B4,
+boton: #78909C,
+subheader: #607D8B,
+cabecera: ( base: #607D8B,
 contrast: #ffffff));
 
 
-$item-md-border-color: #1E90FF;
+// $item-md-border-color: #1E90FF;
+$background-login: #607D8B;
+$card-md-line-height: 1.5;
 
 // iOS only Sass variables can go here
 // App Material Design Variables

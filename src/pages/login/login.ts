@@ -4,8 +4,8 @@ import {
 import {
 	IonicPage,
 	NavController,
-	NavParams,
-	AlertController
+	AlertController,
+	LoadingController
 } from 'ionic-angular';
 import {
 	ListadoAutopistasPage
@@ -21,14 +21,8 @@ import {
 	AutopistasService
 } from '../../shared/autopistas-service'
 import {
-	Storage
-} from '@ionic/storage';
-import {
 	Network
 } from '@ionic-native/network';
-import {
-	Keyboard
-} from '@ionic-native/keyboard';
 
 @IonicPage()
 @Component({
@@ -38,11 +32,14 @@ import {
 export class LoginPage {
 	username: string = ''
 	clave_acceso: string = ''
+	loadingDescargaCatalogos = this.loadingCtrl.create({
+		spinner: 'hide',
+		content: 'Descargando catalogos, por favor espera...'
+	})
 
 	constructor(public navCtrl: NavController, private alertCtrl: AlertController,
 		private apiProvider: ApiProvider, private loginService: LoginService,
-		private storage: Storage, private network: Network, private autopistasService: AutopistasService,
-		private keyboard: Keyboard) {}
+		private network: Network, private autopistasService: AutopistasService, public loadingCtrl: LoadingController) {}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad LoginPage');
@@ -53,29 +50,25 @@ export class LoginPage {
 	login = () => {
 		/* Si el usuario o contraseña son vacios mostramos una alerta de aviso. */
 		if (this.username === '' || this.clave_acceso === '') {
-			let alert = this.alertCtrl.create({
-				title: 'Login',
-				subTitle: 'Debes copletar el usuario y la contraseña',
-				buttons: ['Aceptar']
-			})
-
-			alert.present()
+			this.getMensajeError('Iniciar sesión', 'Debes copletar el usuario y la contraseña')
 		} else {
 			/* Si existe una conexion via wifi. */
 			if (this.network.type == 'wifi') {
-				this.username = 'useradmin'
-				this.clave_acceso = 'secret'
-					/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
+				let loading = this.loadingCtrl.create({
+					spinner: 'hide',
+					content: 'Validando información, por favor espera...'
+				})
+				loading.present();
 
+				/* Resolvemos el end point para loguear al usuario y obtener token de acceso. */
 				/* Llamamos a nuestro servicio para obtener token de acceso. */
 				this.apiProvider.getToken(this.username, this.clave_acceso)
 					.then(response => {
-
-						response.status === 200 ? this.setToken(response.data) : this.getMensajeError('Iniciar sesión', 'Cliente inválido, la autenticación del cliente falló')
+						response.status === 200 ? (this.setToken(response.data), loading.dismiss()) : this.getMensajeError('Iniciar sesión', 'Cliente inválido, la autenticación del cliente falló')
 					})
 			} else {
 				/* Si no hay conexión alguna mandamos un mensaje de error */
-				this.getMensajeError('Error', 'Parece que tienes un error de conexión, favor de verificarlo para continuar')
+				this.getMensajeError('Iniciar sesión', 'Parece que tienes un error de conexión, favor de verificarlo para continuar')
 
 			}
 		}
@@ -88,6 +81,7 @@ export class LoginPage {
 		this.loginService.registrarToken(dataResponse).then((response) => {
 			/* Funcion para obtener el token de acceso. */
 			this.loginService.obtenerToken().then((response) => {
+				this.loadingDescargaCatalogos.present()
 				this.signIn(response[0])
 			})
 		})
@@ -180,6 +174,10 @@ export class LoginPage {
 			this.autopistasService.registrarCarriles(response.data.data).then((response) => {
 				/* Mostramos el listado de las autopistas. */
 				this.navCtrl.setRoot(ListadoAutopistasPage, {})
+				setTimeout(() => {
+					this.loadingDescargaCatalogos.dismiss()
+
+				}, 2000)
 			})
 		})
 	}
@@ -189,7 +187,8 @@ export class LoginPage {
 		let mensaje = this.alertCtrl.create({
 			title: title,
 			message: message,
-			buttons: ['Aceptar']
+			buttons: ['Aceptar'],
+			cssClass: 'alert',
 		})
 
 		mensaje.present()

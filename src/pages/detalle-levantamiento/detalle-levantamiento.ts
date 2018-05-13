@@ -9,9 +9,6 @@ import {
 import {
 	AutopistasService
 } from '../../shared/autopistas-service'
-import {
-	PhotoLibrary
-} from '@ionic-native/photo-library';
 
 @IonicPage()
 @Component({
@@ -25,7 +22,8 @@ export class DetalleLevantamientoPage {
 	imagenA: string = ''
 	imagenB: string = ''
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, private autopistasService: AutopistasService, private photoLibrary: PhotoLibrary) {
+	constructor(public navCtrl: NavController, public navParams: NavParams,
+		private autopistasService: AutopistasService) {
 		this.levantamiento = navParams.get('levantamiento')
 		this.autopista = navParams.get('autopista')
 	}

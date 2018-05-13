@@ -10,9 +10,6 @@ import {
 	AutopistasService
 } from '../../shared/autopistas-service';
 import {
-	LoginService
-} from '../../shared/login-service'
-import {
 	DetalleLevantamientoPage
 } from '../../pages/detalle-levantamiento/detalle-levantamiento';
 

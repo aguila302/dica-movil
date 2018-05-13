@@ -5,14 +5,14 @@
         </button>
         <ion-title>DICA - Diagnostico carretero</ion-title>
     </ion-navbar>
-    <ion-toolbar text-center>
+    <ion-toolbar text-center color="subheader">
         <ion-title>Levantamientos registrados</ion-title>
-        Autopista: {{ datosAutopista.nombre }}
+        <span style="color: #fff;">Autopista: {{ datosAutopista.nombre }}</span>
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
     <ion-list no-lines [virtualScroll]="levantamientos" [bufferRatio]="3.1" [approxItemHeight]="'300px'">
-        <ion-item-sliding [ngClass]="['levantamientos']" *virtualItem="let levantamiento" (click)="detalleLevantamiento(levantamiento)">
+        <ion-item-sliding [ngClass]="['levantamientos']" *virtualItem="let levantamiento">
             <ion-item>
                 <ion-grid>
                     <ion-row text-left justify-content-center>
@@ -46,8 +46,21 @@
                 </ion-grid>
             </ion-item>
             <ion-item-options>
-                <button ion-button icon-only color="danger"><ion-icon name="trash"></ion-icon></button>
+                <button padding ion-button icon-only color="light" (click)="detalleLevantamiento(levantamiento)">
+                    <ion-icon name="information-circle"></ion-icon>
+                    <span ion-tex>Ver mas</span>
+                </button>
+                <button padding ion-button icon-only color="danger">
+                    <ion-icon name="trash"></ion-icon>
+                    <span ion-tex>Eliminar</span>
+                </button>
             </ion-item-options>
         </ion-item-sliding>
     </ion-list>
 </ion-content>
+<ion-footer text-center>
+    <ion-toolbar color="cabecera" text-wrap>
+        <ion-title>
+            <small>Copyright © Cal y Mayor y Asociados, S.C. 2018. Todos los derechos reservados.</small></ion-title>
+    </ion-toolbar>
+</ion-footer>

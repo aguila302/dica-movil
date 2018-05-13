@@ -3,15 +3,14 @@ import {
 } from '@angular/core';
 import {
 	HTTP,
-	HTTPResponse
 } from '@ionic-native/http';
 
 @Injectable()
 export class ApiProvider {
 
 	link = {
-		apiUrl: 'http://11.11.1.58/dica/public',
-		client_secret: 'nQzYnsciKFa3hwsVQdLsxMgbJt9m1J1X3sIPjo0S'
+		apiUrl: 'http://67ae65b8.ngrok.io',
+		client_secret: 'AjU9SFdOSzfq1gKBWxLNVZAOgFtIPRX6kGNoXNPj'
 	}
 
 	constructor(public http: HTTP) {}
@@ -24,7 +23,7 @@ export class ApiProvider {
 			username: username,
 			password: password,
 			grant_type: 'password',
-			client_id: 2,
+			client_id: 4,
 			client_secret: this.link.client_secret
 		}
 		let headers = {

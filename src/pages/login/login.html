@@ -9,17 +9,15 @@
             <img src="assets/imgs/img1.png">
         </div>
         <ion-scroll scrollY="true" style="height: 220px;">
-           <ion-list no-lines>
-                <ion-item margin-bottom padding-top>
-                    <!-- <ion-label floating>Ususario</ion-label> -->
-                    <ion-input [(ngModel)]="username" type="text"></ion-input>
+            <ion-list no-lines>
+                <ion-item margin-bottom>
+                    <ion-input [(ngModel)]="username" type="text" placeholder="Usuario"></ion-input>
                 </ion-item>
-                <ion-item>
-                    <!-- <ion-label floating>Contraseña</ion-label> -->
-                    <ion-input [(ngModel)]="clave_acceso" type="password"></ion-input>
+                <ion-item margin-bottom>
+                    <ion-input [(ngModel)]="clave_acceso" type="password" placeholder="Contraseña"></ion-input>
                 </ion-item>
-                <button padding ion-button full (click)="login()">Entrar</button>
+                <button padding ion-button color="boton" full (click)="login()">Entrar</button>
             </ion-list>
-         </ion-scroll>
+        </ion-scroll>
     </div>
 </ion-content>

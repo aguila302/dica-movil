@@ -1,5 +1,5 @@
 import {
-	Component,
+	Component
 } from '@angular/core';
 import {
 	NavController,
@@ -9,7 +9,6 @@ import {
 } from 'ionic-angular';
 import {
 	Validators,
-	FormBuilder,
 	FormGroup,
 	FormControl,
 } from '@angular/forms';
@@ -17,9 +16,6 @@ import {
 	Camera,
 	CameraOptions
 } from '@ionic-native/camera';
-import {
-	CustomValidators
-} from 'ng2-validation';
 import {
 	AutopistasService
 } from '../../shared/autopistas-service';
@@ -50,8 +46,8 @@ export class RegistroLevantamientoPage {
 	form: FormGroup
 
 	url: string = ''
-	imagenA: string
-	imagenB: string
+	imagenA: string = ''
+	imagenB: string = ''
 	base64imageA: string
 	base64imageB: string
 	fotos = []
@@ -65,7 +61,7 @@ export class RegistroLevantamientoPage {
 	}
 
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder,
+	constructor(public navCtrl: NavController, public navParams: NavParams,
 		private camera: Camera, private autopistasService: AutopistasService, public alert: AlertController,
 		private base64ToGallery: Base64ToGallery, public loadingCtrl: LoadingController) {
 
@@ -270,6 +266,11 @@ export class RegistroLevantamientoPage {
 		alert.present()
 		setTimeout(() => {
 			alert.dismiss()
+			this.form.reset({
+				statusLevantamiento: false,
+			})
+			this.imagenA = ''
+			this.imagenB = ''
 		}, 3000)
 	}
 

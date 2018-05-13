@@ -90,6 +90,9 @@ import {
 import {
 	Keyboard
 } from '@ionic-native/keyboard';
+import {
+	AppVersion
+} from '@ionic-native/app-version';
 
 @NgModule({
 	declarations: [
@@ -136,7 +139,8 @@ import {
 		LoginService,
 		Network,
 		Camera,
-		SQLitePorter
+		SQLitePorter,
+		AppVersion
 	]
 })
 export class AppModule {}

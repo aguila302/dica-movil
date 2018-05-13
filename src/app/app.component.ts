@@ -33,16 +33,21 @@ import {
 import {
 	AutopistasService
 } from '../shared/autopistas-service';
+import {
+	AppVersion
+} from '@ionic-native/app-version';
 
 @Component({
 	templateUrl: 'app.html'
 })
 export class MyApp {
 	@ViewChild(Nav) nav: Nav;
-	// @ViewChild(ListadoLevantamientosPage) listadoLevantamientosPage: ListadoLevantamientosPage;
 
+	email: string = ''
+	name: string = ''
 	rootPage: any
 	autopista = {}
+	versionApp: any
 
 	pages: Array < {
 		title: string,
@@ -50,11 +55,15 @@ export class MyApp {
 	} > ;
 
 	constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-		private storage: Storage, private autopistasService: AutopistasService) {
+		private storage: Storage, private autopistasService: AutopistasService, private appVersion: AppVersion) {
 
 		/* Obtiene usuario logueado. */
 		this.storage.get('auth').then((response) => {
 			if (response) {
+				this.email = response.email
+				this.name = response.nmae
+				console.log(response)
+
 				this.rootPage = ListadoAutopistasPage
 
 			} else {
@@ -86,6 +95,11 @@ export class MyApp {
 			// Here you can do any higher level native things you might need.
 			this.statusBar.styleDefault();
 			this.splashScreen.hide();
+			this.appVersion.getVersionNumber().then((version) => {
+				this.versionApp = version
+				console.log(version)
+
+			})
 		});
 	}
 

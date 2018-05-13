@@ -2,78 +2,80 @@
     <ion-navbar color="cabecera">
         <ion-title>DICA - Diagnostico carretero</ion-title>
     </ion-navbar>
-    <ion-toolbar text-center>
+    <ion-toolbar text-center color="subheader">
         <ion-title>Detalle de levantamiento</ion-title>
-        Autopista: {{ autopista }}
+        <span style="color: #fff;">Autopista: {{ autopista }}</span>
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-list>
+    <ion-list no-lines>
         <ion-item [ngClass]="['levantamientos']">
             <ion-grid>
-                <ion-row text-right>
+                <ion-row text-left justify-content-center>
                     <ion-col col-12>
-                        <p ion-text color="primary">No. de levantamiento:</p>
-                        <p>{{ levantamiento.id }} </p>
+                        <small>No. de levantamiento:</small>
+                        <span>{{ levantamiento.id }}</span>
                     </ion-col>
                 </ion-row>
                 <ion-row text-left>
                     <ion-col col-12>
-                        <p ion-text color="primary">Elemento:</p>
-                        <p>{{ levantamiento.elemento }}</p>
+                        <small>Elemento:</small>
+                        <span>{{ levantamiento.elemento }}</span>
                     </ion-col>
                     <ion-col col-12>
-                        <p ion-text color="primary">Seguimiento:</p>
-                        <p *ngIf="levantamiento.seguimiento === 0">Reporte inicial</p>
-                        <p *ngIf="levantamiento.seguimiento === 1">En proceso de atención</p>
-                        <p *ngIf="levantamiento.seguimiento === 2">Atendido</p>
-                    </ion-col>
-                </ion-row>
-                <ion-row text-left>
-                    <ion-col col-12>
-                        <p ion-text color="primary">Cadenamiento inicial:</p>
-                        <p>{{ levantamiento.cadenamientoInicial }} </p>
-                    </ion-col>
-                    <ion-col col-12>
-                        <p ion-text color="primary">Cadenamiento final:</p>
-                        <p>{{ levantamiento.cadenamientoFinal }} </p>
+                        <small>Seguimiento:</small>
+                        <span *ngIf="levantamiento.seguimiento === 0">Reporte inicial</span>
+                        <span *ngIf="levantamiento.seguimiento === 1">En proceso de atención</span>
+                        <span *ngIf="levantamiento.seguimiento === 2">Atendido</span>
                     </ion-col>
                 </ion-row>
                 <ion-row text-left>
                     <ion-col col-12>
-                        <p ion-text color="primary">Carril:</p>
-                        <p>{{ levantamiento.carril }} </p>
+                        <small>Cadenamiento inicial:</small>
+                        <span>{{ levantamiento.cadenamientoInicial }} </span>
+                    </ion-col>
+                    <ion-col col-12>
+                        <small>Cadenamiento final:</small>
+                        <span>{{ levantamiento.cadenamientoFinal }} </span>
                     </ion-col>
                 </ion-row>
                 <ion-row text-left>
                     <ion-col col-12>
-                        <p ion-text color="primary">Condición:</p>
-                        <p>{{ levantamiento.condicion }} </p>
+                        <small>Carril:</small>
+                        <span>{{ levantamiento.carril }} </span>
                     </ion-col>
                 </ion-row>
                 <ion-row text-left>
                     <ion-col col-12>
-                        <p ion-text color="primary">Subelemento:</p>
-                        <p>{{ levantamiento.subelemento }} </p>
+                        <small>Condición:</small>
+                        <span>{{ levantamiento.condicion }} </span>
                     </ion-col>
                 </ion-row>
                 <ion-row text-left>
                     <ion-col col-12>
-                        <p ion-text color="primary">Longitud del elemento:</p>
-                        <p>{{ levantamiento.longitudElemento }} </p>
+                        <small>Subelemento:</small>
+                        <span>{{ levantamiento.subelemento }} </span>
                     </ion-col>
                 </ion-row>
                 <ion-row text-left>
                     <ion-col col-12>
-                        <p ion-text color="primary">Reportar:</p>
-                        <p>{{ levantamiento.reportar }} </p>
+                        <small>Longitud del elemento:</small>
+                        <span>{{ levantamiento.longitudElemento }} </span>
                     </ion-col>
                 </ion-row>
                 <ion-row text-left>
                     <ion-col col-12>
-                        <p ion-text color="primary">Estatus:</p>
-                        <p>{{ levantamiento.estatus }} </p>
-                        <!-- <ion-badge item-end>260k</ion-badge> -->
+                        <small>Reportar:</small>
+                        <span *ngIf="reportar">Reportar</span>
+                        <span *ngIf="!reportar">No reportado</span>
+                    </ion-col>
+                </ion-row>
+                <ion-row text-left>
+                    <ion-col col-12>
+                        <small>Seguimiento:</small>
+                        <span *ngIf="levantamiento.seguimiento === 0">Reporte inicial</span>
+                        <span *ngIf="levantamiento.seguimiento === 1">En proceso de atención</span>
+                        <span *ngIf="levantamiento.seguimiento === 2">Atendido</span>
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -90,15 +92,13 @@
                         <img tappable [src]="imagenB" />
                     </ion-slide>
                 </ion-slides>
-                <!-- <ion-card>
-                    <img tappable [src]="imagenA" />
-                </ion-card> -->
             </ion-col>
-            <!-- <ion-col col-6>
-                <ion-card>
-                    <img tappable [src]="imagenB" />
-                </ion-card>
-            </ion-col> -->
         </ion-row>
     </ion-grid>
 </ion-content>
+<ion-footer text-center>
+    <ion-toolbar color="cabecera" text-wrap>
+        <ion-title>
+            <small>Copyright © Cal y Mayor y Asociados, S.C. 2018. Todos los derechos reservados.</small></ion-title>
+    </ion-toolbar>
+</ion-footer>
