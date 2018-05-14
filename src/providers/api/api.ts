@@ -9,8 +9,8 @@ import {
 export class ApiProvider {
 
 	link = {
-		apiUrl: 'http://67ae65b8.ngrok.io',
-		client_secret: 'AjU9SFdOSzfq1gKBWxLNVZAOgFtIPRX6kGNoXNPj'
+		apiUrl: 'http://a08f98cb.ngrok.io',
+		client_secret: 'unKvzknkJBX908RHuE1KBpI1oRsj011jlrnlXxRt'
 	}
 
 	constructor(public http: HTTP) {}
