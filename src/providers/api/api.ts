@@ -4,14 +4,18 @@ import {
 import {
 	HTTP,
 } from '@ionic-native/http';
+import {
+	URL_BASE,
+	TOKEN
+} from '../constants'
 
 @Injectable()
 export class ApiProvider {
 
-	link = {
-		apiUrl: 'http://67ae65b8.ngrok.io',
-		client_secret: 'AjU9SFdOSzfq1gKBWxLNVZAOgFtIPRX6kGNoXNPj'
-	}
+	// link = {
+	// 	apiUrl: 'http://f88e50cb.ngrok.io',
+	// 	client_secret: 'mcElle5WbgH1INMpaCpJMw5cuY7il951psCl55Cn'
+	// }
 
 	constructor(public http: HTTP) {}
 
@@ -23,8 +27,8 @@ export class ApiProvider {
 			username: username,
 			password: password,
 			grant_type: 'password',
-			client_id: 4,
-			client_secret: this.link.client_secret
+			client_id: 2,
+			client_secret: TOKEN
 		}
 		let headers = {
 			'Content-Type': 'application/json'
@@ -33,7 +37,7 @@ export class ApiProvider {
 		/* Realizamos la peticion al end point. */
 		this.http.setRequestTimeout(15000)
 
-		return this.http.post(`${this.link.apiUrl}/oauth/token`, params, headers)
+		return this.http.post(`${URL_BASE}/oauth/token`, params, headers)
 			.then(data => {
 				return {
 					'status': data.status,
@@ -57,7 +61,7 @@ export class ApiProvider {
 			'Authorization': 'Bearer ' + user.access_token
 		}
 
-		return this.http.get(`${this.link.apiUrl}/api/user`, {}, params)
+		return this.http.get(`${URL_BASE}/api/user`, {}, params)
 			.then(data => {
 				return {
 					'status': data.status,
@@ -79,7 +83,7 @@ export class ApiProvider {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
 
-		return this.http.get(`${this.link.apiUrl}/api/autopistas`, {}, params)
+		return this.http.get(`${URL_BASE}/api/autopistas`, {}, params)
 			.then(data => {
 				return {
 					'status': data.status,
@@ -101,7 +105,7 @@ export class ApiProvider {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
 
-		return this.http.get(`${this.link.apiUrl}/api/elementos`, {}, params)
+		return this.http.get(`${URL_BASE}/api/elementos`, {}, params)
 			.then(data => {
 				return {
 					'status': data.status,
@@ -123,7 +127,7 @@ export class ApiProvider {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
 
-		return this.http.get(`${this.link.apiUrl}/api/cuerpos`, {}, params)
+		return this.http.get(`${URL_BASE}/api/cuerpos`, {}, params)
 			.then(data => {
 				return {
 					'status': data.status,
@@ -145,7 +149,7 @@ export class ApiProvider {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
 
-		return this.http.get(`${this.link.apiUrl}/api/subelementos`, {}, params)
+		return this.http.get(`${URL_BASE}/api/subelementos`, {}, params)
 			.then(data => {
 				return {
 					'status': data.status,
@@ -168,7 +172,7 @@ export class ApiProvider {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
 
-		return this.http.get(`${this.link.apiUrl}/api/condiciones`, {}, params)
+		return this.http.get(`${URL_BASE}/api/condiciones`, {}, params)
 			.then(data => {
 				return {
 					'status': data.status,
@@ -190,7 +194,7 @@ export class ApiProvider {
 			'Authorization': 'Bearer ' + accessToken.access_token
 		}
 
-		return this.http.get(`${this.link.apiUrl}/api/carriles`, {}, params)
+		return this.http.get(`${URL_BASE}/api/carriles`, {}, params)
 			.then(data => {
 				return {
 					'status': data.status,

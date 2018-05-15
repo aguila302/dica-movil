@@ -85,6 +85,10 @@ export class MyApp {
 			title: 'Cambiar de autopista',
 			component: ListadoAutopistasPage,
 
+		}, {
+			title: 'Sincronizar información',
+			component: ListadoAutopistasPage,
+
 		}];
 
 	}
@@ -111,5 +115,14 @@ export class MyApp {
 		this.nav.setRoot(page.component, {
 			autopista: autopista
 		});
+	}
+
+	logout = () => {
+		this.storage.remove('auth').then(auth => {
+			this.nav.setRoot(LoginPage, {})
+		})
+
+		this.autopistasService.autopistaActiva = null
+		this.autopistasService.resetDatabase().then(() => console.log('database reset'))
 	}
 }

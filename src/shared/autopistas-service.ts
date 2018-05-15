@@ -124,4 +124,11 @@ export class AutopistasService {
 	getFotos = (levantamiento) => {
 		return this.databaseProvider.getFotos(levantamiento.id)
 	}
+
+	/*
+	Resetea el origen de datos movil.
+	 */
+	resetDatabase = () => {
+		return this.databaseProvider.resetDatabase()
+	}
 }

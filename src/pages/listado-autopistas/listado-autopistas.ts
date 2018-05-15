@@ -96,6 +96,7 @@ export class ListadoAutopistasPage {
 			this.navCtrl.setRoot(LoginPage, {})
 		})
 
-		this.databaseProvider.resetDatabase().then(() => console.log('database reset'))
+		this.autopistasService.autopistaActiva = null
+		this.autopistasService.resetDatabase().then(() => console.log('database reset'))
 	}
 }

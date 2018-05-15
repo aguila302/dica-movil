@@ -4,7 +4,8 @@ import {
 import {
 	IonicPage,
 	NavController,
-	NavParams
+	NavParams,
+	AlertController
 } from 'ionic-angular';
 import {
 	AutopistasService
@@ -30,7 +31,7 @@ export class ListadoLevantamientosPage {
 	}
 
 	constructor(public navCtrl: NavController, public navParams: NavParams,
-		private autopistasService: AutopistasService) {
+		private autopistasService: AutopistasService, public alert: AlertController) {
 
 		/* Obtiene los datos generaes de la autopista. */
 		this.datosAutopista.id = this.navParams.get('autopista').autopista_id
@@ -48,6 +49,8 @@ export class ListadoLevantamientosPage {
 	listadoLevantamientos = () => {
 		this.autopistasService.listadoLevantamientos(this.datosAutopista.id).then(levantamientos => {
 			this.levantamientos = levantamientos
+			console.log(this.levantamientos)
+
 		})
 	}
 
@@ -59,5 +62,17 @@ export class ListadoLevantamientosPage {
 			levantamiento,
 			autopista: this.datosAutopista.nombre
 		})
+	}
+
+	/**
+	 * Elimina un levantamiento del origen de datos
+	 */
+	deleteLevantamiento = (levantamiento) => {
+		let mensaje = this.alert.create({
+			title: 'Desarrollo',
+			subTitle: 'Actualmente en desarrollo',
+			buttons: ['Aceptar']
+		})
+		mensaje.present()
 	}
 }

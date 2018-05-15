@@ -64,7 +64,8 @@ export class LoginPage {
 				/* Llamamos a nuestro servicio para obtener token de acceso. */
 				this.apiProvider.getToken(this.username, this.clave_acceso)
 					.then(response => {
-						response.status === 200 ? (this.setToken(response.data), loading.dismiss()) : this.getMensajeError('Iniciar sesión', 'Cliente inválido, la autenticación del cliente falló')
+						loading.dismiss()
+						response.status === 200 ? (this.setToken(response.data)) : this.getMensajeError('Iniciar sesión', 'Cliente inválido, la autenticación del cliente falló')
 					})
 			} else {
 				/* Si no hay conexión alguna mandamos un mensaje de error */
