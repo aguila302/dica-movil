@@ -11,6 +11,9 @@ import {
 import {
 	BehaviorSubject
 } from 'rxjs/BehaviorSubject';
+import {
+	SQLitePorter
+} from '@ionic-native/sqlite-porter';
 
 @Injectable()
 export class DatabaseProvider {
@@ -18,16 +21,21 @@ export class DatabaseProvider {
 	private database: SQLiteObject
 	private dbReady = new BehaviorSubject < boolean > (false)
 
-	constructor(private platform: Platform, private sqlite: SQLite) {
+	constructor(private platform: Platform, private sqlite: SQLite,
+		private sqlitePorter: SQLitePorter) {
 		this.platform.ready().then(() => {
 			this.sqlite.create({
 				name: 'dica.db',
 				location: 'default'
 			}).then((db: SQLiteObject) => {
 				this.database = db
-				// this.sqlitePorter.exportDbToSql(this.database)
-				// 	.then((res) => console.log(res))
-				// 	.catch(e => console.error(e))
+					// this.sqlite.deleteDatabase({
+					// 		name: 'dica.db',
+					// 		location: 'default'
+					// 	}).then(() => console.log('delete database'))
+				this.sqlitePorter.exportDbToSql(this.database)
+					.then((res) => console.log(res))
+					.catch(e => console.error(e))
 
 				this.createTables().then((res) => {
 					this.dbReady.next(true)
@@ -107,7 +115,7 @@ export class DatabaseProvider {
 				        	cadenamiento_inicial_m NUMERIC,
 				        	cadenamiento_final_km NUMERIC,
 				        	cadenamiento_final_m NUMERIC,
-				        	reportar NUMERIC,
+				        	reportar BOOLEAN,
 				        	estatus NUMERIC);`, {}
 										).then(() => {
 											return this.database.executeSql(
@@ -432,9 +440,9 @@ export class DatabaseProvider {
 
 	/* Obtiene un listado de levantamientos registrados de una autopista. */
 	listadoLevantamientos = (id: number) => {
-		return this.isReady()
-			.then(() => {
-				return this.database.executeSql(`
+			return this.isReady()
+				.then(() => {
+					return this.database.executeSql(`
 					select a.id, a.elemento_id, b.descripcion as elemento_descripcion, a.estatus as seguimiento,
 					a.cadenamiento_inicial_km || ' + ' || a.cadenamiento_inicial_m as cadenamiento_inicial,
 					a.cadenamiento_final_km || ' + ' || a.cadenamiento_final_m as cadenamiento_final,
@@ -447,31 +455,31 @@ export class DatabaseProvider {
 					INNER JOIN condiciones as e on a.coondicion_id = e.condicion_id
 					INNER JOIN carriles as f on a.carril_id = f.carril_id
 					where a.autopista_id = ? order by a.id ASC`, [id])
-					.then((result) => {
-						let levantamientos = []
-						for (let i = 0; i < result.rows.length; i++) {
-							levantamientos.push({
-								id: result.rows.item(i).id,
-								elemento_id: result.rows.item(i).elemento_id,
-								elemento: result.rows.item(i).elemento_descripcion,
-								seguimiento: result.rows.item(i).seguimiento,
-								cadenamientoInicial: result.rows.item(i).cadenamiento_inicial,
-								cadenamientoFinal: result.rows.item(i).cadenamiento_final,
-								cuerpo: result.rows.item(i).cuerpo_descripcion,
-								subelemento: result.rows.item(i).descripcion_subelemento,
-								condicion: result.rows.item(i).condicion_descripcion,
-								carril: result.rows.item(i).carril_descripcion,
-								longitudElemento: result.rows.item(i).longitud_elemento,
-								reportar: result.rows.item(i).reportar,
-								estatus: result.rows.item(i).estatus,
-							})
-						}
-						return levantamientos
-					})
+						.then((result) => {
+							let levantamientos = []
+							for (let i = 0; i < result.rows.length; i++) {
+								levantamientos.push({
+									id: result.rows.item(i).id,
+									elemento_id: result.rows.item(i).elemento_id,
+									elemento: result.rows.item(i).elemento_descripcion,
+									seguimiento: result.rows.item(i).seguimiento,
+									cadenamientoInicial: result.rows.item(i).cadenamiento_inicial,
+									cadenamientoFinal: result.rows.item(i).cadenamiento_final,
+									cuerpo: result.rows.item(i).cuerpo_descripcion,
+									subelemento: result.rows.item(i).descripcion_subelemento,
+									condicion: result.rows.item(i).condicion_descripcion,
+									carril: result.rows.item(i).carril_descripcion,
+									longitudElemento: result.rows.item(i).longitud_elemento,
+									reportar: result.rows.item(i).reportar,
+									estatus: result.rows.item(i).estatus,
+								})
+							}
+							return levantamientos
+						})
 
-			})
-	}
-	/* Obtiene la url de las fotos de un levantamiento. */
+				})
+		}
+		/* Obtiene la url de las fotos de un levantamiento. */
 	getFotos = (id: number) => {
 		return this.isReady()
 			.then(() => {

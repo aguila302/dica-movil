@@ -63,9 +63,6 @@ import {
 	FormsModule,
 } from '@angular/forms';
 import {
-	SQLitePorter
-} from '@ionic-native/sqlite-porter';
-import {
 	CustomFormsModule
 } from 'ng2-validation'
 import {
@@ -93,6 +90,9 @@ import {
 import {
 	AppVersion
 } from '@ionic-native/app-version';
+import {
+	SQLitePorter
+} from '@ionic-native/sqlite-porter';
 
 @NgModule({
 	declarations: [
