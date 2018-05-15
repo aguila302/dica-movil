@@ -12,11 +12,6 @@ import {
 @Injectable()
 export class ApiProvider {
 
-	// link = {
-	// 	apiUrl: 'http://f88e50cb.ngrok.io',
-	// 	client_secret: 'mcElle5WbgH1INMpaCpJMw5cuY7il951psCl55Cn'
-	// }
-
 	constructor(public http: HTTP) {}
 
 	/**
