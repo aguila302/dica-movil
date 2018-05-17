@@ -24,10 +24,6 @@ export class ListadoLevantamientosPage {
 	public datosAutopista = {
 		id: 0,
 		nombre: '',
-		cadenamientoInicialKm: 0,
-		cadenamientoInicialm: 0,
-		cadenamientoFinalKm: 0,
-		cadenamientoFinalm: 0,
 	}
 
 	constructor(public navCtrl: NavController, public navParams: NavParams,

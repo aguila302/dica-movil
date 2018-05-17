@@ -23,6 +23,7 @@ export class DatabaseProvider {
 
 	constructor(private platform: Platform, private sqlite: SQLite,
 		private sqlitePorter: SQLitePorter) {
+
 		this.platform.ready().then(() => {
 			this.sqlite.create({
 				name: 'dica.db',
@@ -33,9 +34,9 @@ export class DatabaseProvider {
 					// 		name: 'dica.db',
 					// 		location: 'default'
 					// 	}).then(() => console.log('delete database'))
-				this.sqlitePorter.exportDbToSql(this.database)
-					.then((res) => console.log(res))
-					.catch(e => console.error(e))
+					// this.sqlitePorter.exportDbToSql(this.database)
+					// 	.then((res) => console.log(res))
+					// 	.catch(e => console.error(e))
 
 				this.createTables().then((res) => {
 					this.dbReady.next(true)
@@ -443,11 +444,14 @@ export class DatabaseProvider {
 			return this.isReady()
 				.then(() => {
 					return this.database.executeSql(`
-					select a.id, a.elemento_id, b.descripcion as elemento_descripcion, a.estatus as seguimiento,
-					a.cadenamiento_inicial_km || ' + ' || a.cadenamiento_inicial_m as cadenamiento_inicial,
-					a.cadenamiento_final_km || ' + ' || a.cadenamiento_final_m as cadenamiento_final,
+					select a.id, a.autopista_id, a.elemento_id, a.tipo_elemento_id as subelemento_id, a.cuerpo_id, 
+					a.coondicion_id as condicion_id, a.carril_id,
+					b.descripcion as elemento_descripcion, a.estatus as estatus,
+					a.cadenamiento_inicial_km, a.cadenamiento_inicial_m,
+					a.cadenamiento_final_km, a.cadenamiento_final_m,
 					c.descripcion as cuerpo_descripcion, e.descripcion as condicion_descripcion,
-					d.descripcion_subelemento, f.descripcion as carril_descripcion, a.longitud_elemento, a.reportar, a.estatus
+					d.descripcion_subelemento, f.descripcion as carril_descripcion, a.longitud_elemento,
+					case when(a.reportar == 'true') then 1 else 0 end as reportar 
 					from levantamientos as a
 					INNER JOIN elementos as b on a.elemento_id = b.elemento_id
 					INNER JOIN cuerpos as c on a.cuerpo_id = c.cuerpo_id
@@ -460,18 +464,24 @@ export class DatabaseProvider {
 							for (let i = 0; i < result.rows.length; i++) {
 								levantamientos.push({
 									id: result.rows.item(i).id,
+									autopista_id: result.rows.item(i).autopista_id,
 									elemento_id: result.rows.item(i).elemento_id,
+									subelemento_id: result.rows.item(i).subelemento_id,
+									cuerpo_id: result.rows.item(i).cuerpo_id,
+									condicion_id: result.rows.item(i).condicion_id,
+									carril_id: result.rows.item(i).carril_id,
 									elemento: result.rows.item(i).elemento_descripcion,
-									seguimiento: result.rows.item(i).seguimiento,
-									cadenamientoInicial: result.rows.item(i).cadenamiento_inicial,
-									cadenamientoFinal: result.rows.item(i).cadenamiento_final,
+									estatus: result.rows.item(i).estatus,
+									cadenamientoInicialKm: result.rows.item(i).cadenamiento_inicial_km,
+									cadenamientoInicialm: result.rows.item(i).cadenamiento_final_m,
+									cadenamientoFinalKm: result.rows.item(i).cadenamiento_final_km,
+									cadenamientoFinalm: result.rows.item(i).cadenamiento_final_m,
 									cuerpo: result.rows.item(i).cuerpo_descripcion,
 									subelemento: result.rows.item(i).descripcion_subelemento,
 									condicion: result.rows.item(i).condicion_descripcion,
 									carril: result.rows.item(i).carril_descripcion,
 									longitudElemento: result.rows.item(i).longitud_elemento,
 									reportar: result.rows.item(i).reportar,
-									estatus: result.rows.item(i).estatus,
 								})
 							}
 							return levantamientos

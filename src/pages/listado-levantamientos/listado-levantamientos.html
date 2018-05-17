@@ -27,20 +27,20 @@
                             <span>{{ levantamiento.elemento }}</span>
                         </ion-col>
                         <ion-col col-12>
-                            <small>Seguimiento:</small>
-                            <span *ngIf="levantamiento.seguimiento === 0">Reporte inicial</span>
-                            <span *ngIf="levantamiento.seguimiento === 1">En proceso de atención</span>
-                            <span *ngIf="levantamiento.seguimiento === 2">Atendido</span>
+                            <small>Estatus:</small>
+                            <span *ngIf="levantamiento.estatus === 0">Reporte inicial</span>
+                            <span *ngIf="levantamiento.estatus === 1">En proceso de atención</span>
+                            <span *ngIf="levantamiento.estatus === 2">Atendido</span>
                         </ion-col>
                     </ion-row>
                     <ion-row text-left>
                         <ion-col col-12>
                             <small>Cadenamiento inicial:</small>
-                            <span>{{ levantamiento.cadenamientoInicial }} </span>
+                            <span>{{ levantamiento.cadenamientoInicialKm }} + {{ levantamiento.cadenamientoInicialm }}</span>
                         </ion-col>
                         <ion-col col-12>
                             <small>Cadenamiento final:</small>
-                            <span>{{ levantamiento.cadenamientoFinal }} </span>
+                            <span>{{ levantamiento.cadenamientoFinalKm }} + {{ levantamiento.cadenamientoFinalm }}</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>

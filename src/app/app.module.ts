@@ -74,6 +74,12 @@ import {
 import {
 	DetalleLevantamientoPage
 } from '../pages/detalle-levantamiento/detalle-levantamiento';
+import {
+	DespliegueLevantamientoPage
+} from '../pages/despliegue-levantamiento/despliegue-levantamiento';
+import {
+	PopoverPage
+} from '../pages/popover/popover';
 
 import {
 	Base64ToGallery
@@ -93,6 +99,9 @@ import {
 import {
 	SQLitePorter
 } from '@ionic-native/sqlite-porter';
+import {
+	DespliegueProvider
+} from '../providers/despliegue/despliegue';
 
 @NgModule({
 	declarations: [
@@ -102,7 +111,9 @@ import {
 		LoginPage,
 		OpcionesAutopistaPage,
 		ListadoLevantamientosPage,
-		DetalleLevantamientoPage
+		DetalleLevantamientoPage,
+		DespliegueLevantamientoPage,
+		PopoverPage
 	],
 	imports: [
 		BrowserModule,
@@ -120,7 +131,9 @@ import {
 		LoginPage,
 		OpcionesAutopistaPage,
 		ListadoLevantamientosPage,
-		DetalleLevantamientoPage
+		DetalleLevantamientoPage,
+		DespliegueLevantamientoPage,
+		PopoverPage
 	],
 	providers: [
 		PhotoLibrary,
@@ -140,7 +153,8 @@ import {
 		Network,
 		Camera,
 		SQLitePorter,
-		AppVersion
+		AppVersion,
+		DespliegueProvider
 	]
 })
 export class AppModule {}

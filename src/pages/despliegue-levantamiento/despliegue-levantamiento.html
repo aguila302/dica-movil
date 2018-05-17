@@ -1,16 +1,23 @@
-
 <ion-header text-center>
     <ion-navbar color="cabecera">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
         <ion-title>DICA - Diagnostico carretero</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="popover($event)">
+                <ion-icon name="more"></ion-icon>
+            </button>
+        </ion-buttons>
     </ion-navbar>
     <ion-toolbar text-center color="subheader">
-        <ion-title>Detalle de levantamiento</ion-title>
-        <span style="color: #fff;">Autopista: {{ autopista }}</span>
+        <ion-title>Levantamientos registrados para sincronizar</ion-title>
+        <span style="color: #fff;">Autopista: {{ datosAutopista.nombre }}</span>
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-list no-lines>
-        <ion-item [ngClass]="['levantamientos']">
+    <ion-list no-lines [virtualScroll]="levantamientos" [bufferRatio]="3.1" [approxItemHeight]="'300px'">
+        <ion-item [ngClass]="['levantamientos']" *virtualItem="let levantamiento">
             <ion-grid>
                 <ion-row text-left justify-content-center>
                     <ion-col col-12>
@@ -40,54 +47,14 @@
                         <span>{{ levantamiento.cadenamientoFinalKm }} + {{ levantamiento.cadenamientoFinalm }}</span>
                     </ion-col>
                 </ion-row>
-                <ion-row text-left>
+                <ion-row text-right>
                     <ion-col col-12>
-                        <small>Carril:</small>
-                        <span>{{ levantamiento.carril }} </span>
-                    </ion-col>
-                </ion-row>
-                <ion-row text-left>
-                    <ion-col col-12>
-                        <small>Condición:</small>
-                        <span>{{ levantamiento.condicion }} </span>
-                    </ion-col>
-                </ion-row>
-                <ion-row text-left>
-                    <ion-col col-12>
-                        <small>Subelemento:</small>
-                        <span>{{ levantamiento.subelemento }} </span>
-                    </ion-col>
-                </ion-row>
-                <ion-row text-left>
-                    <ion-col col-12>
-                        <small>Longitud del elemento:</small>
-                        <span>{{ levantamiento.longitudElemento }} </span>
-                    </ion-col>
-                </ion-row>
-                <ion-row text-left>
-                    <ion-col col-12>
-                        <small>Reportar:</small>
-                        <span *ngIf="reportar">Reportar</span>
-                        <span *ngIf="!reportar">No reportado</span>
+                        <ion-icon no-margin name="cloud-upload"></ion-icon>
                     </ion-col>
                 </ion-row>
             </ion-grid>
         </ion-item>
     </ion-list>
-    <ion-grid [ngClass]="['levantamientos']">
-        <ion-row>
-            <ion-col col-12>
-                <ion-slides pager zoom="true" loop="true" effect="fade">
-                    <ion-slide>
-                        <img tappable [src]="imagenA" />
-                    </ion-slide>
-                    <ion-slide>
-                        <img tappable [src]="imagenB" />
-                    </ion-slide>
-                </ion-slides>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
 </ion-content>
 <ion-footer text-center>
     <ion-toolbar color="cabecera" text-wrap>

@@ -52,7 +52,8 @@ export class ListadoAutopistasPage {
 				if (data.length) {
 					this.storage.set('auth', {
 						email: data[0].email,
-						nmae: data[0].name
+						name: data[0].name,
+						access_token: data[0].access_token
 					}).then((response) => {
 						/* Obtenemos las autopistas del origen de datos asignadas a dicho usuario conectado*/
 						this.autopistasService.userId = data[0].id

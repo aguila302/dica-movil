@@ -36,6 +36,9 @@ import {
 import {
 	AppVersion
 } from '@ionic-native/app-version';
+import {
+	DespliegueLevantamientoPage
+} from '../pages/despliegue-levantamiento/despliegue-levantamiento'
 
 @Component({
 	templateUrl: 'app.html'
@@ -62,7 +65,6 @@ export class MyApp {
 			if (response) {
 				this.email = response.email
 				this.name = response.nmae
-				console.log(response)
 
 				this.rootPage = ListadoAutopistasPage
 
@@ -87,7 +89,7 @@ export class MyApp {
 
 		}, {
 			title: 'Sincronizar información',
-			component: ListadoAutopistasPage,
+			component: DespliegueLevantamientoPage,
 
 		}];
 
@@ -110,8 +112,8 @@ export class MyApp {
 	openPage(page) {
 
 		let autopista = this.autopistasService.autopistaActiva
-		// Reset the content nav to have just this page
-		// we wouldn't want the back button to show in this scenario
+			// Reset the content nav to have just this page
+			// we wouldn't want the back button to show in this scenario
 		this.nav.setRoot(page.component, {
 			autopista: autopista
 		});

@@ -266,11 +266,11 @@ export class RegistroLevantamientoPage {
 		alert.present()
 		setTimeout(() => {
 			alert.dismiss()
-			this.form.reset({
-				statusLevantamiento: false,
-			})
-			this.imagenA = ''
-			this.imagenB = ''
+			// this.form.reset({
+			// 	statusLevantamiento: false,
+			// })
+			// this.imagenA = ''
+			// this.imagenB = ''
 		}, 3000)
 	}
 
