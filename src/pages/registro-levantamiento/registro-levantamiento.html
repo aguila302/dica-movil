@@ -214,15 +214,15 @@
                     <ion-list radio-group formControlName="statusLevantamiento">
                         <ion-item>
                             <ion-label>Reporte inicial</ion-label>
-                            <ion-radio value="1"></ion-radio>
+                            <ion-radio value="0"></ion-radio>
                         </ion-item>
                         <ion-item>
                             <ion-label>En proceso de atención</ion-label>
-                            <ion-radio value="2"></ion-radio>
+                            <ion-radio value="1"></ion-radio>
                         </ion-item>
                         <ion-item>
                             <ion-label>Atendido</ion-label>
-                            <ion-radio value="3"></ion-radio>
+                            <ion-radio value="2"></ion-radio>
                         </ion-item>
                         <div margin-left [ngClass]="['ng-invalid', 'danger']" *ngIf="statusLevantamiento.invalid && (statusLevantamiento.dirty || statusLevantamiento.touched)">
                             <div *ngIf="statusLevantamiento.errors.required">

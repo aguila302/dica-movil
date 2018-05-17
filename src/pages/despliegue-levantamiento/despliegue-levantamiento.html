@@ -47,9 +47,13 @@
                         <span>{{ levantamiento.cadenamientoFinalKm }} + {{ levantamiento.cadenamientoFinalm }}</span>
                     </ion-col>
                 </ion-row>
-                <ion-row text-right>
+                <ion-row text-right *ngIf="sincronizados.length !== 0">
                     <ion-col col-12>
-                        <ion-icon no-margin name="cloud-upload"></ion-icon>
+                        <li *ngFor="let sincronizado of sincronizados; index as i; trackBy: personTrackByFn">
+                            {{i}}
+                            <!-- {{i}}/. {{sincronizado.i}} <span *ngIf="isLast">{{ sincronizado.data.id }}</span> -->
+                        </li>
+                        <!-- <ion-icon  no-margin name="cloud-upload"></ion-icon> -->
                     </ion-col>
                 </ion-row>
             </ion-grid>

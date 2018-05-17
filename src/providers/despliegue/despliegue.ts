@@ -42,8 +42,8 @@ export class DespliegueProvider {
 				estatus: item.estatus,
 				reportar: item.reportar,
 			}
-			await this.resolveApi(params).then(res => {
-				miGlobal.responseResult.push(res)
+			await this.resolveApi(params).then((response) => {
+				miGlobal.responseResult.push(response)
 			})
 
 		}
