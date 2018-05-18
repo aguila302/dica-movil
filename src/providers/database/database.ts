@@ -30,13 +30,13 @@ export class DatabaseProvider {
 				location: 'default'
 			}).then((db: SQLiteObject) => {
 				this.database = db
-					// this.sqlite.deleteDatabase({
-					// 		name: 'dica.db',
-					// 		location: 'default'
-					// 	}).then(() => console.log('delete database'))
-					// this.sqlitePorter.exportDbToSql(this.database)
-					// 	.then((res) => console.log(res))
-					// 	.catch(e => console.error(e))
+				// this.sqlite.deleteDatabase({
+				// 		name: 'dica.db',
+				// 		location: 'default'
+				// 	}).then(() => console.log('delete database'))
+				// this.sqlitePorter.exportDbToSql(this.database)
+				// 	.then((res) => console.log(res))
+				// 	.catch(e => console.error(e))
 
 				this.createTables().then((res) => {
 					this.dbReady.next(true)
@@ -117,7 +117,8 @@ export class DatabaseProvider {
 				        	cadenamiento_final_km NUMERIC,
 				        	cadenamiento_final_m NUMERIC,
 				        	reportar BOOLEAN,
-				        	estatus NUMERIC);`, {}
+				        	estatus NUMERIC,
+				        	uuid TEXT);`, {}
 										).then(() => {
 											return this.database.executeSql(
 												`CREATE TABLE IF NOT EXISTS levantamiento_imagen (
@@ -415,16 +416,16 @@ export class DatabaseProvider {
 	}
 
 	/* Registramos levantamientos en el origen de datos movil. */
-	registrarInventarios = (levantamiento) => {
+	registrarInventarios = (levantamiento, uuid) => {
 		return this.isReady()
 			.then(() => {
 				let sql = `insert into levantamientos (autopista_id, cuerpo_id, elemento_id, tipo_elemento_id, coondicion_id, carril_id,
 				        	longitud_elemento, cadenamiento_inicial_km, cadenamiento_inicial_m, cadenamiento_final_km,
-				        	cadenamiento_final_m, reportar, estatus) values (?,?,?,?,?,?,?,?,?,?,?,?,?);`
-				return this.database.executeSql(sql, [levantamiento.autopista, levantamiento.cuerpo, levantamiento.elemento,
+				        	cadenamiento_final_m, reportar, estatus, uuid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
+				return this.database.executeSql(sql, [300, levantamiento.cuerpo, levantamiento.elemento,
 					levantamiento.tipoElemento, levantamiento.condicion, levantamiento.carril, levantamiento.longitudElemento,
 					levantamiento.cadenamientoInicialKm, levantamiento.cadenamientoInicialm, levantamiento.cadenamientoFinalKm,
-					levantamiento.cadenamientoFinalm, levantamiento.reportar, levantamiento.statusLevantamiento
+					levantamiento.cadenamientoFinalm, levantamiento.reportar, levantamiento.statusLevantamiento, uuid
 				])
 			}).catch(console.error.bind(console))
 
@@ -441,17 +442,17 @@ export class DatabaseProvider {
 
 	/* Obtiene un listado de levantamientos registrados de una autopista. */
 	listadoLevantamientos = (id: number) => {
-			return this.isReady()
-				.then(() => {
-					return this.database.executeSql(`
-					select a.id, a.autopista_id, a.elemento_id, a.tipo_elemento_id as subelemento_id, a.cuerpo_id, 
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`
+					select a.id, a.autopista_id, a.elemento_id, a.tipo_elemento_id as subelemento_id, a.cuerpo_id,
 					a.coondicion_id as condicion_id, a.carril_id,
 					b.descripcion as elemento_descripcion, a.estatus as estatus,
 					a.cadenamiento_inicial_km, a.cadenamiento_inicial_m,
 					a.cadenamiento_final_km, a.cadenamiento_final_m,
 					c.descripcion as cuerpo_descripcion, e.descripcion as condicion_descripcion,
 					d.descripcion_subelemento, f.descripcion as carril_descripcion, a.longitud_elemento,
-					case when(a.reportar == 'true') then 1 else 0 end as reportar 
+					case when(a.reportar == 'true') then 1 else 0 end as reportar, a.uuid
 					from levantamientos as a
 					INNER JOIN elementos as b on a.elemento_id = b.elemento_id
 					INNER JOIN cuerpos as c on a.cuerpo_id = c.cuerpo_id
@@ -459,37 +460,38 @@ export class DatabaseProvider {
 					INNER JOIN condiciones as e on a.coondicion_id = e.condicion_id
 					INNER JOIN carriles as f on a.carril_id = f.carril_id
 					where a.autopista_id = ? order by a.id ASC`, [id])
-						.then((result) => {
-							let levantamientos = []
-							for (let i = 0; i < result.rows.length; i++) {
-								levantamientos.push({
-									id: result.rows.item(i).id,
-									autopista_id: result.rows.item(i).autopista_id,
-									elemento_id: result.rows.item(i).elemento_id,
-									subelemento_id: result.rows.item(i).subelemento_id,
-									cuerpo_id: result.rows.item(i).cuerpo_id,
-									condicion_id: result.rows.item(i).condicion_id,
-									carril_id: result.rows.item(i).carril_id,
-									elemento: result.rows.item(i).elemento_descripcion,
-									estatus: result.rows.item(i).estatus,
-									cadenamientoInicialKm: result.rows.item(i).cadenamiento_inicial_km,
-									cadenamientoInicialm: result.rows.item(i).cadenamiento_final_m,
-									cadenamientoFinalKm: result.rows.item(i).cadenamiento_final_km,
-									cadenamientoFinalm: result.rows.item(i).cadenamiento_final_m,
-									cuerpo: result.rows.item(i).cuerpo_descripcion,
-									subelemento: result.rows.item(i).descripcion_subelemento,
-									condicion: result.rows.item(i).condicion_descripcion,
-									carril: result.rows.item(i).carril_descripcion,
-									longitudElemento: result.rows.item(i).longitud_elemento,
-									reportar: result.rows.item(i).reportar,
-								})
-							}
-							return levantamientos
-						})
+					.then((result) => {
+						let levantamientos = []
+						for (let i = 0; i < result.rows.length; i++) {
+							levantamientos.push({
+								id: result.rows.item(i).id,
+								autopista_id: result.rows.item(i).autopista_id,
+								elemento_id: result.rows.item(i).elemento_id,
+								subelemento_id: result.rows.item(i).subelemento_id,
+								cuerpo_id: result.rows.item(i).cuerpo_id,
+								condicion_id: result.rows.item(i).condicion_id,
+								carril_id: result.rows.item(i).carril_id,
+								elemento: result.rows.item(i).elemento_descripcion,
+								estatus: result.rows.item(i).estatus,
+								cadenamiento_inicial_km: result.rows.item(i).cadenamiento_inicial_km,
+								cadenamiento_inicial_m: result.rows.item(i).cadenamiento_final_m,
+								cadenamiento_final_km: result.rows.item(i).cadenamiento_final_km,
+								cadenamiento_final_m: result.rows.item(i).cadenamiento_final_m,
+								cuerpo: result.rows.item(i).cuerpo_descripcion,
+								subelemento: result.rows.item(i).descripcion_subelemento,
+								condicion: result.rows.item(i).condicion_descripcion,
+								carril: result.rows.item(i).carril_descripcion,
+								longitud_elemento: result.rows.item(i).longitud_elemento,
+								reportar: result.rows.item(i).reportar,
+								uuid: result.rows.item(i).uuid,
+							})
+						}
+						return levantamientos
+					})
 
-				})
-		}
-		/* Obtiene la url de las fotos de un levantamiento. */
+			})
+	}
+	/* Obtiene la url de las fotos de un levantamiento. */
 	getFotos = (id: number) => {
 		return this.isReady()
 			.then(() => {

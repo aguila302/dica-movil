@@ -36,7 +36,7 @@ export class DespliegueLevantamientoPage {
 	}
 
 	levantamientos = []
-	public sincronizados = []
+	sincronizados = {}
 
 	public datosAutopista = {
 		id: 0,
@@ -54,6 +54,7 @@ export class DespliegueLevantamientoPage {
 	listadoLevantamientos = () => {
 		this.autopistasService.listadoLevantamientos(this.datosAutopista.id).then(levantamientos => {
 			this.levantamientos = levantamientos
+			console.log(this.levantamientos);
 
 		})
 	}
@@ -63,12 +64,16 @@ export class DespliegueLevantamientoPage {
 		let popover = this.popoverCtrl.create(PopoverPage, {})
 		popover.onDidDismiss(data => {
 			data !== null ? (
-				this.despliegue.sincronizar(this.levantamientos).then((response) => {
-					console.log(' mi response')
-					this.sincronizados = response
-					console.log(this.sincronizados)
-
-				})
+				this.levantamientos.map(item => {
+					item['estatusApi'] = ''
+					item['data'] = {}
+					this.despliegue.sincronizar(item).then((response) => {
+						this.sincronizados = response
+						item.estatusApi = response['status']
+						item.data = response['data']
+					})
+				}),
+				console.log(this.levantamientos)
 			) : ''
 		})
 		popover.present({

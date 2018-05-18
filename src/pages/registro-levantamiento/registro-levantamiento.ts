@@ -22,6 +22,7 @@ import {
 import {
 	Base64ToGallery
 } from '@ionic-native/base64-to-gallery';
+import * as uuid from 'uuid/v5'
 
 @Component({
 	selector: 'page-registro-levantamiento',
@@ -207,8 +208,13 @@ export class RegistroLevantamientoPage {
 			content: 'Guardando información por favor espera',
 		});
 		this.loader.present();
+
+		/* Generamos un uuid para guardar el levantamiento. */
+		let fechaHoraRegistro = (new Date()).toLocaleDateString('eu-ES') + ' ' + (new Date()).toLocaleTimeString('eu-ES')
+
+
 		// Guardamos la informacion del levantamiento en el origen de datos.
-		this.autopistasService.guardaLevantamiento(this.form.controls, this.datosAutopista.id).then((response) => {
+		this.autopistasService.guardaLevantamiento(this.form.controls, this.datosAutopista.id, uuid(fechaHoraRegistro, uuid.URL)).then((response) => {
 			/* Almacenamos la imagen en el dispositivo movil. */
 			response.rowsAffected === 1 ? this.guardaImagen(this.base64imageA, this.base64imageB, response.insertId) : ''
 		})

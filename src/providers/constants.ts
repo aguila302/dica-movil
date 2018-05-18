@@ -1,2 +1,2 @@
-export const URL_BASE: string = 'http://af9cfd5d.ngrok.io'
-export const TOKEN: string = 'PrSjlxWOuhEzEpOHap2tEyDYSLHCXp1VMcjJY307'
+export const URL_BASE: string = 'http://5787291a.ngrok.io'
+export const TOKEN: string = 'vlxU5NQPUXOi5x3lAnltDJq5YYobIbVcQ1N0RF6C'

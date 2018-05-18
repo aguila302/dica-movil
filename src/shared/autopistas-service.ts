@@ -87,7 +87,7 @@ export class AutopistasService {
 	}
 
 	/* Registramos levantamientos en el origen de datos movil. */
-	guardaLevantamiento = (controles, autopista: number) => {
+	guardaLevantamiento = (controles, autopista: number, uuid: string) => {
 		let dataInsert = {
 			autopista,
 			cuerpo: controles.cuerpo.value,
@@ -103,7 +103,7 @@ export class AutopistasService {
 			reportar: controles.reportar.value,
 			statusLevantamiento: controles.statusLevantamiento.value,
 		}
-		return this.databaseProvider.registrarInventarios(dataInsert)
+		return this.databaseProvider.registrarInventarios(dataInsert, uuid)
 	}
 
 	/* Registra un levantamiento con su imagen. */

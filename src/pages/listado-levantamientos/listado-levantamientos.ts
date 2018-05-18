@@ -45,8 +45,6 @@ export class ListadoLevantamientosPage {
 	listadoLevantamientos = () => {
 		this.autopistasService.listadoLevantamientos(this.datosAutopista.id).then(levantamientos => {
 			this.levantamientos = levantamientos
-			console.log(this.levantamientos)
-
 		})
 	}
 

@@ -40,20 +40,19 @@
                 <ion-row text-left>
                     <ion-col col-12>
                         <small>Cadenamiento inicial:</small>
-                        <span>{{ levantamiento.cadenamientoInicialKm }} + {{ levantamiento.cadenamientoInicialm }}</span>
+                        <span>{{ levantamiento.cadenamiento_inicial_km }} + {{ levantamiento.cadenamiento_inicial_m }}</span>
                     </ion-col>
                     <ion-col col-12>
                         <small>Cadenamiento final:</small>
-                        <span>{{ levantamiento.cadenamientoFinalKm }} + {{ levantamiento.cadenamientoFinalm }}</span>
+                        <span>{{ levantamiento.cadenamiento_final_km }} + {{ levantamiento.cadenamiento_final_m }}</span>
                     </ion-col>
                 </ion-row>
-                <ion-row text-right *ngIf="sincronizados.length !== 0">
+                <ion-row text-right *ngIf="levantamiento.estatusApi && levantamiento.data">
                     <ion-col col-12>
-                        <li *ngFor="let sincronizado of sincronizados; index as i; trackBy: personTrackByFn">
-                            {{i}}
-                            <!-- {{i}}/. {{sincronizado.i}} <span *ngIf="isLast">{{ sincronizado.data.id }}</span> -->
-                        </li>
-                        <!-- <ion-icon  no-margin name="cloud-upload"></ion-icon> -->
+                        <small>Estatus de la sincronización:</small>
+                        <!-- <span>{{ levantamiento.data.created_at }}</span> -->
+                        <!-- <span>{{ levantamiento.data.id }}</span> -->
+                        <span ion-text color="danger" *ngIf="levantamiento.data.error">{{ levantamiento.data.error.message }}</span>
                     </ion-col>
                 </ion-row>
             </ion-grid>
