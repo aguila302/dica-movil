@@ -422,7 +422,7 @@ export class DatabaseProvider {
 				let sql = `insert into levantamientos (autopista_id, cuerpo_id, elemento_id, tipo_elemento_id, coondicion_id, carril_id,
 				        	longitud_elemento, cadenamiento_inicial_km, cadenamiento_inicial_m, cadenamiento_final_km,
 				        	cadenamiento_final_m, reportar, estatus, uuid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
-				return this.database.executeSql(sql, [300, levantamiento.cuerpo, levantamiento.elemento,
+				return this.database.executeSql(sql, [levantamiento.autopista, levantamiento.cuerpo, levantamiento.elemento,
 					levantamiento.tipoElemento, levantamiento.condicion, levantamiento.carril, levantamiento.longitudElemento,
 					levantamiento.cadenamientoInicialKm, levantamiento.cadenamientoInicialm, levantamiento.cadenamientoFinalKm,
 					levantamiento.cadenamientoFinalm, levantamiento.reportar, levantamiento.statusLevantamiento, uuid
@@ -500,6 +500,25 @@ export class DatabaseProvider {
 						let fotos = []
 						for (let i = 0; i < result.rows.length; i++) {
 							fotos.push({
+								imagen: result.rows.item(i).imagen
+							})
+						}
+						return fotos
+					})
+
+			})
+	}
+
+	/* Obtiene las fotografias relacionadas a un levantamiento. */
+	getFotografias = (id: number) => {
+		return this.isReady()
+			.then(() => {
+				return this.database.executeSql(`select imagen, levantamiento_id from levantamiento_imagen where levantamiento_id = ?`, [id])
+					.then((result) => {
+						let fotos = []
+						for (let i = 0; i < result.rows.length; i++) {
+							fotos.push({
+								levantamiento_id: result.rows.item(i).levantamiento_id,
 								imagen: result.rows.item(i).imagen
 							})
 						}

@@ -64,14 +64,25 @@ export class DespliegueLevantamientoPage {
 		let popover = this.popoverCtrl.create(PopoverPage, {})
 		popover.onDidDismiss(data => {
 			data !== null ? (
+				/*
+				Itera los levantamientos y los va sincronizando al end point del api.
+				 */
 				this.levantamientos.map(item => {
+					console.log(item)
+
 					item['estatusApi'] = ''
 					item['data'] = {}
-					this.despliegue.sincronizar(item).then((response) => {
-						this.sincronizados = response
-						item.estatusApi = response['status']
-						item.data = response['data']
+					item['fotos'] = {}
+					/* Obtiene las fotografias de un levantamiento. */
+					this.autopistasService.getFotografias(item.id).then((fotos) => {
+						console.log(fotos)
+						item['fotos'] = fotos
 					})
+					// this.despliegue.sincronizar(item).then((response) => {
+					// 	this.sincronizados = response
+					// 	item.estatusApi = response['status']
+					// 	item.data = response['data']
+					// })
 				}),
 				console.log(this.levantamientos)
 			) : ''
@@ -80,9 +91,4 @@ export class DespliegueLevantamientoPage {
 			ev: event
 		})
 	}
-
-	personTrackByFn(index: number, person) {
-		return person.data.id;
-	}
-
 }

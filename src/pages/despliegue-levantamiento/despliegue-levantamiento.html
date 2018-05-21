@@ -47,11 +47,8 @@
                         <span>{{ levantamiento.cadenamiento_final_km }} + {{ levantamiento.cadenamiento_final_m }}</span>
                     </ion-col>
                 </ion-row>
-                <ion-row text-right *ngIf="levantamiento.estatusApi && levantamiento.data">
+                <ion-row text-left *ngIf="levantamiento.estatusApi && levantamiento.data">
                     <ion-col col-12>
-                        <small>Estatus de la sincronización:</small>
-                        <!-- <span>{{ levantamiento.data.created_at }}</span> -->
-                        <!-- <span>{{ levantamiento.data.id }}</span> -->
                         <span ion-text color="danger" *ngIf="levantamiento.data.error">{{ levantamiento.data.error.message }}</span>
                     </ion-col>
                 </ion-row>

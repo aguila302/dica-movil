@@ -131,4 +131,10 @@ export class AutopistasService {
 	resetDatabase = () => {
 		return this.databaseProvider.resetDatabase()
 	}
+
+	/* Obtiene las fotografias relacionadas a un levantamiento. */
+	getFotografias = (id: number) => {
+		return this.databaseProvider.getFotografias(id)
+
+	}
 }
