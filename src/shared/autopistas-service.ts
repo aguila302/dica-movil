@@ -135,6 +135,5 @@ export class AutopistasService {
 	/* Obtiene las fotografias relacionadas a un levantamiento. */
 	getFotografias = (id: number) => {
 		return this.databaseProvider.getFotografias(id)
-
 	}
 }

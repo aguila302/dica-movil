@@ -75,6 +75,8 @@ export class DespliegueLevantamientoPage {
 					item['fotos'] = {}
 					/* Obtiene las fotografias de un levantamiento. */
 					this.autopistasService.getFotografias(item.id).then((fotos) => {
+						console.log('fotos')
+
 						console.log(fotos)
 						item['fotos'] = fotos
 					})
