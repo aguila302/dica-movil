@@ -25,6 +25,8 @@ export class DespliegueProvider {
 
 	/* Obtenemos los datos de los levantamientos a ser sincronizados. */
 	async sincronizar(data) {
+		console.log(data)
+
 		await this.resolveApi(data).then((response) => {
 			this.responseResult = response
 		})

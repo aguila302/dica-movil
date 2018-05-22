@@ -68,25 +68,21 @@ export class DespliegueLevantamientoPage {
 				Itera los levantamientos y los va sincronizando al end point del api.
 				 */
 				this.levantamientos.map(item => {
-					console.log(item)
-
 					item['estatusApi'] = ''
 					item['data'] = {}
-					item['fotos'] = {}
+					item['foto'] = []
 					/* Obtiene las fotografias de un levantamiento. */
 					this.autopistasService.getFotografias(item.id).then((fotos) => {
-						console.log('fotos')
-
-						console.log(fotos)
-						item['fotos'] = fotos
+						item['foto'] = fotos
+						this.despliegue.sincronizar(item).then((response) => {
+							this.sincronizados = response
+							item.estatusApi = response['status']
+							item.data = response['data']
+						})
 					})
-					// this.despliegue.sincronizar(item).then((response) => {
-					// 	this.sincronizados = response
-					// 	item.estatusApi = response['status']
-					// 	item.data = response['data']
-					// })
-				}),
-				console.log(this.levantamientos)
+
+				})
+				// console.log(this.levantamientos)
 			) : ''
 		})
 		popover.present({
