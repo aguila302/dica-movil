@@ -5,7 +5,7 @@
         </button>
         <ion-title>DICA - Diagnostico carretero</ion-title>
         <ion-buttons end>
-            <button ion-button icon-only (click)="popover($event)">
+            <button *ngIf="levantamientos.length" ion-button icon-only (click)="popover($event)">
                 <ion-icon name="more"></ion-icon>
             </button>
         </ion-buttons>
@@ -16,8 +16,8 @@
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-list no-lines [virtualScroll]="levantamientos" [bufferRatio]="3.1" [approxItemHeight]="'300px'">
-        <ion-item [ngClass]="['levantamientos']" *virtualItem="let levantamiento">
+    <ion-list no-lines [virtualScroll]="levantamientos" [bufferRatio]="3.1" [approxItemHeight]="'100px'">
+        <ion-item [ngClass]="['levantamientos']" *virtualItem="let levantamiento" margin-top margin-bottom>
             <ion-grid>
                 <ion-row text-left justify-content-center>
                     <ion-col col-12>
@@ -47,9 +47,10 @@
                         <span>{{ levantamiento.cadenamiento_final_km }} + {{ levantamiento.cadenamiento_final_m }}</span>
                     </ion-col>
                 </ion-row>
-                <ion-row text-left *ngIf="levantamiento.estatusApi && levantamiento.data">
-                    <ion-col col-12>
-                        <span ion-text color="danger" *ngIf="levantamiento.data.error">{{ levantamiento.data.error.message }}</span>
+                <ion-row text-left>
+                    <ion-col col-12 text-wrap>
+                        <small ion-text color="danger" *ngIf="levantamiento.estatusApi && levantamiento.data && levantamiento.data.error">{{ levantamiento.data.error.message }}</small>
+                        <small ion-text color="secondary" *ngIf=" levantamiento.estatusApi && levantamiento.data && !levantamiento.data.error">Levantamiento sincronizado {{ levantamiento.data.created_at }}</small>
                     </ion-col>
                 </ion-row>
             </ion-grid>

@@ -68,8 +68,6 @@ export class RegistroLevantamientoPage {
 		private base64ToGallery: Base64ToGallery, public loadingCtrl: LoadingController) {
 
 		/* Obtiene los datos generaes de la autopista. */
-		console.log(this.navParams.get('autopista'))
-
 		this.datosAutopista.id = this.navParams.get('autopista').autopista_id
 		this.datosAutopista.nombre = this.navParams.get('autopista').nombre
 		this.datosAutopista.cadenamientoInicialKm = this.navParams.get('autopista').cadenamiento_inicial_km
@@ -87,7 +85,10 @@ export class RegistroLevantamientoPage {
 			tipoElemento: new FormControl('', Validators.required),
 			condicionFisica: new FormControl('', Validators.required),
 			carril: new FormControl('', Validators.required),
-			longitudElemento: new FormControl('', Validators.required),
+			longitudElemento: new FormControl('', Validators.compose([
+				Validators.required,
+				Validators.minLength(4),
+			])),
 
 			cadenamientoInicialKm: new FormControl('', Validators.compose([
 				Validators.required,
@@ -117,7 +118,6 @@ export class RegistroLevantamientoPage {
 			reportar: new FormControl(false, Validators.required),
 			statusLevantamiento: new FormControl('', Validators.required)
 		})
-
 	}
 
 	/* Inizializa los catalogos. */
@@ -137,6 +137,7 @@ export class RegistroLevantamientoPage {
 	get longitudElemento() {
 		return this.form.get('longitudElemento')
 	}
+
 	get elemento() {
 		return this.form.get('elemento')
 	}

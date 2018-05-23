@@ -99,6 +99,9 @@
                         <div *ngIf="longitudElemento.errors.required">
                             Longitud del elemento es requerido.
                         </div>
+                        <div *ngIf="longitudElemento.errors">
+                            El formato de longitud del elemento.
+                        </div>
                     </div>
                 </ion-col>
             </ion-row>

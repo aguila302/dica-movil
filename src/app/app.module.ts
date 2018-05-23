@@ -102,6 +102,10 @@ import {
 import {
 	DespliegueProvider
 } from '../providers/despliegue/despliegue';
+import {
+	FileTransfer
+} from '@ionic-native/file-transfer';
+
 
 @NgModule({
 	declarations: [
@@ -154,7 +158,8 @@ import {
 		Camera,
 		SQLitePorter,
 		AppVersion,
-		DespliegueProvider
+		DespliegueProvider,
+		FileTransfer,
 	]
 })
 export class AppModule {}

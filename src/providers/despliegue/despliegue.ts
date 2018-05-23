@@ -10,23 +10,27 @@ import {
 import {
 	URL_BASE
 } from '../constants'
+import {
+	FileTransfer,
+	FileUploadOptions,
+	FileTransferObject
+} from '@ionic-native/file-transfer';
 
 @Injectable()
 export class DespliegueProvider {
 	access_token: string = ''
 	responseResult = {}
-	constructor(public http: HTTP, private storage: Storage) {
+	constructor(public http: HTTP, private storage: Storage, private transfer: FileTransfer) {
 
 		/* Obtiene el token de acceso para realizar post al end point. */
 		this.storage.get('auth').then((response) => {
 			this.access_token = response.access_token
 		})
 	}
+	fileTransfer: FileTransferObject = this.transfer.create();
 
 	/* Obtenemos los datos de los levantamientos a ser sincronizados. */
 	async sincronizar(data) {
-		console.log(data)
-
 		await this.resolveApi(data).then((response) => {
 			this.responseResult = response
 		})
@@ -57,4 +61,31 @@ export class DespliegueProvider {
 				}
 			})
 	}
+
+	/**
+	 * Transfiere las fotografias de un levantamiento.
+	 */
+	transfiereFotos = (path, levantamiento) => {
+		let options: FileUploadOptions = {
+			fileKey: 'foto',
+			fileName: path.substr(path.lastIndexOf('/') + 1),
+			httpMethod: 'POST',
+			mimeType: 'image/png',
+			chunkedMode: true,
+			headers: {
+				'Authorization': `Bearer ${this.access_token}`,
+				'Accept': 'application/json'
+			}
+
+		}
+		this.fileTransfer.upload(path, `${URL_BASE}/api/levantamiento/${levantamiento}/fotografias`, options)
+			.then((data) => {
+				console.log(JSON.parse(data.response))
+			})
+			.catch((error) => {
+				console.log(error)
+
+			});
+	}
+
 }
