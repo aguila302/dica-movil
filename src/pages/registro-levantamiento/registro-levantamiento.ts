@@ -1,3 +1,12 @@
+/**
+ * Clase generada para RegistroLevantamientoPage.
+ * Autor: Alfonso Hernández Montoya.
+ * Fecha de creación: 24 Mayo 2018.
+ * Descripción: Componente para la funcionalidad registro de un nuevo levantamiento en una autopista.
+ * Modifico: Alfonso Hernández Montoya.
+ * Fecha modificación: 24 Mayo 2018.
+ */
+
 import {
 	Component
 } from '@angular/core';
@@ -122,7 +131,6 @@ export class RegistroLevantamientoPage {
 
 	/* Inizializa los catalogos. */
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad LevantamientoPage')
 		/* Cargamos los catalogos para los controles. */
 		this.getCuerpos()
 		this.getElementos()
@@ -243,19 +251,16 @@ export class RegistroLevantamientoPage {
 	/* Guardamos la imagen en dispositivo movil. */
 	guardaImagen(fotoA, fotoB, levantamientoId) {
 		this.base64ToGallery.base64ToGallery(fotoA).then((res) => {
-			console.log(res)
 			/* Guardamos la url de la imagen y el id de levantamiento en el origen de datos. */
 			this.autopistasService.guardaImagen(res, levantamientoId)
 				.then((response) => {
-					console.log(response)
+					console.log(response.rowsAffected)
 				})
 			setTimeout(() => {
 				this.base64ToGallery.base64ToGallery(fotoB).then((res1) => {
-					console.log(res1)
 					this.autopistasService.guardaImagen(res1, levantamientoId)
 						.then((response) => {
-							console.log(response)
-
+							console.log(response.rowsAffected)
 							this.confirmarRegistro()
 						})
 				})

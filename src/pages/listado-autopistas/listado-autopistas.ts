@@ -1,3 +1,12 @@
+/**
+ * Clase generada para ListadoAutopistasPage.
+ * Autor: Alfonso Hernández Montoya.
+ * Fecha de creación: 24 Mayo 2018.
+ * Descripción: Componente para la funcionalidad de listado de autopistas descargados desde el API.
+ * Modifico: Alfonso Hernández Montoya.
+ * Fecha modificación: 24 Mayo 2018.
+ */
+
 import {
 	Component
 } from '@angular/core';
@@ -58,9 +67,12 @@ export class ListadoAutopistasPage {
 						/* Obtenemos las autopistas del origen de datos asignadas a dicho usuario conectado*/
 						this.autopistasService.userId = data[0].id
 						this.autopistasService.getAutopistas().then(autopistas => this.autopistas = autopistas)
+					}).catch((error) => {
+						console.error.bind(error)
 					})
-
 				}
+			}).catch((error) => {
+				console.error.bind(error)
 			})
 	}
 

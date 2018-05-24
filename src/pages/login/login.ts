@@ -1,3 +1,12 @@
+/**
+ * Clase generada para LoginPage.
+ * Autor: Alfonso Hernández Montoya.
+ * Fecha de creación: 24 Mayo 2018.
+ * Descripción: Componente para la funcionalidad de inicio de sesión.
+ * Modifico: Alfonso Hernández Montoya.
+ * Fecha modificación: 24 Mayo 2018.
+ */
+
 import {
 	Component
 } from '@angular/core';
@@ -29,6 +38,7 @@ import {
 	selector: 'page-login',
 	templateUrl: 'login.html',
 })
+
 export class LoginPage {
 	username: string = ''
 	clave_acceso: string = ''
@@ -41,12 +51,9 @@ export class LoginPage {
 		private apiProvider: ApiProvider, private loginService: LoginService,
 		private network: Network, private autopistasService: AutopistasService, public loadingCtrl: LoadingController) {}
 
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad LoginPage');
-	}
-
 	/**
-	 *	Funcion para realizar el proceso de logueo.*/
+	 * Funcion para realizar el proceso de logueo.
+	 */
 	login = () => {
 		/* Si el usuario o contraseña son vacios mostramos una alerta de aviso. */
 		if (this.username === '' || this.clave_acceso === '') {
@@ -66,6 +73,9 @@ export class LoginPage {
 					.then(response => {
 						loading.dismiss()
 						response.status === 200 ? (this.setToken(response.data)) : this.getMensajeError('Iniciar sesión', 'Cliente inválido, la autenticación del cliente falló')
+					})
+					.catch(error => {
+						console.error.bind(error)
 					})
 			} else {
 				/* Si no hay conexión alguna mandamos un mensaje de error */

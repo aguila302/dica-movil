@@ -1,3 +1,12 @@
+/**
+ * Clase generada para DespliegueProvider.
+ * Autor: Alfonso Hernández Montoya.
+ * Fecha de creación: 24 Mayo 2018.
+ * Descripción: Clase para la funcionalidad de gestionar y administrar la sincronización de levantamientos.
+ * Modifico: Alfonso Hernández Montoya.
+ * Fecha modificación: 24 Mayo 2018.
+ */
+
 import {
 	Injectable
 } from '@angular/core';
@@ -33,6 +42,8 @@ export class DespliegueProvider {
 	async sincronizar(data) {
 		await this.resolveApi(data).then((response) => {
 			this.responseResult = response
+		}).catch(error => {
+			console.error.bind(console)
 		})
 		return this.responseResult
 	}
@@ -84,7 +95,6 @@ export class DespliegueProvider {
 			})
 			.catch((error) => {
 				console.log(error)
-
 			});
 	}
 

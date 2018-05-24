@@ -1,8 +1,18 @@
+/**
+ * Clase generada para ApiProvider.
+ * Autor: Alfonso Hernández Montoya.
+ * Fecha de creación: 24 Mayo 2018.
+ * Descripción: Clase para la funcionalidad de gestionar la API.
+ * Modifico: Alfonso Hernández Montoya.
+ * Fecha modificación: 24 Mayo 2018.
+ */
+
 import {
 	Injectable
 } from '@angular/core';
 import {
 	HTTP,
+	HTTPResponse
 } from '@ionic-native/http';
 import {
 	URL_BASE,
@@ -17,7 +27,7 @@ export class ApiProvider {
 	/**
 	 * Funcion para resolver el end point y obtener token de acceso.
 	 */
-	getToken = (username: string, password: string) => {
+	getToken = (username: string, password: string): any => {
 		let params = {
 			username: username,
 			password: password,
@@ -40,8 +50,6 @@ export class ApiProvider {
 					'headers': data.headers
 				}
 			}).catch(error => {
-				console.log(error)
-
 				return {
 					'status': error.status,
 					'data': JSON.parse(error.error),

@@ -1,3 +1,12 @@
+/**
+ * Clase generada para ListadoLevantamientosPage.
+ * Autor: Alfonso Hernández Montoya.
+ * Fecha de creación: 24 Mayo 2018.
+ * Descripción: Componente para la funcionalidad de listado de levantamientos registrados en una autopista.
+ * Modifico: Alfonso Hernández Montoya.
+ * Fecha modificación: 24 Mayo 2018.
+ */
+
 import {
 	Component
 } from '@angular/core';
@@ -35,7 +44,6 @@ export class ListadoLevantamientosPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad ListadoLevantamientosPage');
 		this.listadoLevantamientos()
 	}
 
@@ -45,6 +53,8 @@ export class ListadoLevantamientosPage {
 	listadoLevantamientos = () => {
 		this.autopistasService.listadoLevantamientos(this.datosAutopista.id).then(levantamientos => {
 			this.levantamientos = levantamientos
+		}).catch(error => {
+			console.error.bind(console)
 		})
 	}
 

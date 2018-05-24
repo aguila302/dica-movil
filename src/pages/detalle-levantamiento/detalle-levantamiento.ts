@@ -1,3 +1,12 @@
+/**
+ * Clase generada para DetalleLevantamientoPage.
+ * Autor: Alfonso Hernández Montoya.
+ * Fecha de creación: 24 Mayo 2018.
+ * Descripción: Componente para la funcionalidad de poder ver el detalle de un levantamiento.
+ * Modifico: Alfonso Hernández Montoya.
+ * Fecha modificación: 24 Mayo 2018.
+ */
+
 import {
 	Component
 } from '@angular/core';
@@ -29,7 +38,6 @@ export class DetalleLevantamientoPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad DetalleLevantamientoPage');
 		this.getFotos()
 	}
 
@@ -40,6 +48,8 @@ export class DetalleLevantamientoPage {
 		this.autopistasService.getFotos(this.levantamiento).then((response) => {
 			this.imagenA = response[0].imagen
 			this.imagenB = response[1].imagen
+		}).catch(error => {
+			console.error.bind(console)
 		})
 	}
 
