@@ -107,7 +107,7 @@ export class DespliegueLevantamientoPage {
 					})
 					loading.dismiss()
 
-				}),
+				})
 			) : ''
 		})
 
@@ -117,7 +117,7 @@ export class DespliegueLevantamientoPage {
 		})
 	}
 
-	/**
+	/*
 	 * Transfiere las fotografias de un levantamiento.
 	 */
 	transfiereFotos = (path, levantamiento) => {
