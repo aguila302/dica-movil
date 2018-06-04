@@ -88,11 +88,13 @@ export class DespliegueLevantamientoPage {
 
 					/* Obtiene las fotografias de un levantamiento. */
 					this.despliegue.sincronizar(item).then((response) => {
+						console.log(response)
+
 						item.estatusApi = response['status']
 						item.data = response['data']
 
 						/* Obtiene las fotografias de los levantamientos. */
-						response['status'] === 200 ? (
+						response['status'] === 201 ? (
 							/* Obtiene la url de las fotografias en el origen de datos. */
 							this.autopistasService.getFotografias(item.id).then((fotos) => {
 								fotos.forEach(foto => {
